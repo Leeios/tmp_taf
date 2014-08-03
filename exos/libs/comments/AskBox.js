@@ -30,14 +30,8 @@ var AskBox = function (sText, e) {
   document.confirmCom.addEventListener("click", this.validCom.bind(this));
 };
 
-AskBox.prototype.destroy = function(e) {
-  if (e.target != document.inputCom) {
-    this.com.remove();
-  }
-};
-
 AskBox.prototype.validCom = function(e) {
-  if (document.inputCom === "") {
+  if (document.inputCom.value === "") {
     return ;
   }
   /*
@@ -45,7 +39,7 @@ AskBox.prototype.validCom = function(e) {
   */
   var column = r.CommentsCol.getInstance();
   column.addComment(this);
-  this.destroy(e);
+  this.com.remove();
 };
 
 return AskBox;

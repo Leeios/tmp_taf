@@ -5,33 +5,44 @@ sand.define('Comments/SelectText', [
   var SelectText = function () {
     this.sText = "";
     this.ask = null;
+    this.range = null;
     document.addEventListener("mouseup", this.getSelectedText.bind(this));
     document.addEventListener("mousedown", this.destroyAsk.bind(this));
   };
 
   SelectText.prototype.getSelectedText = function(e) {
-    if (this.ask != null)
+    if (this.ask !== null)
       return ;
     if (window.getSelection) {
-      sText = window.getSelection().toString();
+      this.sText = window.getSelection();
     }
     else if (document.getSelection) {
-      sText = document.getSelection();
+      this.sText = document.getSelection();
     }
     else if (document.selection) {
-      sText = document.selection.createRange().text;
+      this.sText = document.selection.createRange().text;
     }
-    if (sText === "")
+    if (this.sText === "" || !(this.sText))
       return ;
-    this.ask = new r.AskBox(sText, e);
+    this.setRange();
+    this.ask = new r.AskBox(this.sText, e);
+  };
+
+  SelectText.prototype.setRange = function() {
+    if (this.sText.rangeCount > 0) {
+      this.range = this.sText.getRangeAt(0).cloneRange();
+      this.range.collapse(false);
+      console.log(this.range);
+    }
   };
 
   SelectText.prototype.destroyAsk = function(e) {
-    if (e.target == this.ask || this.ask == null) {
+    if (this.ask == null || e.target == document.confirmCom || e.target == document.inputCom) {
       return ;
     }
-    this.ask.destroy(e);
+    this.ask.com.remove();
     this.ask = null;
+    this.range = null;
   };
 
   return SelectText;
