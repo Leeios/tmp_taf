@@ -1,5 +1,8 @@
-div {
-	position: "relative";
+#test {
+	position: "absolute";
+	max-width: 80%;
+	left: 0px;
+	background-color: #45458F;
 }
 
 body {

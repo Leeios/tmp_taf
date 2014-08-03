@@ -7,14 +7,15 @@ var Comment = function(askCom) {
   this.com = r.toDOM({
     tag: "div",
     as: "AskBox",
-    innerHTML: document.inputCom,
+    innerHTML: document.inputCom.value,
     style: {
       height: "10%",
+      position: "absolute",
       width: "20%",
       "background-color": "#7093DB"
     },
   }, document);
-}
+};
 
 return Comment;
 

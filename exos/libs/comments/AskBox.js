@@ -13,22 +13,22 @@ var AskBox = function (sText, e) {
       left: e.pageX,
       top: e.pageY,
     },
-    children: [
-      { tag: "input",
-      as : 'inputCom',
+    children: [{
+        tag: "input",
+      as: 'inputCom',
       attr: { placeholder: "Enter a comment" },
-    },
-    { tag: "input",
-    as: "confirmCom",
-    attr: {
-      type: "button",
-      value: "Add",
-    },
-  }]
+      },{
+      tag: "input",
+      as: "confirmCom",
+      attr: {
+        type: "button",
+        value: "Add",
+      },
+    }]
   }, document);
   document.body.appendChild(this.com);
   document.confirmCom.addEventListener("click", this.validCom.bind(this));
-}
+};
 
 AskBox.prototype.destroy = function(e) {
   if (e.target != document.inputCom) {
@@ -37,14 +37,16 @@ AskBox.prototype.destroy = function(e) {
 };
 
 AskBox.prototype.validCom = function(e) {
-  console.log(document.inputCom);
   if (document.inputCom === "") {
     return ;
   }
-  var column = new r.CommentsCol();
-  column.addComment(this).bind(column);
-  this.destroy(e).bind(this);
-}
+  /*
+  **Appelle cCol : singleton || fire event
+  */
+  var column = r.CommentsCol.getInstance();
+  column.addComment(this);
+  this.destroy(e);
+};
 
 return AskBox;
 

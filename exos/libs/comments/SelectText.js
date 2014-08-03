@@ -7,7 +7,7 @@ sand.define('Comments/SelectText', [
     this.ask = null;
     document.addEventListener("mouseup", this.getSelectedText.bind(this));
     document.addEventListener("mousedown", this.destroyAsk.bind(this));
-  }
+  };
 
   SelectText.prototype.getSelectedText = function(e) {
     if (this.ask != null)
@@ -24,7 +24,7 @@ sand.define('Comments/SelectText', [
     if (sText === "")
       return ;
     this.ask = new r.AskBox(sText, e);
-  }
+  };
 
   SelectText.prototype.destroyAsk = function(e) {
     if (e.target == this.ask || this.ask == null) {
@@ -32,7 +32,7 @@ sand.define('Comments/SelectText', [
     }
     this.ask.destroy(e);
     this.ask = null;
-  }
+  };
 
   return SelectText;
 });
