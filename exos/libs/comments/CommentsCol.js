@@ -13,7 +13,7 @@ var CommentsCol = function() {
 CommentsCol.prototype.addComment = function(askCom) {
   var com = new r.Comment(askCom);
   this.comArray.push(com);
-  console.log(this.comArray);
+  document.deleteCom.addEventListener("click", this.removeCom.bind(this));
   this.displayCol();
 };
 
@@ -25,6 +25,15 @@ CommentsCol.prototype.displayCol = function() {
   }
 };
 
+CommentsCol.prototype.removeCom = function(e) {
+  for (var i = -1; ++i < this.comArray.length;) {
+    if (this.comArray[i].com == e.target.parentNode) {
+      this.comArray[i].com.remove();
+      this.comArray.splice(i, 1);
+    }
+  }
+  this.displayCol();
+}
 
 return {
   getInstance: function() {

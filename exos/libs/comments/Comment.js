@@ -14,6 +14,14 @@ var Comment = function(askCom) {
       width: "20%",
       "background-color": "#7093DB"
     },
+    children: [{
+      tag: "input",
+      as: "deleteCom",
+      attr: {
+        type: "button",
+        value: "X"
+      }
+    }]
   }, document);
 };
 

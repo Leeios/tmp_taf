@@ -14,7 +14,7 @@ var AskBox = function (sText, e) {
       top: e.pageY,
     },
     children: [{
-        tag: "input",
+      tag: "input",
       as: 'inputCom',
       attr: { placeholder: "Enter a comment" },
       },{
