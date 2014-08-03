@@ -22,7 +22,7 @@ sand.define('Comments/SelectText', [
     else if (document.selection) {
       this.sText = document.selection.createRange().text;
     }
-    if (this.sText === "" || !(this.sText))
+    if (this.sText.toString() === "" || !(this.sText))
       return ;
     this.setRange();
     this.ask = new r.AskBox(this.sText, e);
