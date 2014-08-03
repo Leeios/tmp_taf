@@ -1,4 +1,5 @@
 sand.define('Comments/SelectText', [
+  'DOM/toDOM',
   'Comments/AskBox'
 ], function(r) {
 
@@ -33,6 +34,8 @@ sand.define('Comments/SelectText', [
       this.range = this.sText.getRangeAt(0).cloneRange();
       this.range.collapse(false);
       console.log(this.range);
+      this.range.insertNode(
+        document.createTextNode("<strong>" + this.sText.toString() + "</strong>"));
     }
   };
 
