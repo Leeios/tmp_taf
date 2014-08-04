@@ -6,7 +6,6 @@ sand.define('Comments/SelectText', [
   var SelectText = function () {
     this.sText = "";
     this.ask = null;
-    this.range = null;
     document.addEventListener("mouseup", this.getSelectedText.bind(this));
     document.addEventListener("mousedown", this.destroyAsk.bind(this));
   };
@@ -25,18 +24,7 @@ sand.define('Comments/SelectText', [
     }
     if (this.sText.toString() === "" || !(this.sText))
       return ;
-    this.setRange();
     this.ask = new r.AskBox(this.sText, e);
-  };
-
-  SelectText.prototype.setRange = function() {
-    if (this.sText.rangeCount > 0) {
-      this.range = this.sText.getRangeAt(0).cloneRange();
-      this.range.collapse(false);
-      console.log(this.range);
-      this.range.insertNode(
-        document.createTextNode("<strong>" + this.sText.toString() + "</strong>"));
-    }
   };
 
   SelectText.prototype.destroyAsk = function(e) {
@@ -45,7 +33,6 @@ sand.define('Comments/SelectText', [
     }
     this.ask.com.remove();
     this.ask = null;
-    this.range = null;
   };
 
   return SelectText;
