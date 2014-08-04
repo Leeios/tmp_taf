@@ -47,8 +47,8 @@ Comment.prototype.editSText = function() {
   this.range.execCommand("HiliteColor", false, "#FFFF66");
   this.range.designMode = "off";
   // this.range.surroundContents(this.editNode);
-  this.editNode.addEventListener("mouseover", this.showCom.bind(this))
-  this.editNode.addEventListener("mouseout", this.unshowCom.bind(this))
+  this.editNode.addEventListener("mouseover", this.showCom.bind(this));
+  this.editNode.addEventListener("mouseout", this.unshowCom.bind(this));
 };
 
 Comment.prototype.showCom = function() {
