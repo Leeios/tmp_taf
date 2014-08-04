@@ -17,7 +17,7 @@ var Comment = function(askCom) {
       overflow: "hidden",
       width: "20%",
       top: this.actualTop + "px",
-      height: "auto",
+      height: "30px",
       right: "0px",
       "background-color": "#7093DB"
     },
@@ -41,7 +41,12 @@ Comment.prototype.editSText = function() {
     style: { "background-color": "#FFFF66" }
   }, document);
   this.actualTop = this.range.getBoundingClientRect().top;
-  this.range.surroundContents(this.editNode);
+  this.sText.removeAllRanges();
+  this.sText.addRange(this.range);
+  this.range.designMode = "on";
+  this.range.execCommand("HiliteColor", false, "#FFFF66");
+  this.range.designMode = "off";
+  // this.range.surroundContents(this.editNode);
   this.editNode.addEventListener("mouseover", this.showCom.bind(this))
   this.editNode.addEventListener("mouseout", this.unshowCom.bind(this))
 };
@@ -55,7 +60,7 @@ Comment.prototype.showCom = function() {
 
 Comment.prototype.unshowCom = function() {
   this.com.style["background-color"] = "#7093DB";
-  // this.com.style["height"] = "30px";
+  this.com.style["height"] = "30px";
   this.editNode.style["background-color"] = "FFFF66";
   this.com.addEventListener("mouseover", this.showCom.bind(this));
 };
@@ -63,10 +68,13 @@ Comment.prototype.unshowCom = function() {
 
 
 Comment.prototype.destroy = function() {
-  var pa = this.editNode.parentNode;
-  while (this.editNode.firstChild) {
-    pa.insertBefore(this.editNode.firstChild, this.editNode);
-  }
+  // var pa = this.editNode.parentNode;
+  // while (this.editNode.firstChild) {
+  //   pa.insertBefore(this.editNode.firstChild, this.editNode);
+  // }
+  this.range.designMode = "on";
+  this.range.execCommand("RemoveFormat", false, null);
+  this.range.designMode = "off";
   this.com.remove();
 };
 

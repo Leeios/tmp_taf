@@ -21,13 +21,11 @@ var AskBox = function (sText, e) {
   }, document);
   document.body.appendChild(this.com);
   this.com.focus();
-  this.com.addEventListener("keypress", function() {
-    var key = e.keyCode;
-    console.log(e.preventDefault());
-    if (key == 13) {
-      this.validCom.bind(this);
+  this.com.addEventListener("keypress", function(e) {
+    if (e.keyCode === 13) {
+      this.validCom();
     }
-  })
+  }.bind(this))
   this.com.addEventListener("click", this.validCom.bind(this));
 };
 
