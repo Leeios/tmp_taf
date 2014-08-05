@@ -24,7 +24,7 @@ var Comment = function(askCom) {
     children: [{
       tag: "input",
       as: "deleteCom",
-      style: {float: "left"},
+      style: {left: "0px", top: "0px"},
       attr: {
         type: "button",
         value: "X"
@@ -32,8 +32,9 @@ var Comment = function(askCom) {
     }]
   }, document);
   this.height = parseInt(this.com.style.height);
-  socket.emit("newComment", {sText: this.sText, text: this.com.innerHTML, top: this.actualTop});
+  // socket.emit("newComment", {sText: this.sText, text: this.com.innerHTML, top: this.actualTop});
   this.com.addEventListener("mouseover", this.showCom.bind(this));
+  this.com.addEventListener("mouseout", this.unshowCom.bind(this));
 };
 
 Comment.prototype.editSText = function() {
@@ -44,10 +45,16 @@ Comment.prototype.editSText = function() {
   this.actualTop = this.range.getBoundingClientRect().top;
   this.sText.removeAllRanges();
   this.sText.addRange(this.range);
-  // this.range.designMode = "on";
-  // this.range.execCommand("HiliteColor", false, "#FFFF66");
-  // this.range.designMode = "off";
+
+  var frag = this.range.extractContents();
+  this.editNode.appendChild(frag);
+  this.range.insertNode(this.editNode);
+  if (!this.range.collapsed) {
+    this.range.deleteContents();
+  }
   this.range.surroundContents(this.editNode);
+  document.body.appendChild(this.editNode);
+
   this.editNode.addEventListener("mouseover", this.showCom.bind(this));
   this.editNode.addEventListener("mouseout", this.unshowCom.bind(this));
 };
@@ -56,14 +63,12 @@ Comment.prototype.showCom = function() {
   this.com.style["background-color"] = "#F3F3F3";
   this.com.style["height"] = "auto";
   this.editNode.style["background-color"] = "#FF9900";
-  this.com.addEventListener("mouseout", this.unshowCom.bind(this));
 };
 
 Comment.prototype.unshowCom = function() {
   this.com.style["background-color"] = "#7093DB";
   this.com.style["height"] = "30px";
-  this.editNode.style["background-color"] = "FFFF66";
-  this.com.addEventListener("mouseover", this.showCom.bind(this));
+  this.editNode.style["background-color"] = "#FFFF66";
 };
 
 
@@ -73,9 +78,6 @@ Comment.prototype.destroy = function() {
   while (this.editNode.firstChild) {
     pa.insertBefore(this.editNode.firstChild, this.editNode);
   }
-  // this.range.designMode = "on";
-  // this.range.execCommand("RemoveFormat", false, null);
-  // this.range.designMode = "off";
   this.com.remove();
 };
 

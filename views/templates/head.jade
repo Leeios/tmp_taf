@@ -2,12 +2,21 @@ head
 	title Comment test
 	meta(charset="utf-8")
 	meta(name="viewport", content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0")
+
 	link(rel='stylesheet', href='css/index.css', type='text/css')
+	link(rel='stylesheet', href='css/shCore.css', type='text/css')
+	link(rel='stylesheet', href='css/shCoreDefault.css', type='text/css')
+
 	script(type = 'text/javascript', src = "http://localhost:3000/socket.io/socket.io.js")
-	script(type = 'text/javascript', src = "js/libs/filedrop-min.js")
 	script(type = 'text/javascript', src = "js/libs/sand.min.js")
 	script(type = 'text/javascript', src = "js/libs/toDOM.sand.js")
+
+	script(type = 'text/javascript', src = "js/libs/shCore.js")
+	script(type = 'text/javascript', src = "js/scripts/shBrushJScript.js")
+
+	script(type = 'text/javascript', src = "js/libs/ReadUpload.js")
 	script(type = 'text/javascript', src = "js/libs/comments/AskBox.js")
 	script(type = 'text/javascript', src = "js/libs/comments/SelectText.js")
 	script(type = 'text/javascript', src = "js/libs/comments/Comment.js")
 	script(type = 'text/javascript', src = "js/libs/comments/CommentsCol.js")
+

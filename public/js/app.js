@@ -1,9 +1,10 @@
 sand.define('appComments', [
   'Comments/SelectText',
-  'Comments/CommentsCol'
+  'ReadUpload'
 ], function(r) {
 var appComments = function() {
   this.sText = new r.SelectText();
+  this.rUpload = new r.ReadUpload();
 }
 return appComments;
 });
@@ -12,13 +13,6 @@ return appComments;
 sand.require('appComments', function(r){
   //Socket co
   socket = io.connect();
-  //File dropping
-  var zone = new FileDrop('upload', null);
-  zone.event('send', function (files) {
-    files.each(function (file) {
-      console.log("File loaded");
-    })
-  });
 
   //Start comments app
   app = new r.appComments();
