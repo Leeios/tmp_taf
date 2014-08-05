@@ -32,6 +32,7 @@ var Comment = function(askCom) {
     }]
   }, document);
   this.height = parseInt(this.com.style.height);
+  socket.emit("newComment", {sText: this.sText, text: this.com.innerHTML, top: this.actualTop});
   this.com.addEventListener("mouseover", this.showCom.bind(this));
 };
 

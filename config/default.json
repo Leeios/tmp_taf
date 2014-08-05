@@ -3,8 +3,8 @@
 		"Host": "localhost",
 		"Port": 3000,
 		"dbHost": "mongodb",
-		"dbName": "game",
-		"dbPort": 10065,
+		"dbName": "Test_database",
+		"dbPort": 10043,
 		"dbUser": "lili",
 		"dbPwd": "castor"
 	}
