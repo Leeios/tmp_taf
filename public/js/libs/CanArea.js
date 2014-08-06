@@ -24,7 +24,7 @@ CanArea.prototype.draw = function () {
   } else {
     console.log("This form is not implemented yet");
   }
-}
+};
 
 CanArea.prototype.clone = function() {
   var copy = new CanArea(this.origin, this.end, this.form, this.ctx);
@@ -33,7 +33,8 @@ CanArea.prototype.clone = function() {
 
 CanArea.prototype.clearForm = function() {
   if (this.form == "rectangle") {
-    this.ctx.clearRect(this.origin[0], this.origin[1], this.end[0] - this.origin[0], this.end[1] - this.origin[1]);
+    this.ctx.clearRect(0, 0, document.body.canWindow.width, document.body.canWindow.height);
+    // this.ctx.clearRect(this.origin[0], this.origin[1], this.end[0] - this.origin[0], this.end[1] - this.origin[1]);
   } else {
     console.log("This form is not implemented yet");
   }
