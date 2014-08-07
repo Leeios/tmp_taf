@@ -7,21 +7,15 @@ sand.define('SingleComment', [
     this.txt = txt;
     this.edit = edit;
 
-    this.validCom = r.toDOM({
-      tag: "button",
-      innerHTML: "OK",
-      attr: { type: "button"},
-      style: { display: "inline" }
-    })
     this.elDiv = r.toDOM({
       tag:"div",
       innerHTML: this.txt,
-      style: { display: "inline", width: "100%" }
+      style: { display: "inline", width: "100%", height: '100%' }
     });
-    this.elInput = r.toDOM({
-      tag:"input",
+    this.elTxt = r.toDOM({
+      tag:"textarea",
       attr: { placeholder: this.txt },
-      style: { display: "inline", width: "100%" }
+      style: { display: "inline", width: "100%", height: '100%' }
     });
     this.el = r.toDOM({
       tag: "div",
@@ -36,11 +30,15 @@ sand.define('SingleComment', [
       },
       children: [
       this.elDiv,
-      this.elInput,
-      this.validCom
+      this.elTxt,
       ]
     });
     this.switchEdit();
+    this.el.addEventListener("keypress", function(e) {
+      if (e.keyCode === 13) {
+        this.fire("tmpComValid");
+      }
+    }.bind(this));
   }
 
   SingleComment.prototype.addArea = function(canArea) {
@@ -49,18 +47,25 @@ sand.define('SingleComment', [
     }
     this.areas.push(canArea);
     console.log(canArea.origin[1], document.body.scrollTop);
+    this.actualTop = canArea.origin[1];
     this.el.style.top = canArea.origin[1] + "px";
-    this.switchEdit();
+    // this.switchEdit();
   };
 
+  SingleComment.prototype.validCom = function() {
+    this.edit = 0;
+    this.switchEdit();
+    this.txt = this.elTxt.value;
+    this.elDiv.innerHTML = this.txt;
+  };
 
   SingleComment.prototype.switchEdit = function() {
-    if (this.edit === 0) {
+    if (this.edit == 0) {
       this.elDiv.style.display = "inline";
-      this.elInput.style.display = "none";
+      this.elTxt.style.display = "none";
     } else {
       this.elDiv.style.display = "none";
-      this.elInput.style.display = "inline";
+      this.elTxt.style.display = "inline";
     }
   }
 

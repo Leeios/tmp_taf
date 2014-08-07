@@ -26,7 +26,7 @@ Publisher.prototype.on = function(e, callback) {
 Publisher.extend = function (Class) {
   var C = function () {
     Publisher.call(this);
-    Class.call(this);
+    Class.apply(this, arguments);
   }
   for (var i in Publisher.prototype) {
     C.prototype[i] = Publisher.prototype[i];

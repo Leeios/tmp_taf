@@ -19,23 +19,35 @@ sand.define('ColComments', [
   }
 
   ColComments.prototype.addComment = function() {
-    this.tmpComment.edit = 0;
+    console.log(this)
+    this.tmpComment.validCom();
+    this.el.appendChild(this.tmpComment.el);
     this.commentList.push(this.tmpComment);
     this.tmpComment = null;
+    this.displayCol();
   };
 
   ColComments.prototype.addArea = function(canArea) {
     if (!this.tmpComment) {
       this.tmpComment = new r.SingleComment("Enter a comment ...", 1);
+      this.tmpComment.on("tmpComValid", this.addComment.bind(this));
+      this.el.appendChild(this.tmpComment.el);
     }
     this.tmpComment.addArea(canArea);
-    this.displayCol();
   };
 
   ColComments.prototype.displayCol = function() {
-    this.el.appendChild(this.tmpComment.el);
+    var previous_down;
+
+    this.commentList.sort(function (a, b) {
+      return a.actualTop - b.actualTop;
+    });
+
     for (var i = 0, len = this.commentList.length; i < len; i++) {
-      this.el.appendChild(this.commentList[i].el);
+      this.commentList[i].el.style.top = this.commentList[i].actualTop + "px";
+      i > 0 && (previous_down = parseInt(this.commentList[i - 1].el.style.top) + parseInt(this.commentList[i - 1].el.style.height))
+      && (previous_down >= parseInt(this.commentList[i].el.style.top))
+      && (this.commentList[i].el.style.top = previous_down + "px");
     }
   };
 

@@ -16,8 +16,9 @@ CanArea.prototype.refresh = function(origin, end, form) {
 }
 
 CanArea.prototype.draw = function () {
-  this.previous && this.clearForm.bind(this.previous)();
-  this.previous = this.clone();
+  // this.previous && this.clearForm.bind(this.previous)();
+  // this.previous = this.clone();
+  this.ctx.clearRect(0, 0, document.body.canWindow.width, document.body.canWindow.height);
   this.ctx.fillStyle = "rgba(0, 0, 200, 0.3)";
   if (this.form == "rectangle") {
     this.ctx.fillRect(this.origin[0], this.origin[1], this.end[0] - this.origin[0], this.end[1] - this.origin[1]);
