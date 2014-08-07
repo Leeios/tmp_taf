@@ -20,6 +20,7 @@ sand.define('ColComments', [
       for (var i = 0, len = this.commentList.length; i < len; i++) {
         if (el == this.commentList[i].el) {
           this.commentList.splice(i, 1);
+          this.displayCol();
           return ;
         }
       }

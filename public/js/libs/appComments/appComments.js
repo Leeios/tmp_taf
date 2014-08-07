@@ -3,7 +3,8 @@ sand.define('appComments', [
   'ReadUpload',
   'FileViewer',
   'CanTrack',
-  'ColComments'
+  'ColComments',
+  'CommentServer'
 ], function(r) {
 var appComments = function() {
 
@@ -11,6 +12,8 @@ var appComments = function() {
     tag: "div.wrapper"
   });
 
+  this.commentServer = new r.CommentServer();
+  this.commentServer.sendData("msg", "worktest server");
   this.rUpload = new r.ReadUpload();
   this.colComments = new r.ColComments();
 
@@ -27,6 +30,7 @@ var appComments = function() {
 
   this.rUpload.on('uploadDone', function (s) {
     this.fileViewer.refreshContent(s);
+    this.commentServer.sendData('file', s);
     this.canTrack.setSize(this.fileViewer.el.clientHeight, this.fileViewer.el.clientWidth);
   }.bind(this));
 

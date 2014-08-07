@@ -1,5 +1,5 @@
 //LAUNCHER
-sand.require('appComments', function(r){
+sand.require('appComments', function(r) {
   //Socket co
   socket = io.connect();
 

@@ -1,5 +1,4 @@
 sand.define('FileViewer', [
-  'OnFire',
   'DOM/toDOM'
 ], function(r) {
 

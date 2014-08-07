@@ -60,13 +60,9 @@ sand.define('SingleComment', [
       this.areas = [];
     }
     this.areas.push(canArea);
-    // canArea.el.addEventListener("mouseover", this.highStyle.bind(this));
-    // canArea.el.addEventListener("mouseout", this.usualStyle.bind(this));
     this.actualTop = canArea.origin[1];
     this.el.style.top = this.actualTop + "px";
-    console.log(this.el.style.top, this.actualTop)
     this.elTxt.focus();
-    // this.switchEdit();
   };
 
   SingleComment.prototype.validCom = function() {
