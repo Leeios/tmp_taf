@@ -7,8 +7,10 @@ var FileViewer = function() {
 
   this.el = r.toDOM({
     tag: "pre",
-    style: {
-      "z-index": 0
+     attr: {
+      unselectable: 'on',
+      onselectstart: 'return false;',
+      onmousedown: 'return false;'
     }
   });
 }

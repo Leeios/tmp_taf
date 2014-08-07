@@ -1,5 +1,5 @@
 html {
-  height: 100%;
+  height: 98%;
 }
 
 body {
@@ -8,4 +8,78 @@ body {
 
 pre {
   margin: 0;
+}
+
+.wrapper {
+  position: relative;
+  overflow-x: auto;
+  background-color: #4F4F4F;
+  border: 1px groove black;
+  width: 60%;
+}
+
+.canWindow {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  z-index: 1;
+}
+
+.colComments {
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  width: 35%;
+  min-height: 100%;
+}
+
+.fileViewer {
+  overflow-x: hidden;
+  display: inline-block;
+  min-width: 100%;
+  z-index: 0;
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.rUpload {
+}
+
+.comment {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 100%;
+  /*overflow: auto;*/
+  box-sizing: border-box;
+  background-color: #4F4F4F;
+  border: 1px groove black;
+  transition-property: top;
+  transition-duration: 1s;
+}
+
+.createButton {
+      display: inline;
+      height: 50%;
+      top: 0px;
+}
+
+.deleteButton {
+      display: inline;
+      height: 50% ;
+}
+
+.divComment {
+      display: inline;
+      width: 100%;
+      height: 100%;
+      box-sizing: border-box;
+}
+
+.txtComment {
+      display: inline;
+      width: 100%;
+      height: 100%;
 }

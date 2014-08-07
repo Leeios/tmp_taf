@@ -6,9 +6,9 @@ sand.define('ReadUpload', [
 var ReadUpload = function() {
 
   this.el = r.toDOM({
-    tag: "input",
+    tag: "input.rUpload",
     attr: { type: "file" },
-  });
+  }, document.body);
 
   this.el.addEventListener("change", this.uploadFile.bind(this));
 }
