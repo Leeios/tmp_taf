@@ -1,11 +1,12 @@
 sand.define('appComments', [
   'CanvasTrack',
   'CommentsGroup',
-  'ServerInterface',
   'DOM/toDOM',
   'FileFormat',
-  'ViewFile',
-  'UploadFile'
+  'GenerateLink',
+  'ServerInterface',
+  'UploadFile',
+  'ViewFile'
 ], function(r) {
 var appComments = function() {
 
@@ -14,13 +15,12 @@ var appComments = function() {
   });
 
   this.file = new r.FileFormat();
+  this.link = new r.GenerateLink();
   this.commentServer = new r.ServerInterface();
   this.uploadFile = new r.UploadFile();
   this.commentsGroup = new r.CommentsGroup();
 
   document.body.appendChild(this.uploadFile.el);
-  document.body.appendChild(this.wrapper);
-  document.body.appendChild(this.commentsGroup.el);
 
   this.viewFile = new r.ViewFile();
   this.canvasTrack = new r.CanvasTrack();
@@ -32,6 +32,10 @@ var appComments = function() {
     this.file.getMeta(meta);
   }.bind(this));
   this.uploadFile.on('uploadDone', function (s) {
+    this.link.getLink(this.file.uid);
+    document.body.appendChild(this.link.el);
+    document.body.appendChild(this.wrapper);
+    document.body.appendChild(this.commentsGroup.el);
     this.viewFile.refreshContent(s);
     this.file.s = s;
     this.commentServer.sendData('add', this.file);
