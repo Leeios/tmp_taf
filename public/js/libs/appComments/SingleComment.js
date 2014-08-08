@@ -39,7 +39,7 @@ sand.define('SingleComment', [
         this.fire("tmpComValid");
       } else {
         this.validCom();
-        this.fire("editCom");
+        this.fire("editCom", this.el);
       }
     }.bind(this));
 
@@ -74,10 +74,13 @@ sand.define('SingleComment', [
     this.edit = 0;
     this.switchEdit();
     this.txt = this.elTxt.value;
-    this.elDiv.innerHTML = this.txt.replace(/\ /g, "&nbsp").replace(/\n/g, "<"+"br/>").replace(/\[/g, '<pre>').replace(/\]/g, '</pre>');
+    this.elDiv.innerHTML = this.txt.replace(/\[/g, '<pre>').replace(/\]/g, '</pre>');
     for (var i = 0, len = this.elDiv.childNodes.length; i < len; i++) {
       if (this.elDiv.childNodes[i].tagName == "PRE") {
+        console.log(this.elDiv.childNodes[i].innerHTML);
         hljs.highlightBlock(this.elDiv.childNodes[i]);
+      } else {
+        this.elDiv.childNodes[i] = this.elDiv.childNodes[i].toString().replace(/\ /g, "&nbsp").replace(/\n/g, "<br/>");
       }
     }
     this.usualStyle();
@@ -104,14 +107,14 @@ sand.define('SingleComment', [
   };
 
 SingleComment.prototype.highStyle = function() {
-  this.el.style["background-color"] = "#4682B4";
+  this.el.style["background-color"] = "#000080";
   this.areas && (this.areas[0].ctx.fillStyle =  "rgba(0, 0, 200, 0.3)");
   this.displayArea();
   this.areas && (this.areas[0].ctx.fillStyle =  "rgba(200, 200, 200, 0.3)");
 };
 
 SingleComment.prototype.usualStyle = function() {
-  this.el.style["background-color"] = "#B0C4DE";
+  this.el.style["background-color"] = "#272822";
   this.displayArea();
 };
 

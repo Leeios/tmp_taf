@@ -1,6 +1,6 @@
 var idUser = 0;
-var mongoose = require('mongoose');
 var file_method = require('../model/file');
+var com_method = require('../model/comment');
 
 exports.socket = function(socket) {
 
@@ -11,10 +11,34 @@ exports.socket = function(socket) {
   socket.on('msg', function (message) {
     console.log('Client ' + socket.username + ' send :', message);
   });
-  socket.on('file', function (data) {
-    //file_method.insertFile(data);
+
+  var callback = function(id) {
+    socket.emit('id', id);
+  }
+
+  socket.on('add', function (data) {
+    if (data.model == 'File') {
+      file_method.insertFile(data, callback);
+    } else if (data.model == 'Com') {
+      com_method.insertCom(data, callback);
+    } else {
+      console.log('Data model is not recognized');
+    }
   });
-  socket.on('comment', function (message) {
-    console.log('Client ' + socket.username + ' send :', message);
+
+  socket.on('edit', function (data) {
+    if (data.model == 'Com') {
+      com_method.editCom(data);
+    } else {
+      console.log('Data model is not recognized');
+    }
+  });
+
+  socket.on('delete', function (data) {
+    if (data.model == 'Com') {
+      com_method.deleteCom(data);
+    } else {
+      console.log('Data model is not recognized');
+    }
   });
 }

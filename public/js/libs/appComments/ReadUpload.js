@@ -16,6 +16,7 @@ var ReadUpload = function() {
 ReadUpload.prototype.uploadFile = function(e) {
   var reader = new FileReader();
 
+  this.fire("fileMeta", this.el.files[0]);
   reader.readAsText(this.el.files[0]);
   reader.addEventListener("loadend", function (e) {
     this.fire('uploadDone', reader.result.replace(/</g, '&lt;').replace(/>/g, '&gt;'));

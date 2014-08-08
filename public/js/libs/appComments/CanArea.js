@@ -3,20 +3,15 @@ sand.define('CanArea', [
 
 var CanArea = function(origin, end, form, ctx) {
 
-  this.origin = [];
-  this.end = [];
-  this.origin[0] = origin[0];
-  this.origin[1] = origin[1];
-  this.end[0] = end[0];
-  this.end[1] = end[1];
+  this.origin = origin.slice(0);
+  this.end = end.slice(0);
   this.form = form;
   this.ctx = ctx;
 }
 
 CanArea.prototype.refresh = function(end) {
   this.previous = this.clone();
-  this.end[0] = end[0];
-  this.end[1] = end[1];
+  this.end = end.slice(0);
   this.draw();
 }
 
