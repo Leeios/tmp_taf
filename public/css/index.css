@@ -3,7 +3,7 @@ html {
 }
 
 body {
-  background-color: #323232;
+  background-image: url('../img/42back.gif');
 }
 
 pre {
@@ -52,34 +52,44 @@ pre {
   top: 0;
   right: 0;
   width: 100%;
-  /*overflow: auto;*/
+  padding: 0.5em;
   box-sizing: border-box;
-  background-color: #4F4F4F;
-  border: 1px groove black;
-  transition-property: top;
-  transition-duration: 1s;
+  background-color: #B0C4DE;
+  border-radius: 1em;
+  border: 2px ridge;
+  border-color: #272822;
+  transition-property: top 1s;
+  transition-property: background-color 0.7s;
 }
 
 .createButton {
-      display: inline;
-      height: 50%;
-      top: 0px;
+  display: inline;
+  width: 100% ;
+  border-radius: 10px;
 }
 
 .deleteButton {
-      display: inline;
-      height: 50% ;
+  display: inline;
+  width: 100% ;
+  border-radius: 10px;
 }
 
 .divComment {
-      display: inline;
-      width: 100%;
-      height: 100%;
-      box-sizing: border-box;
+  display: block;
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+  font-family: Tahoma, sans-serif;
+  font-size: small;
 }
 
 .txtComment {
-      display: inline;
-      width: 100%;
-      height: 100%;
+  display: block;
+  width: 98%;
+  height: 100%;
+  padding: 5px;
+  font-family: Tahoma, sans-serif;
+  font-size: small;
+  background-image: url('../img/42back.gif');
+  resize: horizontal;
 }

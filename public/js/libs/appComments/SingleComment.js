@@ -20,7 +20,7 @@ sand.define('SingleComment', [
     });
     this.elTxt = r.toDOM({
       tag:"textarea.txtComment",
-      attr: { placeholder: this.txt, rows: "5"}
+      attr: { placeholder: this.txt }
     });
     this.el = r.toDOM({
       tag: "div.comment",
@@ -39,6 +39,7 @@ sand.define('SingleComment', [
         this.fire("tmpComValid");
       } else {
         this.validCom();
+        this.fire("editCom");
       }
     }.bind(this));
 
@@ -51,6 +52,10 @@ sand.define('SingleComment', [
     //Delete
     this.delete.addEventListener("click", this.destroy.bind(this));
 
+    this.elTxt.addEventListener("keypress", function () {
+      this.elTxt.style.height = "1px";
+      this.elTxt.style.height = this.elTxt.scrollHeight + 10 + "px";
+    }.bind(this));
     this.el.addEventListener("mouseover", this.highStyle.bind(this));
     this.el.addEventListener("mouseout", this.usualStyle.bind(this));
   }
@@ -75,6 +80,7 @@ sand.define('SingleComment', [
         hljs.highlightBlock(this.elDiv.childNodes[i]);
       }
     }
+    this.usualStyle();
   };
 
   SingleComment.prototype.switchEdit = function() {
@@ -98,14 +104,14 @@ sand.define('SingleComment', [
   };
 
 SingleComment.prototype.highStyle = function() {
-  this.el.style["background-color"] = "#450245";
-  this.areas && (this.areas[0].ctx.fillStyle =  "rgba(200, 0, 200, 0.3)");
+  this.el.style["background-color"] = "#4682B4";
+  this.areas && (this.areas[0].ctx.fillStyle =  "rgba(0, 0, 200, 0.3)");
   this.displayArea();
+  this.areas && (this.areas[0].ctx.fillStyle =  "rgba(200, 200, 200, 0.3)");
 };
 
 SingleComment.prototype.usualStyle = function() {
-  this.el.style["background-color"] = "#4F4F4F";
-  this.areas && (this.areas[0].ctx.fillStyle =  "rgba(0, 0, 200, 0.3)");
+  this.el.style["background-color"] = "#B0C4DE";
   this.displayArea();
 };
 

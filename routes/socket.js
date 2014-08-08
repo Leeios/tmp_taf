@@ -12,7 +12,7 @@ exports.socket = function(socket) {
     console.log('Client ' + socket.username + ' send :', message);
   });
   socket.on('file', function (data) {
-    file_method.insertFile(data);
+    //file_method.insertFile(data);
   });
   socket.on('comment', function (message) {
     console.log('Client ' + socket.username + ' send :', message);

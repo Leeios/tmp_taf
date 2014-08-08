@@ -44,7 +44,7 @@ CanTrack.prototype.drawSelection = function(e) {
   var rect = this.el.getBoundingClientRect();
   this.end[0] = e.clientX - rect.left;
   this.end[1] = e.clientY - rect.top;
-  this.ctx.fillStyle = "rgba(0, 0, 200, 0.3)";
+  this.ctx.fillStyle = "rgba(200, 200, 200, 0.3)";
   this.canArea.refresh(this.end);
 };
 
