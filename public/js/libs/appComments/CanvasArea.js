@@ -1,7 +1,7 @@
-sand.define('CanArea', [
+sand.define('CanvasArea', [
 ], function(r) {
 
-var CanArea = function(origin, end, form, ctx) {
+var CanvasArea = function(origin, end, form, ctx) {
 
   this.origin = origin.slice(0);
   this.end = end.slice(0);
@@ -9,13 +9,13 @@ var CanArea = function(origin, end, form, ctx) {
   this.ctx = ctx;
 }
 
-CanArea.prototype.refresh = function(end) {
+CanvasArea.prototype.refresh = function(end) {
   this.previous = this.clone();
   this.end = end.slice(0);
   this.draw();
 }
 
-CanArea.prototype.draw = function () {
+CanvasArea.prototype.draw = function () {
   this.previous && this.clearForm.bind(this.previous)();
   if (this.form == "rectangle") {
     this.ctx.fillRect(this.origin[0], this.origin[1], this.end[0] - this.origin[0], this.end[1] - this.origin[1]);
@@ -24,12 +24,12 @@ CanArea.prototype.draw = function () {
   }
 };
 
-CanArea.prototype.clone = function() {
-  var copy = new CanArea(this.origin, this.end, this.form, this.ctx);
+CanvasArea.prototype.clone = function() {
+  var copy = new CanvasArea(this.origin, this.end, this.form, this.ctx);
   return (copy);
 };
 
-CanArea.prototype.clearForm = function() {
+CanvasArea.prototype.clearForm = function() {
   if (this.form == "rectangle") {
     this.ctx.clearRect(this.origin[0], this.origin[1], this.end[0] - this.origin[0], this.end[1] - this.origin[1]);
   } else {
@@ -37,5 +37,5 @@ CanArea.prototype.clearForm = function() {
   }
 };
 
-return CanArea;
+return CanvasArea;
 });

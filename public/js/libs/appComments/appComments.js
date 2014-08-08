@@ -1,10 +1,11 @@
 sand.define('appComments', [
+  'CanvasTrack',
+  'CommentsGroup',
+  'ServerInterface',
   'DOM/toDOM',
-  'ReadUpload',
-  'FileViewer',
-  'CanTrack',
-  'ColComments',
-  'CommentServer'
+  'FileFormat',
+  'ViewFile',
+  'UploadFile'
 ], function(r) {
 var appComments = function() {
 
@@ -12,51 +13,40 @@ var appComments = function() {
     tag: "div.wrapper"
   });
 
-  this.commentServer = new r.CommentServer();
-  this.rUpload = new r.ReadUpload();
-  this.colComments = new r.ColComments();
+  this.file = new r.FileFormat();
+  this.commentServer = new r.ServerInterface();
+  this.uploadFile = new r.UploadFile();
+  this.commentsGroup = new r.CommentsGroup();
 
-  document.body.appendChild(this.rUpload.el);
+  document.body.appendChild(this.uploadFile.el);
   document.body.appendChild(this.wrapper);
-  document.body.appendChild(this.colComments.el);
+  document.body.appendChild(this.commentsGroup.el);
 
+  this.viewFile = new r.ViewFile();
+  this.canvasTrack = new r.CanvasTrack();
 
-  this.fileViewer = new r.FileViewer();
-  this.canTrack = new r.CanTrack();
+  this.wrapper.appendChild(this.viewFile.el);
+  this.wrapper.appendChild(this.canvasTrack.el);
 
-  this.wrapper.appendChild(this.fileViewer.el);
-  this.wrapper.appendChild(this.canTrack.el);
-
-  this.rUpload.on('fileMeta', function (data) {
-    this.fileMeta = data;
+  this.uploadFile.on('fileMeta', function (meta) {
+    this.file.getMeta(meta);
   }.bind(this));
-  this.rUpload.on('uploadDone', function (s) {
-    this.fileViewer.refreshContent(s);
-    var parseFile = { name:this.fileMeta.name, size:this.fileMeta.size, type: this.fileMeta.type, s: s };
-    parseFile.model = 'File';
-    this.commentServer.sendData('add', parseFile);
-    this.commentServer.on('idFile', function (id) {
-      this.fileMeta.id = id;
-    }.bind(this));
-    this.canTrack.setSize(this.fileViewer.el.clientHeight, this.fileViewer.el.clientWidth);
+  this.uploadFile.on('uploadDone', function (s) {
+    this.viewFile.refreshContent(s);
+    this.file.s = s;
+    this.commentServer.sendData('add', this.file);
+    this.canvasTrack.setSize(this.viewFile.el.clientHeight, this.viewFile.el.clientWidth);
   }.bind(this));
 
-  this.canTrack.on('validSelection', function(canArea) {
-      this.colComments.addArea(canArea);
+  this.canvasTrack.on('validSelection', function(canArea) {
+      this.commentsGroup.addArea(canArea);
     }.bind(this));
 
   ['add', 'edit', 'delete'].each(function (e) {
-    this.colComments.on(e, function(data) {
-      data.file_id = this.fileMeta.id;
+    this.commentsGroup.on(e, function(data) {
+      data.file_uid = this.file.uid;
       data.model = 'Com';
       this.commentServer.sendData(e, data);
-
-      if (e == 'add') {
-        this.commentServer.on('idCom', function (id) {
-          this.colComments.comValidation.id = id;
-          this.colComments.comValidation = null;
-        }.bind(this));
-      }
     }.bind(this))
   }.bind(this));
 

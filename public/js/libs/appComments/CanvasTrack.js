@@ -1,11 +1,11 @@
-sand.define('CanTrack', [
+sand.define('CanvasTrack', [
   'DOM/toDOM',
   'Publisher',
-  'CanArea'
+  'CanvasArea'
 ], function(r) {
 
 /*Put form (rectangle, circle) in parameter, this.form = form then*/
-var CanTrack = function(h, w) {
+var CanvasTrack = function(h, w) {
 
   this.origin =[];
   this.end =[];
@@ -23,16 +23,16 @@ var CanTrack = function(h, w) {
   this.el.addEventListener('mouseout', this.reset.bind(this));
 }
 
-CanTrack.prototype.setSize = function(h, w) {
+CanvasTrack.prototype.setSize = function(h, w) {
   this.el.height = h;
   this.el.width = w;
 };
 
-CanTrack.prototype.startSelection = function (e) {
+CanvasTrack.prototype.startSelection = function (e) {
   var rect = this.el.getBoundingClientRect();
   this.origin[0] = e.clientX - rect.left;
   this.origin[1] = e.clientY - rect.top;
-  this.canArea = new r.CanArea(this.origin, this.origin, this.form, this.ctx);
+  this.canvasArea = new r.CanvasArea(this.origin, this.origin, this.form, this.ctx);
   this.mouseMoveHandler = this.drawSelection.bind(this);
   this.mouseUpHandler = this.validSelection.bind(this);
   this.finish = 0;
@@ -40,32 +40,32 @@ CanTrack.prototype.startSelection = function (e) {
   this.el.addEventListener('mouseup', this.mouseUpHandler);
 }
 
-CanTrack.prototype.drawSelection = function(e) {
+CanvasTrack.prototype.drawSelection = function(e) {
   var rect = this.el.getBoundingClientRect();
   this.end[0] = e.clientX - rect.left;
   this.end[1] = e.clientY - rect.top;
   this.ctx.fillStyle = "rgba(200, 200, 200, 0.3)";
-  this.canArea.refresh(this.end);
+  this.canvasArea.refresh(this.end);
 };
 
-CanTrack.prototype.validSelection = function(e) {
+CanvasTrack.prototype.validSelection = function(e) {
   this.el.removeEventListener('mousemove', this.mouseMoveHandler);
   this.el.removeEventListener('mouseup', this.mouseUpHandler);
   this.finish = 1;
-  this.canArea.previous = this.canArea.clone();
-  this.fire('validSelection', this.canArea);
+  this.canvasArea.previous = this.canvasArea.clone();
+  this.fire('validSelection', this.canvasArea);
 };
 
-CanTrack.prototype.reset = function() {
+CanvasTrack.prototype.reset = function() {
   this.el.removeEventListener('mousemove', this.mouseMoveHandler);
   this.el.removeEventListener('mouseup', this.mouseUpHandler);
-  if (this.finish == 0 && this.canArea) {
-    this.canArea.clearForm();
+  if (this.finish == 0 && this.canvasArea) {
+    this.canvasArea.clearForm();
   }
   this.origin = [];
   this.end = [];
 };
 
-CanTrack = r.Publisher.extend(CanTrack);
-return CanTrack;
+CanvasTrack = r.Publisher.extend(CanvasTrack);
+return CanvasTrack;
 });

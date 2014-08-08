@@ -2,18 +2,19 @@ var mongoose = require('mongoose'),
   cfg = require('config').Default;
 
 var comSchema = new mongoose.Schema({
+  uid: String,
   txt: String,
   author: String,
   areas: { type : Array , "default" : [] }
 });
 
 var fileSchema = new mongoose.Schema({
+  uid: String,
   name: String,
   size: Number,
   type: String,
   content: String,
-  comments: { type : Array , "default" : [] },
-  key: String
+  comments: { type : Array , "default" : [] }
 });
 
 mongoose.model('Com', comSchema);

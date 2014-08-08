@@ -12,15 +12,11 @@ exports.socket = function(socket) {
     console.log('Client ' + socket.username + ' send :', message);
   });
 
-  var callback = function(id) {
-    socket.emit('id', id);
-  }
-
   socket.on('add', function (data) {
     if (data.model == 'File') {
-      file_method.insertFile(data, callback);
+      file_method.insertFile(data);
     } else if (data.model == 'Com') {
-      com_method.insertCom(data, callback);
+      com_method.insertCom(data);
     } else {
       console.log('Data model is not recognized');
     }

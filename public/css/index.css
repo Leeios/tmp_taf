@@ -25,7 +25,7 @@ pre {
   z-index: 1;
 }
 
-.colComments {
+.commentsGroup {
   position: absolute;
   top: 0px;
   right: 0px;
@@ -33,7 +33,7 @@ pre {
   min-height: 100%;
 }
 
-.fileViewer {
+.viewFile {
   overflow-x: hidden;
   display: inline-block;
   min-width: 100%;
@@ -44,7 +44,7 @@ pre {
   user-select: none;
 }
 
-.rUpload {
+.uploadFile {
 }
 
 .comment {

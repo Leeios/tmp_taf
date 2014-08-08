@@ -1,11 +1,11 @@
-sand.define('FileViewer', [
+sand.define('ViewFile', [
   'DOM/toDOM'
 ], function(r) {
 
-var FileViewer = function() {
+var ViewFile = function() {
 
   this.el = r.toDOM({
-    tag: "pre",
+    tag: "pre.viewFile",
      attr: {
       unselectable: 'on',
       onselectstart: 'return false;',
@@ -14,11 +14,11 @@ var FileViewer = function() {
   });
 }
 
-FileViewer.prototype.refreshContent = function(s) {
+ViewFile.prototype.refreshContent = function(s) {
   this.el.innerHTML = s;
   hljs.highlightBlock(this.el);
 };
 
-return FileViewer;
+return ViewFile;
 
 })

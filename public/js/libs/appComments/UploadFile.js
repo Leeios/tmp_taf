@@ -1,19 +1,19 @@
-sand.define('ReadUpload', [
+sand.define('UploadFile', [
   'DOM/toDOM',
   'Publisher'
 ], function(r) {
 
-var ReadUpload = function() {
+var UploadFile = function() {
 
   this.el = r.toDOM({
-    tag: "input.rUpload",
+    tag: "input.uploadFile",
     attr: { type: "file" },
   }, document.body);
 
   this.el.addEventListener("change", this.uploadFile.bind(this));
 }
 
-ReadUpload.prototype.uploadFile = function(e) {
+UploadFile.prototype.uploadFile = function(e) {
   var reader = new FileReader();
 
   this.fire("fileMeta", this.el.files[0]);
@@ -23,6 +23,6 @@ ReadUpload.prototype.uploadFile = function(e) {
   }.bind(this));
 }
 
-ReadUpload = r.Publisher.extend(ReadUpload);
-return ReadUpload;
+UploadFile = r.Publisher.extend(UploadFile);
+return UploadFile;
 });

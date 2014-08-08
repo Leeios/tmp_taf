@@ -1,11 +1,12 @@
-sand.define('SingleComment', [
+sand.define('Comment', [
   'DOM/toDOM',
   'Publisher'
 ], function(r) {
 
-  var SingleComment = function(txt, edit) {
+  var Comment = function(txt, edit) {
     this.txt = txt;
     this.edit = edit;
+    this.uid = this.guid()();
 
     this.create = r.toDOM({
       tag:"input.createButton",
@@ -60,7 +61,7 @@ sand.define('SingleComment', [
     this.el.addEventListener("mouseout", this.usualStyle.bind(this));
   }
 
-  SingleComment.prototype.addArea = function(canArea) {
+  Comment.prototype.addArea = function(canArea) {
     if (!this.areas) {
       this.areas = [];
     }
@@ -70,7 +71,7 @@ sand.define('SingleComment', [
     this.elTxt.focus();
   };
 
-  SingleComment.prototype.validCom = function() {
+  Comment.prototype.validCom = function() {
     this.edit = 0;
     this.switchEdit();
     this.txt = this.elTxt.value;
@@ -86,7 +87,7 @@ sand.define('SingleComment', [
     this.usualStyle();
   };
 
-  SingleComment.prototype.switchEdit = function() {
+  Comment.prototype.switchEdit = function() {
     if (this.edit == 0) {
       this.el.removeChild(this.elTxt);
       this.el.appendChild(this.elDiv);
@@ -100,25 +101,25 @@ sand.define('SingleComment', [
     }
   }
 
-  SingleComment.prototype.displayArea = function() {
+  Comment.prototype.displayArea = function() {
     for (var i = 0, len = this.areas.length; i < len; i++) {
       this.areas[i].draw();
     }
   };
 
-SingleComment.prototype.highStyle = function() {
+Comment.prototype.highStyle = function() {
   this.el.style["background-color"] = "#000080";
   this.areas && (this.areas[0].ctx.fillStyle =  "rgba(0, 0, 200, 0.3)");
   this.displayArea();
   this.areas && (this.areas[0].ctx.fillStyle =  "rgba(200, 200, 200, 0.3)");
 };
 
-SingleComment.prototype.usualStyle = function() {
+Comment.prototype.usualStyle = function() {
   this.el.style["background-color"] = "#272822";
   this.displayArea();
 };
 
-SingleComment.prototype.destroy = function() {
+Comment.prototype.destroy = function() {
   this.fire("deleteCom", this.el);
   this.el.remove();
   for (var i = 0, len = this.areas.length; i < len; i++) {
@@ -126,6 +127,19 @@ SingleComment.prototype.destroy = function() {
   }
 };
 
-  SingleComment = r.Publisher.extend(SingleComment);
-  return SingleComment;
+Comment.prototype.guid = function() {
+  function s4() {
+    return Math.floor((1 + Math.random()) * 0x10000)
+               .toString(16)
+               .substring(1);
+  }
+  return function() {
+    return s4() + s4() + '-' + s4() + '-' + s4() + '-' +
+           s4() + '-' + s4() + s4() + s4();
+  };
+};
+
+
+  Comment = r.Publisher.extend(Comment);
+  return Comment;
 });
