@@ -75,7 +75,6 @@ sand.define('Comment', [
     this.areas.push(canArea);
     this.actualTop = canArea.origin[1];
     this.el.style.top = this.actualTop + "px";
-    console.log(this.elTxt);
     this.elTxt.focus();
   };
 
@@ -116,8 +115,8 @@ sand.define('Comment', [
   };
 
 Comment.prototype.highStyle = function() {
-  this.el.style["background-color"] = "#000080";
-  this.areas && (this.areas[0].ctx.fillStyle =  "rgba(0, 0, 200, 0.3)");
+  this.el.style["background-color"] = "#17657D";
+  this.areas && (this.areas[0].ctx.fillStyle =  "rgba(23, 101, 125, 0.3)");
   this.displayArea();
   this.areas && (this.areas[0].ctx.fillStyle =  "rgba(200, 200, 200, 0.3)");
 };

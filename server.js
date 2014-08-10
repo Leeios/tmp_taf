@@ -15,6 +15,7 @@ io.on('connection', routes.socket);
 
 //path
 app.get('/', routes.main);
+app.get('/*', routes.upload);
 
 //listen
 server.listen(cfg.Port, function() {

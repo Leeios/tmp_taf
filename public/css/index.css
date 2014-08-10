@@ -12,7 +12,7 @@ pre {
 
 .wrapper {
   position: relative;
-  overflow-x: auto;
+  overflow-x: hidden;
   background-color: #4F4F4F;
   border: 1px groove black;
   width: 60%;
@@ -58,21 +58,18 @@ pre {
   padding: 0.3em;
   box-sizing: border-box;
   background-color: #272822;
-  border-radius: 1em;
-  border: 2px black ridge;
+  border: 1px black ridge;
   transition: top 1s;
 }
 
 .createButton {
   display: inline;
   width: 100% ;
-  border-radius: 10px;
 }
 
 .deleteButton {
   display: inline;
   width: 100% ;
-  border-radius: 10px;
 }
 
 .divComment {
@@ -83,14 +80,13 @@ pre {
   background-image: url('../img/42back.gif');
   font-family: Tahoma, sans-serif;
   font-size: small;
-  border-radius: 1em;
   padding: 0.2em;
   white-space: pre;
 }
 
 .txtComment {
   display: block;
-  width: 98%;
+  width: 97%;
   height: 100%;
   padding: 5px;
   font-family: Tahoma, sans-serif;
