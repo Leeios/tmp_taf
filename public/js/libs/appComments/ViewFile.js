@@ -2,17 +2,17 @@ sand.define('ViewFile', [
   'DOM/toDOM'
 ], function(r) {
 
-var ViewFile = function() {
+var ViewFile = Seed.extend({
 
-  this.el = r.toDOM({
+  tpl: {
     tag: "pre.viewFile",
      attr: {
       unselectable: 'on',
       onselectstart: 'return false;',
       onmousedown: 'return false;'
     }
-  });
-}
+  }
+});
 
 ViewFile.prototype.refreshContent = function(s) {
   this.el.innerHTML = s;
@@ -20,5 +20,4 @@ ViewFile.prototype.refreshContent = function(s) {
 };
 
 return ViewFile;
-
 })

@@ -61,7 +61,6 @@ pre {
   border-radius: 1em;
   border: 2px black ridge;
   transition: top 1s;
-  transition: background-color 0.5s;
 }
 
 .createButton {
