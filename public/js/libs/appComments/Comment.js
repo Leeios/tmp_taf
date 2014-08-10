@@ -1,65 +1,72 @@
 sand.define('Comment', [
   'DOM/toDOM',
-  'Publisher'
+  'Seed'
 ], function(r) {
 
-  var Comment = function(txt, edit) {
-    this.txt = txt;
-    this.edit = edit;
-    this.uid = this.guid()();
+// -init ne marche pas, a voir
+  var Comment = Seed.extend({
+    tpl: {
+      tag: "div.comment"
+    },
+    '+options': {
+      txt: "",
+      edit: 1
+    },
+    // '-init': function () {
+    // },
+    '+init': function () {
 
-    this.create = r.toDOM({
-      tag:"input.createButton",
-      attr: { type: "button", value: "Create" }
-    });
-    this.delete = r.toDOM({
-      tag:"input.deleteButton",
-      attr: { type: "button", value: "Delete" }
-    });
-    this.elDiv = r.toDOM({
-      tag:"div.divComment",
-    });
-    this.elTxt = r.toDOM({
-      tag:"textarea.txtComment",
-      attr: { placeholder: this.txt }
-    });
-    this.el = r.toDOM({
-      tag: "div.comment",
-      children: [
-      this.elDiv,
-      this.elTxt,
-      this.create,
-      this.delete
-      ]
-    });
-    this.switchEdit();
+      this.create = r.toDOM({
+        tag:"input.createButton",
+        attr: { type: "button", value: "Create" }
+      });
+      this.delete = r.toDOM({
+        tag:"input.deleteButton",
+        attr: { type: "button", value: "Delete" }
+      });
+      this.elDiv = r.toDOM({
+        tag:"div.divComment",
+      });
+      this.elTxt = r.toDOM({
+        tag:"textarea.txtComment",
+        attr: { placeholder: this.txt }
+      });
 
-    //Create or Edit
-    this.create.addEventListener("click", function(e) {
-      if (this.elDiv.innerHTML == "") {
-        this.fire("tmpComValid");
-      } else {
-        this.validCom();
-        this.fire("editCom", this.el);
-      }
-    }.bind(this));
+      this.el.appendChild(this.elDiv);
+      this.el.appendChild(this.elTxt);
+      this.el.appendChild(this.create);
+      this.el.appendChild(this.delete);
 
-    //Want to edit
-    this.elDiv.addEventListener("click", function() {
-      this.edit = 1;
+      this.uid = this.guid()();
       this.switchEdit();
-    }.bind(this));
 
-    //Delete
-    this.delete.addEventListener("click", this.destroy.bind(this));
+      //Create or Edit
+      this.create.addEventListener("click", function(e) {
+        if (this.elDiv.innerHTML == "") {
+          this.fire("tmpComValid");
+        } else {
+          this.validCom();
+          this.fire("editCom", this.el);
+        }
+      }.bind(this));
 
-    this.elTxt.addEventListener("keypress", function () {
-      this.elTxt.style.height = "1px";
-      this.elTxt.style.height = this.elTxt.scrollHeight + 10 + "px";
-    }.bind(this));
-    this.el.addEventListener("mouseover", this.highStyle.bind(this));
-    this.el.addEventListener("mouseout", this.usualStyle.bind(this));
-  }
+      //Want to edit
+      this.elDiv.addEventListener("click", function() {
+        this.edit = 1;
+        this.switchEdit();
+      }.bind(this));
+
+      //Delete
+      this.delete.addEventListener("click", this.destroy.bind(this));
+
+      this.elTxt.addEventListener("keypress", function () {
+        this.elTxt.style.height = "1px";
+        this.elTxt.style.height = this.elTxt.scrollHeight + 10 + "px";
+      }.bind(this));
+      this.el.addEventListener("mouseover", this.highStyle.bind(this));
+      this.el.addEventListener("mouseout", this.usualStyle.bind(this));
+    }
+  });
 
   Comment.prototype.addArea = function(canArea) {
     if (!this.areas) {
@@ -68,6 +75,7 @@ sand.define('Comment', [
     this.areas.push(canArea);
     this.actualTop = canArea.origin[1];
     this.el.style.top = this.actualTop + "px";
+    console.log(this.elTxt);
     this.elTxt.focus();
   };
 
@@ -139,7 +147,5 @@ Comment.prototype.guid = function() {
   };
 };
 
-
-  Comment = r.Publisher.extend(Comment);
   return Comment;
 });

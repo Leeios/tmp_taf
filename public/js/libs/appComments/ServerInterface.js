@@ -1,12 +1,13 @@
 sand.define('ServerInterface', [
-  'Publisher'
+  'Seed'
 ], function(r) {
 
-var ServerInterface = function() {
-
-  this.server = socket;
-  this.protocol = "socket";
-}
+var ServerInterface = Seed.extend({
+  '+options': {
+    server: null,
+    protocol: "none"
+  }
+});
 
 ServerInterface.prototype.sendData = function(operation, data) {
   if (this.protocol == "socket") {
@@ -16,7 +17,6 @@ ServerInterface.prototype.sendData = function(operation, data) {
   }
 };
 
-  ServerInterface = r.Publisher.extend(ServerInterface);
   return ServerInterface;
 
 })

@@ -1,6 +1,9 @@
+sand.define('Seed', [
+  'DOM/toDOM'
+  ], function(r) {
 (function(name) {
 
-  var extend = function(o, p) {
+  var extend = function(o, p) {0
     for (var i in p) {
       o[i] = p[i];
     }
@@ -41,7 +44,7 @@
 
       this.$setOptions(o || {});
       if (this.tpl) {
-        this.el = toDOM(typeof(this.tpl) === 'function' ? this.tpl() : this.tpl, this);
+        this.el = r.toDOM(typeof(this.tpl) === 'function' ? this.tpl() : this.tpl, this);
         if (o && o.parentEl) o.parentEl.appendChild(this.el);
       }
     },
@@ -109,7 +112,7 @@
         if (this.$listeners[event][i] === f) this.$listeners[event].splice(i, 1);
       }
     },
-    
+
     $setOptions : function(o) {
       if (typeof(__log) !== 'undefined') console.log('LOG', o);
       if (this.options) {
@@ -202,7 +205,7 @@
     };
 
     C.prototype = extend(new this(false), obj);
-    
+
     pm(C, obj); // handling of +- methods
 
     C.extend = obj.extend || this.extend;
@@ -211,3 +214,4 @@
   };
 
 })('Seed');
+});

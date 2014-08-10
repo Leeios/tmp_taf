@@ -1,5 +1,6 @@
 sand.define('ViewFile', [
-  'DOM/toDOM'
+  'DOM/toDOM',
+  'Seed'
 ], function(r) {
 
 var ViewFile = Seed.extend({

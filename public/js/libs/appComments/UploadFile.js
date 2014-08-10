@@ -1,17 +1,18 @@
 sand.define('UploadFile', [
   'DOM/toDOM',
-  'Publisher'
+  'Seed'
 ], function(r) {
 
-var UploadFile = function() {
+var UploadFile = Seed.extend({
 
-  this.el = r.toDOM({
+  tpl: {
     tag: "input.uploadFile",
     attr: { type: "file" },
-  }, document.body);
-
-  this.el.addEventListener("change", this.uploadFile.bind(this));
-}
+  },
+  '+init': function () {
+    this.el.addEventListener("change", this.uploadFile.bind(this));
+  }
+})
 
 UploadFile.prototype.uploadFile = function(e) {
   var reader = new FileReader();
@@ -23,6 +24,5 @@ UploadFile.prototype.uploadFile = function(e) {
   }.bind(this));
 }
 
-UploadFile = r.Publisher.extend(UploadFile);
 return UploadFile;
 });

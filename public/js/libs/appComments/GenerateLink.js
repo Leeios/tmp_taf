@@ -1,23 +1,26 @@
 sand.define('GenerateLink', [
-  'DOM/toDOM'
+  'DOM/toDOM',
+  'Seed'
 ], function(r) {
 
-  var GenerateLink = function() {
-    this.link = "";
-    this.el = r.toDOM({
+  var GenerateLink = Seed.extend({
+    tpl: {
       tag: 'input.generateLink',
       attr: {
         readOnly: 'true',
         value: 'No link yet'
       }
-    });
-    this.el.addEventListener('click', function() {
-      this.el.setSelectionRange(0, this.el.value.length);
-    }.bind(this));
-  }
+    },
+    '+init': function () {
+      this.link = "";
+      this.el.addEventListener('click', function() {
+        this.el.setSelectionRange(0, this.el.value.length);
+      }.bind(this));
+    }
+  });
 
-  GenerateLink.prototype.getLink = function(link) {
-    this.link = link;
+  GenerateLink.prototype.setLink = function(link) {
+    this.link = 'http://localhost:3000/' + link;
     this.el.value = this.link;
   };
 

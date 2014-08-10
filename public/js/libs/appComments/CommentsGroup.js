@@ -1,15 +1,18 @@
 sand.define('CommentsGroup', [
+  'Comment',
   'DOM/toDOM',
-  'Publisher',
-  'Comment'
+  'Seed'
 ], function(r) {
 
-  var CommentsGroup = function() {
-    this.commentList = [];
-    this.el = r.toDOM({
+//Si 'init', le .el n'est pas crée !!!
+  var CommentsGroup = Seed.extend({
+    tpl: {
       tag: "div.commentsGroup"
-    });
-  }
+    },
+    '+init': function() {
+      this.commentList = [];
+    }
+  });
 
   CommentsGroup.prototype.addComment = function() {
     /*Ici le tmp comment est le commentaire en cours de validation
@@ -30,7 +33,7 @@ sand.define('CommentsGroup', [
 
   CommentsGroup.prototype.addArea = function(canArea) {
     if (!this.tmpComment) {
-      this.tmpComment = new r.Comment("Enter a comment ...", 1);
+      this.tmpComment = new r.Comment({ txt: "Enter a comment ...", edit: 1});
       this.tmpComment.on("tmpComValid", this.addComment.bind(this));
       this.el.appendChild(this.tmpComment.el);
     }
@@ -87,6 +90,5 @@ CommentsGroup.prototype.formatCom = function(com) {
   return (parseCom);
 };
 
-  CommentsGroup = r.Publisher.extend(CommentsGroup);
   return CommentsGroup;
 });

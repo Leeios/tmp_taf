@@ -1,13 +1,20 @@
 sand.define('CanvasArea', [
+  'Seed'
 ], function(r) {
 
-var CanvasArea = function(origin, end, form, ctx) {
+var CanvasArea = Seed.extend({
 
-  this.origin = origin.slice(0);
-  this.end = end.slice(0);
-  this.form = form;
-  this.ctx = ctx;
-}
+  '+options': {
+    origin: [],
+    end: [],
+    form: "empty",
+    ctx: null
+  },
+  '+init': function() {
+    this.origin = this.origin.slice(0);
+    this.end = this.end.slice(0);
+  }
+});
 
 CanvasArea.prototype.refresh = function(end) {
   this.previous = this.clone();
@@ -25,7 +32,7 @@ CanvasArea.prototype.draw = function () {
 };
 
 CanvasArea.prototype.clone = function() {
-  var copy = new CanvasArea(this.origin, this.end, this.form, this.ctx);
+  var copy = new CanvasArea({origin: this.origin, end: this.end, form: this.form, ctx: this.ctx});
   return (copy);
 };
 
