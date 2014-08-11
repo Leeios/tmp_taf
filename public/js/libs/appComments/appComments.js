@@ -28,7 +28,7 @@ var appComments = Seed.extend({
     this.link = new r.GenerateLink();
     this.servInterface = new r.ServerInterface({server: socket, protocol: "socket"});
     this.viewFile = new r.ViewFile();
-    this.canvasTrack = new r.CanvasTrack({form: "rectangle"});
+    this.canvasTrack = new r.CanvasTrack({form: "points"});
     this.commentsGroup = new r.CommentsGroup();
 
     this.el.appendChild(this.viewFile.el);
@@ -58,6 +58,10 @@ var appComments = Seed.extend({
 
     this.canvasTrack.on('validSelection', function(canArea) {
         this.commentsGroup.addArea(canArea);
+      }.bind(this));
+
+    this.commentsGroup.on('clearAll', function(canArea) {
+        this.canvasTrack.clearCanvas();
       }.bind(this));
 
     ['add', 'edit', 'delete'].each(function (e) {

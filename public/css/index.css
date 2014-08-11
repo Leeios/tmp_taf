@@ -72,6 +72,11 @@ pre {
   width: 100% ;
 }
 
+.replyButton {
+  display: inline;
+  width: 100% ;
+}
+
 .divComment {
   display: block;
   width: 100%;

@@ -4,13 +4,12 @@ sand.define('CommentsGroup', [
   'Seed'
 ], function(r) {
 
-//Si 'init', le .el n'est pas crée !!!
   var CommentsGroup = Seed.extend({
     tpl: {
       tag: "div.commentsGroup"
     },
-    '+init': function() {
-      this.commentList = [];
+    '+options': {
+      commentList: [];
     }
   });
 
@@ -33,8 +32,11 @@ sand.define('CommentsGroup', [
 
   CommentsGroup.prototype.addArea = function(canArea) {
     if (!this.tmpComment) {
-      this.tmpComment = new r.Comment({ txt: "Enter a comment ...", edit: 1});
+      this.tmpComment = new r.Comment({ txt: "Enter a comment ..."});
       this.tmpComment.on("tmpComValid", this.addComment.bind(this));
+      this.tmpComment.on("redraw", function() {
+        this.displayCol();
+      }.bind(this));
       this.el.appendChild(this.tmpComment.el);
     }
     this.tmpComment.addArea(canArea);
@@ -44,6 +46,8 @@ sand.define('CommentsGroup', [
   CommentsGroup.prototype.displayCol = function() {
     var previous_down;
 
+    this.fire('clearAll');
+     this.tmpComment && this.tmpComment.displayArea();
     for (var i = 0, len = this.commentList.length; i < len; i++) {
       this.commentList[i].displayArea();
       this.commentList[i].el.style.top = this.commentList[i].actualTop + "px";
@@ -83,17 +87,22 @@ CommentsGroup.prototype.formatCom = function(com) {
     parseAreas[i] = {};
     parseAreas[i].origin = com.areas[i].origin.slice(0);
     parseAreas[i].end = com.areas[i].end.slice(0);
+    parseAreas[i].points = com.areas[i].points;
     parseAreas[i].form = com.areas[i].form;
   }
   parseCom = {txt: com.txt, actualTop: com.actualTop, areas: parseAreas, uid: com.uid};
   return (parseCom);
 };
 
+//Affiche 2 fois les areas au setting server (usual style + display courant)
 CommentsGroup.prototype.setComGroup = function(data, ctx) {
   for (var i = 0, len = data.length; i < len; i++) {
     this.tmpComment = new r.Comment(data[i]);
     this.tmpComment.setAreas(data[i].areas, ctx);
     this.tmpComment.preValideCom();
+    this.tmpComment.on("redraw", function() {
+      this.displayCol();
+    }.bind(this));
     this.addComment();
   }
 };

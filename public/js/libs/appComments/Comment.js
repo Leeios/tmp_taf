@@ -13,7 +13,9 @@ sand.define('Comment', [
       txt: "",
       edit: 1,
       uid: -1,
-      actualTop: 0
+      actualTop: 0,
+      replies: "",
+      resolved: false
     },
     // '-init': function () {
     // },
@@ -28,6 +30,10 @@ sand.define('Comment', [
         tag:"input.deleteButton",
         attr: { type: "button", value: "Delete" }
       });
+      this.reply = r.toDOM({
+        tag:"input.replyButton",
+        attr: { type: "button", value: "Reply" }
+      });
       this.elDiv = r.toDOM({
         tag:"div.divComment"
       });
@@ -39,6 +45,7 @@ sand.define('Comment', [
       this.el.appendChild(this.elTxt);
       this.el.appendChild(this.create);
       this.el.appendChild(this.delete);
+      this.el.appendChild(this.reply);
 
       if (this.uid == -1) {
         this.uid = this.guid()();
@@ -131,15 +138,18 @@ sand.define('Comment', [
   };
 
 Comment.prototype.highStyle = function() {
+  this.fire('redraw');
   this.el.style["background-color"] = "#17657D";
-  this.areas && (this.areas[0].ctx.fillStyle =  "rgba(23, 101, 125, 0.3)");
+  this.areas && (this.areas[0].ctx.strokeStyle =  "rgba(23, 101, 125, 0.3)");
+  this.areas && (this.areas[0].ctx.fillStyle =  "rgba(23, 101, 125, 0.2)");
   this.displayArea();
+  this.areas && (this.areas[0].ctx.strokeStyle = "rgba(200, 200, 200, 0.3)");
   this.areas && (this.areas[0].ctx.fillStyle =  "rgba(200, 200, 200, 0.3)");
 };
 
 Comment.prototype.usualStyle = function() {
+  this.fire('redraw');
   this.el.style["background-color"] = "#272822";
-  this.displayArea();
 };
 
 Comment.prototype.destroy = function() {
@@ -155,7 +165,6 @@ Comment.prototype.setAreas = function(data, ctx) {
   for (var i = 0, len = data.length; i < len; i++) {
     data[i].ctx = ctx;
     current_area = new r.CanvasArea(data[i]);
-    current_area.refresh(current_area.end);
     this.areas.push(current_area);
   }
 }

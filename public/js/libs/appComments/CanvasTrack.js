@@ -28,6 +28,8 @@ var CanvasTrack = Seed.extend({
 CanvasTrack.prototype.setSize = function(h, w) {
   this.el.height = h;
   this.el.width = w;
+  this.ctx.strokeStyle = "rgba(200, 200, 200, 0.3)";
+  this.ctx.lineWidth = 15;
   this.ctx.fillStyle = "rgba(200, 200, 200, 0.3)";
 };
 
@@ -39,15 +41,19 @@ CanvasTrack.prototype.startSelection = function (e) {
   this.mouseMoveHandler = this.drawSelection.bind(this);
   this.mouseUpHandler = this.validSelection.bind(this);
   this.finish = 0;
+  this.canvasArea.on('clearCan', this.clearCanvas.bind(this));
   this.el.addEventListener('mousemove', this.mouseMoveHandler);
   this.el.addEventListener('mouseup', this.mouseUpHandler);
 }
+
+CanvasTrack.prototype.clearCanvas = function() {
+  this.setSize(this.el.height, this.el.width);
+};
 
 CanvasTrack.prototype.drawSelection = function(e) {
   var rect = this.el.getBoundingClientRect();
   this.end[0] = e.clientX - rect.left;
   this.end[1] = e.clientY - rect.top;
-  this.ctx.fillStyle = "rgba(200, 200, 200, 0.3)";
   this.canvasArea.refresh(this.end);
 };
 

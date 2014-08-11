@@ -4,6 +4,8 @@ var mongoose = require('mongoose'),
 var comSchema = new mongoose.Schema({
   uid: String,
   txt: String,
+  replies: { type : Array , "default" : [] },
+  resolved: Boolean,
   author: String,
   actualTop: Number,
   areas: { type : Array , "default" : [] }
