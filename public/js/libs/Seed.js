@@ -3,7 +3,7 @@ sand.define('Seed', [
   ], function(r) {
 (function(name) {
 
-  var extend = function(o, p) {0
+  var extend = function(o, p) {
     for (var i in p) {
       o[i] = p[i];
     }

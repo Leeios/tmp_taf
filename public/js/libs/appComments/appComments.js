@@ -10,6 +10,10 @@ sand.define('appComments', [
   'ViewFile'
 ], function(r) {
 
+/*
+**Fire: 0
+**On:   5
+*/
 var appComments = Seed.extend({
 
   tpl: {
@@ -21,6 +25,7 @@ var appComments = Seed.extend({
   },
 
   '+init': function() {
+    /*Init page elements*/
     this.uploadFile = new r.UploadFile();
     document.body.appendChild(this.uploadFile.el);
 
@@ -37,6 +42,7 @@ var appComments = Seed.extend({
     document.body.appendChild(this.el);
     document.body.appendChild(this.colComments.el);
 
+    /*File ruler*/
     if (this.servData == null) {
       this.uploadFile.on('fileMeta', function (meta) {
         this.file.setMeta(meta);
@@ -56,13 +62,15 @@ var appComments = Seed.extend({
       this.colComments.setComGroup(this.servData.comments, this.canvasTrack.ctx);
     }
 
-    this.canvasTrack.on('validSelection', function(canArea) {
+    /*Canvas <=> Comment*/
+    this.canvasTrack.on('valid', function(canArea) {
         this.colComments.addArea(canArea);
       }.bind(this));
     this.colComments.on('clearCanvas', function(canArea) {
       this.canvasTrack.clearCanvas();
     }.bind(this));
 
+    /*Send to server*/
     ['add', 'edit', 'delete'].each(function (e) {
       this.colComments.on(e, function(data) {
         data.file_uid = this.file.uid;
@@ -71,6 +79,7 @@ var appComments = Seed.extend({
       }.bind(this))
     }.bind(this));
   }
-})
+
+});
 return appComments;
 });

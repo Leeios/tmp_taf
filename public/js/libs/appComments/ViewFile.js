@@ -3,6 +3,10 @@ sand.define('ViewFile', [
   'Seed'
 ], function(r) {
 
+/*
+**Fire: 0
+**On:   0
+*/
 var ViewFile = Seed.extend({
 
   tpl: {
@@ -12,13 +16,13 @@ var ViewFile = Seed.extend({
       onselectstart: 'return false;',
       onmousedown: 'return false;'
     }
+  },
+
+  refreshContent: function(s) {
+    this.el.innerHTML = s;
+    hljs.highlightBlock(this.el);
   }
+
 });
-
-ViewFile.prototype.refreshContent = function(s) {
-  this.el.innerHTML = s;
-  hljs.highlightBlock(this.el);
-};
-
 return ViewFile;
 })

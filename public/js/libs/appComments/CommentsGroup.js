@@ -3,6 +3,10 @@ sand.define('CommentsGroup', [
   'Seed'
 ], function(r) {
 
+/*
+**Fire: 3
+**On:   4
+*/
 var CommentsGroup = Seed.extend({
 
   '+options': {
@@ -11,16 +15,17 @@ var CommentsGroup = Seed.extend({
     sub: []
   },
 
+  /*Add/Edit/Remove*/
   addComment: function() {
     /*Ici le tmp comment est le commentaire en cours de validation
     on lui add les listeners et le prepare à etre un vrai com*/
-    this.tmp.validCom();
+    this.tmp.valid();
     this.fire("add", this.tmp.formatCom());
     this.el.appendChild(this.tmp.el);
     this.tmp.create.value = "Edit";
     this.sub.push(this.tmp);
-    this.tmp.on("editCom", this.edit.bind(this));
-    this.tmp.on("deleteCom", this.remove.bind(this));
+    this.tmp.on("edit", this.edit.bind(this));
+    this.tmp.on("delete", this.remove.bind(this));
     this.tmp = null;
     this.sub.sort(function (a, b) {
       return a.actualTop - b.actualTop;
@@ -31,7 +36,8 @@ var CommentsGroup = Seed.extend({
   addTmpComment: function() {
     if (!this.tmp) {
       this.tmp = new r.Comment({ txt: "Enter a comment ..."});
-      this.tmp.on("createCom", this.addComment.bind(this));
+      this.tmp.on("create", this.addComment.bind(this));
+      this.tmp.on("reply", this.addComment.bind(this));
       this.tmp.on("redraw", function() {
         this.displaySub();
       }.bind(this));
@@ -42,7 +48,7 @@ var CommentsGroup = Seed.extend({
   edit: function(editSub) {
     for (var i = 0, len = this.sub.length; i < len; i++) {
       if (editSub == this.sub[i]) {
-        this.fire("edit", this.formatCom(this.sub[i]));
+        this.fire("edit", this.sub[i].formatCom());
         this.displaySub();
         return ;
       }
@@ -60,6 +66,7 @@ var CommentsGroup = Seed.extend({
     }
   },
 
+  /*Display array sub*/
   displaySub: function() {
     var previous_down;
     this.tmp && this.tmp.displayArea();
@@ -72,12 +79,12 @@ var CommentsGroup = Seed.extend({
     }
   },
 
-//Affiche 2 fois les areas au setting server (usual style + display courant)
+  /*Use for import dataserv*/
   setComGroup: function(data, ctx) {
     for (var i = 0, len = data.length; i < len; i++) {
       this.tmp = new r.Comment(data[i]);
       this.tmp.setAreas(data[i].areas, ctx);
-      this.tmp.preValideCom();
+      this.tmp.preValide();
       this.tmp.on("redraw", function() {
         this.displaySub();
       }.bind(this));

@@ -29,7 +29,7 @@ pre {
   position: absolute;
   top: 0px;
   right: 0px;
-  width: 35%;
+  width: 40%;
   min-height: 100%;
 }
 
@@ -63,25 +63,32 @@ pre {
 }
 
 .comment.comment {
-  width: 80%;
+  width: 95%;
 }
 
-.createButton {
+.button {
   width: 10%;
-  height: 40%;
   float: left;
+  clear: left;
+  border-color: #272822;
+  font-size: x-small;
+  font-family: Verdana;
+  transition: color 0.8s;
+}
+
+.button:hover {
+  background-color: #4F4F4F;
+}
+.createButton {
+  background-color: #6699cc;
 }
 
 .deleteButton {
-  width: 5%;
-  height: 40%;
-  float: left;
+  background-color: #f99157;
 }
 
 .replyButton {
-  width: 5%;
-  height: 40%;
-  float: left;
+  background-color: #cc99cc;
 }
 
 .divComment {

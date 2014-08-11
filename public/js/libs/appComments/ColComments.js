@@ -1,9 +1,12 @@
 sand.define('ColComments', [
   'CommentsGroup',
-  'DOM/toDOM',
-  'Seed'
+  'DOM/toDOM'
 ], function(r) {
 
+/*
+**Fire: 1
+**On:   0
+*/
 var ColComments = r.CommentsGroup.extend({
   tpl: {
     tag: "div.commentsGroup"
