@@ -16,8 +16,16 @@ FileFormat.prototype.setMeta = function(meta) {
   this.type =  meta.type;
 };
 
-FileFormat.prototype.setS = function(s) {
-  this.s = s;
+FileFormat.prototype.setContent = function(content) {
+  this.content = content;
+};
+
+FileFormat.prototype.setFile = function(data) {
+  this.name = data.name;
+  this.size = data.size;
+  this.type = data.type;
+  this.content = data.content;
+  this.uid = data.uid;
 };
 
 FileFormat.prototype.guid = function() {

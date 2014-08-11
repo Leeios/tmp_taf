@@ -28,6 +28,7 @@ var CanvasTrack = Seed.extend({
 CanvasTrack.prototype.setSize = function(h, w) {
   this.el.height = h;
   this.el.width = w;
+  this.ctx.fillStyle = "rgba(200, 200, 200, 0.3)";
 };
 
 CanvasTrack.prototype.startSelection = function (e) {

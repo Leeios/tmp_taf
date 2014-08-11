@@ -7,6 +7,7 @@ exports.insertCom = function(data) {
   var insert_com = new Com({
     uid: data.uid,
     txt: data.txt,
+    actualTop: data.actualTop,
     areas: data.areas
   });
   File.update({uid: data.file_uid}, {$push: {comments: insert_com}}, function (err) {

@@ -5,6 +5,7 @@ var comSchema = new mongoose.Schema({
   uid: String,
   txt: String,
   author: String,
+  actualTop: Number,
   areas: { type : Array , "default" : [] }
 });
 

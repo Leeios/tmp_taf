@@ -1,3 +1,9 @@
+var mongoose = require('mongoose');
+var file_method = require('../model/file');
+
 exports.upload = function(req, res) {
-  res.render('index.jade', {locals: {file: req.url.substr(1)}});
+  console.log("go");
+  file_method.getFile(req.url.substr(1), function(data) {
+    res.render('index.jade', {locals: {file: data}});
+  });
 }

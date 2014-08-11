@@ -85,9 +85,17 @@ CommentsGroup.prototype.formatCom = function(com) {
     parseAreas[i].end = com.areas[i].end.slice(0);
     parseAreas[i].form = com.areas[i].form;
   }
-  parseCom = {txt: com.txt, areas: parseAreas, uid: com.uid};
-
+  parseCom = {txt: com.txt, actualTop: com.actualTop, areas: parseAreas, uid: com.uid};
   return (parseCom);
+};
+
+CommentsGroup.prototype.setComGroup = function(data, ctx) {
+  for (var i = 0, len = data.length; i < len; i++) {
+    this.tmpComment = new r.Comment(data[i]);
+    this.tmpComment.setAreas(data[i].areas, ctx);
+    this.tmpComment.preValideCom();
+    this.addComment();
+  }
 };
 
   return CommentsGroup;
