@@ -52,7 +52,7 @@ var CommentsGroup = Seed.extend({
   remove: function(rmSub) {
     for (var i = 0, len = this.sub.length; i < len; i++) {
       if (rmSub == this.sub[i]) {
-        this.fire("delete", this.formatCom(this.sub[i]));
+        this.fire("delete", this.sub[i].formatCom());
         this.sub.splice(i, 1);
         this.displaySub();
         return ;
@@ -62,6 +62,7 @@ var CommentsGroup = Seed.extend({
 
   displaySub: function() {
     var previous_down;
+    this.tmp && this.tmp.displayArea();
     for (var i = 0, len = this.sub.length; i < len; i++) {
       this.sub[i].el.style.top = this.sub[i].actualTop + "px";
       i > 0 && (previous_down = parseInt(this.sub[i - 1].el.style.top) + parseInt(this.sub[i - 1].el.offsetHeight))

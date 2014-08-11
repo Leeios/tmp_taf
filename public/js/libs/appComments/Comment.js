@@ -15,8 +15,8 @@ sand.define('Comment', [
       actualTop: 0,
       resolved: false
     },
-    '+init': function () {
 
+    '+init': function () {
       this.areas = [];
       this.create = r.toDOM({
         tag:"input.createButton",
@@ -65,7 +65,7 @@ sand.define('Comment', [
       }.bind(this));
 
       //Delete
-      this.delete.addEventListener("click", this.destroy.bind(this));
+      this.delete.addEventListener("click", this.remove.bind(this));
 
       this.elTxt.addEventListener("keypress", this.adjustHeight.bind(this));
       this.el.addEventListener("mouseover", this.highStyle.bind(this));
@@ -145,10 +145,10 @@ Comment.prototype.usualStyle = function() {
   this.fire('redraw');
 };
 
-Comment.prototype.destroy = function() {
-  this.fire("deleteCom", this.el);
+Comment.prototype.remove = function() {
+  this.fire("deleteCom", this);
   this.el.remove();
-  this.fire('redraw');
+  // this.fire('redraw');
 };
 
 Comment.prototype.setAreas = function(data, ctx) {
