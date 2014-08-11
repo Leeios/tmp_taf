@@ -4,7 +4,6 @@ sand.define('Comment', [
   'Seed'
 ], function(r) {
 
-// -init ne marche pas, a voir
   var Comment = Seed.extend({
     tpl: {
       tag: "div.comment"
@@ -14,11 +13,8 @@ sand.define('Comment', [
       edit: 1,
       uid: -1,
       actualTop: 0,
-      replies: "",
       resolved: false
     },
-    // '-init': function () {
-    // },
     '+init': function () {
 
       this.areas = [];
@@ -55,7 +51,7 @@ sand.define('Comment', [
       //Create or Edit
       this.create.addEventListener("click", function(e) {
         if (this.elDiv.innerHTML == "") {
-          this.fire("tmpComValid");
+          this.fire("createCom");
         } else {
           this.validCom();
           this.fire("editCom", this.el);
@@ -78,11 +74,8 @@ sand.define('Comment', [
   });
 
   Comment.prototype.addArea = function(canArea) {
-    if (!this.areas) {
-      this.areas = [];
-    }
     this.areas.push(canArea);
-    this.actualTop = canArea.origin[1];
+    this.actualTop = canArea.pos[1];
     this.el.style.top = this.actualTop + "px";
     this.adjustHeight();
     this.elTxt.focus();
@@ -120,44 +113,42 @@ sand.define('Comment', [
       this.el.appendChild(this.elDiv);
       this.el.removeChild(this.create);
       this.el.appendChild(this.delete);
+      this.el.appendChild(this.reply);
     } else {
       this.el.style["z-index"] = 1;
       this.elTxt.placeholder = this.txt;
       this.el.removeChild(this.elDiv);
       this.el.appendChild(this.elTxt);
       this.el.removeChild(this.delete);
+      this.el.removeChild(this.reply);
       this.el.appendChild(this.create);
-      this.adjustHeight();
     }
+    this.adjustHeight();
   }
 
-  Comment.prototype.displayArea = function() {
-    for (var i = 0, len = this.areas.length; i < len; i++) {
-      this.areas[i].draw();
-    }
-  };
+Comment.prototype.displayArea = function() {
+  for (var i = 0, len = this.areas.length; i < len; i++) {
+    this.areas[i].draw();
+  }
+};
 
 Comment.prototype.highStyle = function() {
-  this.fire('redraw');
   this.el.style["background-color"] = "#17657D";
-  this.areas && (this.areas[0].ctx.strokeStyle =  "rgba(23, 101, 125, 0.3)");
-  this.areas && (this.areas[0].ctx.fillStyle =  "rgba(23, 101, 125, 0.2)");
+  this.fire('redraw');
+  this.areas[0] && (this.areas[0].ctx.strokeStyle =  "rgba(23, 101, 125, 0.2)");
   this.displayArea();
-  this.areas && (this.areas[0].ctx.strokeStyle = "rgba(200, 200, 200, 0.3)");
-  this.areas && (this.areas[0].ctx.fillStyle =  "rgba(200, 200, 200, 0.3)");
+  this.areas[0] && (this.areas[0].ctx.strokeStyle = "rgba(200, 200, 200, 0.3)");
 };
 
 Comment.prototype.usualStyle = function() {
-  this.fire('redraw');
   this.el.style["background-color"] = "#272822";
+  this.fire('redraw');
 };
 
 Comment.prototype.destroy = function() {
   this.fire("deleteCom", this.el);
   this.el.remove();
-  for (var i = 0, len = this.areas.length; i < len; i++) {
-    this.areas[i].clearForm();
-  }
+  this.fire('redraw');
 };
 
 Comment.prototype.setAreas = function(data, ctx) {
@@ -180,6 +171,18 @@ Comment.prototype.guid = function() {
            s4() + '-' + s4() + s4() + s4();
   };
 };
+
+Comment.prototype.formatCom = function() {
+  var parseCom = {};
+
+  var parseAreas = [];
+  for (var i = 0, len = this.areas.length; i < len; i++) {
+    parseAreas[i] = this.areas[i].formateArea();
+  }
+  parseCom = {txt: this.txt, actualTop: this.actualTop, areas: parseAreas, uid: this.uid};
+  return (parseCom);
+};
+
 
   return Comment;
 });

@@ -62,24 +62,32 @@ pre {
   transition: top 1s;
 }
 
+.comment.comment {
+  width: 80%;
+}
+
 .createButton {
-  display: inline;
-  width: 100% ;
+  width: 10%;
+  height: 40%;
+  float: left;
 }
 
 .deleteButton {
-  display: inline;
-  width: 100% ;
+  width: 5%;
+  height: 40%;
+  float: left;
 }
 
 .replyButton {
-  display: inline;
-  width: 100% ;
+  width: 5%;
+  height: 40%;
+  float: left;
 }
 
 .divComment {
   display: block;
-  width: 100%;
+  float: right;
+  width: 85%;
   height: 100%;
   box-sizing: border-box;
   background-image: url('../img/42back.gif');
@@ -91,7 +99,8 @@ pre {
 
 .txtComment {
   display: block;
-  width: 97%;
+  float: right;
+  width: 85%;
   height: 100%;
   padding: 5px;
   font-family: Tahoma, sans-serif;

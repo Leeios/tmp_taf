@@ -13,12 +13,10 @@ var CanvasTrack = Seed.extend({
     }
   },
   '+options': {
+    pos: [],
     form: "empty"
   },
   '+init': function (options) {
-    this.origin =[];
-    this.end =[];
-    this.finish = 0;
     this.ctx = this.el.getContext("2d");
     this.el.addEventListener('mousedown', this.startSelection.bind(this));
     this.el.addEventListener('mouseout', this.reset.bind(this));
@@ -35,13 +33,11 @@ CanvasTrack.prototype.setSize = function(h, w) {
 
 CanvasTrack.prototype.startSelection = function (e) {
   var rect = this.el.getBoundingClientRect();
-  this.origin[0] = e.clientX - rect.left;
-  this.origin[1] = e.clientY - rect.top;
-  this.canvasArea = new r.CanvasArea({origin: this.origin, end: this.origin, form: this.form, ctx: this.ctx});
+  this.pos[0] = e.clientX - rect.left;
+  this.pos[1] = e.clientY - rect.top;
+  this.canvasArea = new r.CanvasArea({pos: this.pos, form: this.form, ctx: this.ctx});
   this.mouseMoveHandler = this.drawSelection.bind(this);
   this.mouseUpHandler = this.validSelection.bind(this);
-  this.finish = 0;
-  this.canvasArea.on('clearCan', this.clearCanvas.bind(this));
   this.el.addEventListener('mousemove', this.mouseMoveHandler);
   this.el.addEventListener('mouseup', this.mouseUpHandler);
 }
@@ -52,15 +48,14 @@ CanvasTrack.prototype.clearCanvas = function() {
 
 CanvasTrack.prototype.drawSelection = function(e) {
   var rect = this.el.getBoundingClientRect();
-  this.end[0] = e.clientX - rect.left;
-  this.end[1] = e.clientY - rect.top;
-  this.canvasArea.refresh(this.end);
+  this.pos[0] = e.clientX - rect.left;
+  this.pos[1] = e.clientY - rect.top;
+  this.canvasArea.refresh(this.pos);
 };
 
 CanvasTrack.prototype.validSelection = function(e) {
   this.el.removeEventListener('mousemove', this.mouseMoveHandler);
   this.el.removeEventListener('mouseup', this.mouseUpHandler);
-  this.finish = 1;
   this.canvasArea.previous = this.canvasArea.clone();
   this.fire('validSelection', this.canvasArea);
 };
@@ -68,11 +63,7 @@ CanvasTrack.prototype.validSelection = function(e) {
 CanvasTrack.prototype.reset = function() {
   this.el.removeEventListener('mousemove', this.mouseMoveHandler);
   this.el.removeEventListener('mouseup', this.mouseUpHandler);
-  if (this.finish == 0 && this.canvasArea) {
-    this.canvasArea.clearForm();
-  }
-  this.origin = [];
-  this.end = [];
+  this.pos = [];
 };
 
 return CanvasTrack;
