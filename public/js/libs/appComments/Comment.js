@@ -61,7 +61,7 @@ var Comment = Seed.extend({
         this.fire("create");
       } else {
         this.valid();
-        this.fire("edit", this);
+        this.fire("editEl", this);
       }
     }.bind(this));
 
@@ -72,7 +72,7 @@ var Comment = Seed.extend({
     }.bind(this));
 
     /*Delete*/
-    this.delete.addEventListener("click", this.remove.bind(this));
+    this.delete.addEventListener("click", this.removeEl.bind(this));
 
     /*Reply*/
     this.reply.addEventListener("click", function() {
@@ -103,8 +103,8 @@ var Comment = Seed.extend({
     this.usualStyle();
   },
 
-  remove: function() {
-    this.fire("delete", this);
+  removeEl: function() {
+    this.fire("deleteEl", this);
     this.el.remove();
   },
 

@@ -1,5 +1,6 @@
 sand.define('ColComments', [
   'CommentsGroup',
+  'SingleComment',
   'DOM/toDOM'
 ], function(r) {
 
@@ -10,6 +11,10 @@ sand.define('ColComments', [
 var ColComments = r.CommentsGroup.extend({
   tpl: {
     tag: "div.commentsGroup"
+  },
+
+  '+init': function() {
+    this.Schema = r.SingleComment;
   },
 
   addArea: function(canArea) {

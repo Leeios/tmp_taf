@@ -3,6 +3,7 @@ sand.define('appComments', [
   'ColComments',
   'DOM/toDOM',
   'FileFormat',
+  'FileGroup',
   'GenerateLink',
   'Seed',
   'ServerInterface',
@@ -29,7 +30,7 @@ var appComments = Seed.extend({
     this.uploadFile = new r.UploadFile();
     document.body.appendChild(this.uploadFile.el);
 
-    this.file = new r.FileFormat();
+    this.fileGroup = new r.FileGroup();
     this.link = new r.GenerateLink();
     this.servInterface = new r.ServerInterface({server: socket, protocol: "socket"});
     this.viewFile = new r.ViewFile();
@@ -43,24 +44,33 @@ var appComments = Seed.extend({
     document.body.appendChild(this.colComments.el);
 
     /*File ruler*/
+    console.log(this.servData);
     if (this.servData == null) {
-      this.uploadFile.on('fileMeta', function (meta) {
-        this.file.setMeta(meta);
+
+      /*Read multi files*/
+      this.uploadFile.on('uploadFile', function (f) {
+        this.fileGroup.pushFile(f);
       }.bind(this));
-      this.uploadFile.on('uploadDone', function (s) {
-        this.file.setContent(s);
-        this.servInterface.sendData('add', this.file);
-        this.link.setLink(this.file.uid);
-        this.viewFile.refreshContent(this.file.content);
-        this.canvasTrack.setSize(this.viewFile.el.clientHeight, this.viewFile.el.clientWidth);
+      this.uploadFile.on('uploadEnd', function () {
+        this.servInterface.sendData('add', this.fileGroup.getFiles());
+        this.fileGroup.fire('display');
       }.bind(this));
+
     } else {
-      this.file.setFile(this.servData);
-      this.link.setLink(this.file.uid);
-      this.viewFile.refreshContent(this.file.content);
-      this.canvasTrack.setSize(this.viewFile.el.clientHeight, this.viewFile.el.clientWidth);
-      this.colComments.setComGroup(this.servData.comments, this.canvasTrack.ctx);
+
+      /*Load Files & Coms*/
+      this.fileGroup.setFiles(this.servData);
+      this.fileGroup.fire('display');
+      // this.colComments.setComGroup(this.servData.comments, this.canvasTrack.ctx);
+
     }
+
+    this.fileGroup.on('display', function() {
+      this.link.setLink(this.fileGroup.uid);
+      console.log(this.fileGroup.files); return ;
+      this.viewFile.refreshContent(this.fileGroup.renderContent(0));
+      this.canvasTrack.setSize(this.viewFile.el.clientHeight, this.viewFile.el.clientWidth);
+    }.bind(this));
 
     /*Canvas <=> Comment*/
     this.canvasTrack.on('valid', function(canArea) {
@@ -73,7 +83,7 @@ var appComments = Seed.extend({
     /*Send to server*/
     ['add', 'edit', 'delete'].each(function (e) {
       this.colComments.on(e, function(data) {
-        data.file_uid = this.file.uid;
+        data.file_uid = this.fileGroup.uid;
         data.model = 'Com';
         this.servInterface.sendData(e, data);
       }.bind(this))

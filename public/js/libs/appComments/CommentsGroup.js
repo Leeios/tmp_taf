@@ -1,5 +1,4 @@
 sand.define('CommentsGroup', [
-  'Comment',
   'Seed'
 ], function(r) {
 
@@ -10,7 +9,7 @@ sand.define('CommentsGroup', [
 var CommentsGroup = Seed.extend({
 
   '+options': {
-    main: null,
+    schema: null,
     tmp: null,
     sub: []
   },
@@ -24,8 +23,8 @@ var CommentsGroup = Seed.extend({
     this.el.appendChild(this.tmp.el);
     this.tmp.create.value = "Edit";
     this.sub.push(this.tmp);
-    this.tmp.on("edit", this.edit.bind(this));
-    this.tmp.on("delete", this.remove.bind(this));
+    this.tmp.on("editEl", this.edit.bind(this));
+    this.tmp.on("deleteEl", this.remove.bind(this));
     this.tmp = null;
     this.sub.sort(function (a, b) {
       return a.actualTop - b.actualTop;
@@ -35,7 +34,7 @@ var CommentsGroup = Seed.extend({
 
   addTmpComment: function() {
     if (!this.tmp) {
-      this.tmp = new r.Comment({ txt: "Enter a comment ..."});
+      this.tmp = new this.Schema({ txt: "Enter a comment ..."});
       this.tmp.on("create", this.addComment.bind(this));
       this.tmp.on("reply", this.addComment.bind(this));
       this.tmp.on("redraw", function() {
@@ -82,7 +81,7 @@ var CommentsGroup = Seed.extend({
   /*Use for import dataserv*/
   setComGroup: function(data, ctx) {
     for (var i = 0, len = data.length; i < len; i++) {
-      this.tmp = new r.Comment(data[i]);
+      this.tmp = new this.schema(data[i]);
       this.tmp.setAreas(data[i].areas, ctx);
       this.tmp.preValide();
       this.tmp.on("redraw", function() {

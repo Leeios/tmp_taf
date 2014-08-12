@@ -9,10 +9,14 @@ sand.define('SingleComment', [
 **Fire: 0
 **On:   0
 */
-var SingleComment = r.CommentsGroup.extend({
+var Inheritance = r.CommentsGroup.extend(r.Comment.prototype);
+var SingleComment = Inheritance.extend({
+
   '+init': function() {
-    this.main = new r.Comment();
-    this.reply.addEventListener('click', this.addTmpComment.bind(this));
+    // Seed.prototype.init.apply(this, arguments);
+    // r.CommentsGroup.prototype['+init'].apply(this, arguments);
+    // r.Comment.prototype['+init'].apply(this, arguments);
+    this.schema = r.Comment;
   }
 
 });

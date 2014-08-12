@@ -1,23 +1,31 @@
 var mongoose = require('mongoose'),
   cfg = require('config').Default;
 
-var comSchema = new mongoose.Schema({
+var projSchema = new mongoose.Schema({
   uid: String,
-  txt: String,
-  replies: { type : Array , "default" : [] },
-  resolved: Boolean,
-  author: String,
-  actualTop: Number,
-  areas: { type : Array , "default" : [] }
+  uidParent: String,
+  name: String
 });
 
 var fileSchema = new mongoose.Schema({
   uid: String,
+  uidParent: String,
+  uidProject: String,
   name: String,
   size: Number,
   type: String,
   content: String,
-  comments: { type : Array , "default" : [] }
+});
+
+var comSchema = new mongoose.Schema({
+  uid: String,
+  txt: String,
+  uidFile: String,
+  resolved: Boolean,
+  author: String,
+  actualTop: Number,
+  replies: { type : Array , "default" : [] },
+  areas: { type : Array , "default" : [] }
 });
 
 mongoose.model('Com', comSchema);

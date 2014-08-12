@@ -14,7 +14,7 @@ exports.socket = function(socket) {
 
   socket.on('add', function (data) {
     if (data.model == 'File') {
-      file_method.insertFile(data);
+      file_method.insertFiles(data);
     } else if (data.model == 'Com') {
       com_method.insertCom(data);
     } else {

@@ -2,7 +2,7 @@ var mongoose = require('mongoose');
 var model = require('./model');
 var File = mongoose.model('File');
 
-exports.insertFile = function(data) {
+function insertFile(data) {
     var insert_file = new File({
       uid: data.uid,
       name: data.name,
@@ -19,9 +19,14 @@ exports.insertFile = function(data) {
   });
 }
 
+exports.insertFiles = function(data) {
+  for (var i = 0, len = data.files.length; i < len; i++) {
+    insertFile(data.files[i]);
+  }
+}
+
 exports.getFile = function(id, callback) {
-  console.log(id);
-  File.findOne({uid: id}, {}, function (err, doc) {
+  File.find({uid: id}, {}, function (err, doc) {
       if (err || doc == null) {
         console.log("File " + id + " not found in database");
       } else {
