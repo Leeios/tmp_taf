@@ -9,48 +9,55 @@ sand.define('Comment', [
 **On:   0
 */
 var Comment = Seed.extend({
-  tpl: {
-    tag: "div.comment"
+
+  tpl: function() {
+    return {
+      tag: "div.comment",
+      children: [
+        this.elDiv,
+        this.elTxt,
+        this.create,
+        this.delete,
+        this.reply
+      ]
+    }
   },
-  '+options': {
-    txt: "",
-    edit: 1,
-    uid: -1,
-    actualTop: 0,
-    resolved: false
+
+  options: function() {
+    return {
+      txt: "",
+      edit: 1,
+      uid: -1,
+      actualTop: 0,
+      resolved: false,
+      areas: [],
+      create: r.toDOM({
+        tag:"input.createButton.button",
+        attr: { type: "button", value: "Create" }
+      }),
+      delete: r.toDOM({
+        tag:"input.deleteButton.button",
+        attr: { type: "button", value: "Delete" }
+      }),
+      reply: r.toDOM({
+        tag:"input.replyButton.button",
+        attr: { type: "button", value: "Reply" }
+      }),
+      elDiv: r.toDOM({
+        tag:"div.divComment"
+      }),
+      elTxt: r.toDOM({
+        tag:"textarea.txtComment"
+      })
+    }
   },
 
   '+init': function () {
 
     console.log('create new com');
-    this.areas = [];
+    console.log(this.el);
 
     /*Define div*/
-    this.create = r.toDOM({
-      tag:"input.createButton.button",
-      attr: { type: "button", value: "Create" }
-    });
-    this.delete = r.toDOM({
-      tag:"input.deleteButton.button",
-      attr: { type: "button", value: "Delete" }
-    });
-    this.reply = r.toDOM({
-      tag:"input.replyButton.button",
-      attr: { type: "button", value: "Reply" }
-    });
-    this.elDiv = r.toDOM({
-      tag:"div.divComment"
-    });
-    this.elTxt = r.toDOM({
-      tag:"textarea.txtComment"
-    });
-
-    this.el.appendChild(this.elDiv);
-    this.el.appendChild(this.elTxt);
-    this.el.appendChild(this.create);
-    this.el.appendChild(this.delete);
-    this.el.appendChild(this.reply);
-
     if (this.uid == -1) {
       this.uid = this.guid()();
     }
@@ -123,18 +130,18 @@ var Comment = Seed.extend({
     if (this.edit == 0) {
       this.el.style["z-index"] = 0;
       this.elDiv.innerHTML = this.txt;
-      this.el.removeChild(this.elTxt);
+      this.elTxt.remove();
       this.el.appendChild(this.elDiv);
-      this.el.removeChild(this.create);
+      this.create.remove();
       this.el.appendChild(this.delete);
       this.el.appendChild(this.reply);
     } else {
       this.el.style["z-index"] = 1;
       this.elTxt.placeholder = this.txt;
-      this.el.removeChild(this.elDiv);
+      this.elDiv.remove();
       this.el.appendChild(this.elTxt);
-      this.el.removeChild(this.delete);
-      this.el.removeChild(this.reply);
+      this.delete.remove();
+      this.reply.remove();
       this.el.appendChild(this.create);
     }
     this.adjustHeight();

@@ -33,10 +33,9 @@ var CommentsGroup = Seed.extend({
 
   addTmpComment: function() {
     if (!this.tmp) {
-      console.log('add tmpcom ', this.Schema.prototype);
       this.tmp = new this.Schema({ txt: "Enter a comment ..."});
       this.tmp.on("create", this.addComment.bind(this));
-      this.tmp.on("reply", this.addComment.bind(this));
+      // this.tmp.on("reply", this.addComment.bind(this));
       this.tmp.on("redraw", function() {
         this.displaySub();
       }.bind(this));

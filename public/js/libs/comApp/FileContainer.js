@@ -30,7 +30,7 @@ var FileContainer = Seed.extend({
           onmousedown: 'return false;'
         }
       }),
-      canvasTrack: new r.CanvasTrack(),
+      canvasTrack: new r.CanvasTrack({form: "points"}),
       colComments: new r.ColComments()
     };
   },
@@ -38,12 +38,13 @@ var FileContainer = Seed.extend({
   mutation: function(mutations) {
     this.canvasTrack.setSize(this.content.clientHeight, this.content.clientWidth);
     this.content.appendChild(this.canvasTrack.el);
+    this.observer.disconnect();
   },
 
   setFile: function(file) {
-    var observer = new MutationObserver(this.mutation.bind(this));
-    var config = { attributes: true }
-    observer.observe(this.content, config);
+    this.observer = new MutationObserver(this.mutation.bind(this));
+    var config = { childList: true };
+    this.observer.observe(this.content, config);
 
     this.infoFile.setName(file.name);
     this.content.innerHTML = file.content;

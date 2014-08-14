@@ -31,7 +31,7 @@ var CanvasTrack = Seed.extend({
   /*Init/Clear*/
   setSize: function(h, w) {
     this.el.height = h;
-    this.el.width = w - 10;
+    this.el.width = w;
     this.ctx.strokeStyle = "rgba(200, 200, 200, 0.3)";
     this.ctx.lineWidth = 15;
     this.ctx.fillStyle = "rgba(200, 200, 200, 0.3)";
@@ -43,6 +43,7 @@ var CanvasTrack = Seed.extend({
 
   clearCanvas: function() {
     this.setSize(this.el.height, this.el.width);
+    this.fire('clear', this.canvasArea);
   },
 
   /*Start/Save & Valid selection*/
