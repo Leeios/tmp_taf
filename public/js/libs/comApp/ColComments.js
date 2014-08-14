@@ -13,7 +13,7 @@ var ColComments = r.CommentsGroup.extend({
     tag: "div.commentsGroup"
   },
 
-  '+init': function() {
+  '-init': function() {
     this.Schema = r.SingleComment;
   },
 

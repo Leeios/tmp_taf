@@ -13,7 +13,15 @@ var Inheritance = r.CommentsGroup.extend(r.Comment.prototype);
 var SingleComment = Inheritance.extend({
 
   '+init': function() {
-    this.schema = r.Comment;
+    this.Schema = r.Comment;
+    console.log(this);
+  },
+
+  '-displaySub': function() {
+    console.log('display subcom')
+  },
+
+  '+addTmpComment': function() {
   },
 
   '-formate': function() {

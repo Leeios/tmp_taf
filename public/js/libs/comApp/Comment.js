@@ -22,6 +22,7 @@ var Comment = Seed.extend({
 
   '+init': function () {
 
+    console.log('create new com');
     this.areas = [];
 
     /*Define div*/
@@ -90,8 +91,8 @@ var Comment = Seed.extend({
   /*Add/remove*/
   valid: function() {
     this.edit = 0;
-    this.switchEdit();
     this.txt = this.elTxt.value;
+    this.switchEdit();
     this.elDiv.innerHTML = this.txt.replace(/\[/g, '<pre>').replace(/\]/g, '</pre>');
     for (var i = 0, len = this.elDiv.childNodes.length; i < len; i++) {
       if (this.elDiv.childNodes[i].tagName == "PRE") {

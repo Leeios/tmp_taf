@@ -8,8 +8,7 @@ sand.define('CommentsGroup', [
 */
 var CommentsGroup = Seed.extend({
 
-  '+options': {
-    schema: null,
+  options: {
     tmp: null,
     sub: []
   },
@@ -19,7 +18,7 @@ var CommentsGroup = Seed.extend({
     /*Ici le tmp comment est le commentaire en cours de validation
     on lui add les listeners et le prepare à etre un vrai com*/
     this.tmp.valid();
-    this.fire("add", this.tmp.formatCom());
+    this.fire("add", this.tmp.formateEl());
     this.el.appendChild(this.tmp.el);
     this.tmp.create.value = "Edit";
     this.sub.push(this.tmp);
@@ -34,6 +33,7 @@ var CommentsGroup = Seed.extend({
 
   addTmpComment: function() {
     if (!this.tmp) {
+      console.log('add tmpcom ', this.Schema.prototype);
       this.tmp = new this.Schema({ txt: "Enter a comment ..."});
       this.tmp.on("create", this.addComment.bind(this));
       this.tmp.on("reply", this.addComment.bind(this));
@@ -47,7 +47,7 @@ var CommentsGroup = Seed.extend({
   edit: function(editSub) {
     for (var i = 0, len = this.sub.length; i < len; i++) {
       if (editSub == this.sub[i]) {
-        this.fire("edit", this.sub[i].formatCom());
+        this.fire("edit", this.sub[i].formateEl());
         this.displaySub();
         return ;
       }
@@ -57,7 +57,7 @@ var CommentsGroup = Seed.extend({
   remove: function(rmSub) {
     for (var i = 0, len = this.sub.length; i < len; i++) {
       if (rmSub == this.sub[i]) {
-        this.fire("delete", this.sub[i].formatCom());
+        this.fire("delete", this.sub[i].formateEl());
         this.sub.splice(i, 1);
         this.displaySub();
         return ;
@@ -89,7 +89,8 @@ var CommentsGroup = Seed.extend({
 
   /*Use for import dataserv*/
   setComGroup: function(data, ctx) {
-    return ;
+    if (typeof data == "undefined")
+      return ;
     for (var i = 0, len = data.length; i < len; i++) {
       this.tmp = new this.schema(data[i]);
       this.tmp.setAreas(data[i].areas, ctx);

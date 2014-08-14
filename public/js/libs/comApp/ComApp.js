@@ -42,7 +42,7 @@ var appComments = Seed.extend({
       this.servInterface.sendData('add', parseFile);
     }.bind(this));
     this.uploadFile.on('uploadEnd', function () {
-//      this.project.display();
+     // this.project.display();
     }.bind(this));
 
     /*Username*/

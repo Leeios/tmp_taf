@@ -7,24 +7,27 @@ sand.define('Project', [
 
 var Project = Seed.extend({
 
-  tpl: {
-    tag: 'div.wrapper',
+  tpl: function() {
+    return {
+      tag: 'div.wrapper',
+      children: [
+        this.header.el,
+        this.infoProj.el,
+        this.container.el
+      ]
+    };
   },
 
-  '+options': {
-    userName: "unnamed",
-    name: "unnamed",
-    header: new r.HeaderFile(),/*single*/
-    infoProj: new r.Info(),/*used for files too*/
-    container: new r.Container(),/*single*/
-    uid: -1,
-    uidParent: -1
-  },
-
-  '+init': function() {
-    this.el.appendChild(this.header.el);
-    this.el.appendChild(this.infoProj.el);
-    this.el.appendChild(this.container.el);
+  'options': function() {
+    return {
+      userName: "unnamed",
+      name: "unnamed",
+      header: new r.HeaderFile(),/*single*/
+      infoProj: new r.Info(),/*used for files too*/
+      container: new r.Container(),/*single*/
+      uid: -1,
+      uidParent: -1
+    };
   },
 
   setData: function(data) {
@@ -55,6 +58,8 @@ var Project = Seed.extend({
   addFile: function(file) {
     this.container.addFile(file);
     this.header.addFile(file);
+    var last_add = this.container.formate();
+    return last_add[last_add.length - 1];
   },
 
   guid: function() {
