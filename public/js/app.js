@@ -1,8 +1,8 @@
 //LAUNCHER
-sand.require('appComments', function(r) {
+sand.require('ComApp', function(r) {
   //Socket co
   socket = io.connect();
 
   //Start comments app
-  app = new r.appComments({servData: current_file.locals.file});
+  app = new r.ComApp({servData: current_file.locals.file});
 });

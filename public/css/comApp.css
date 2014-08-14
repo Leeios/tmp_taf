@@ -1,0 +1,52 @@
+html {
+  height: 100%;
+}
+
+body {
+  background-color: #3F3F3F;
+}
+
+pre {
+  margin: 0;
+}
+
+.wrapper {
+  width: 100%;
+  border: 1px groove black;
+}
+
+.projectNameButton {
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  height: 5em;
+  width: 10em;
+  background-color: #AEAE14;
+}
+
+.projectName {
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  width: 3em;
+  background-color: #AEAE14;
+}
+
+.header {
+  height: 2em;
+  width: 100%;
+  background-color: #7875E6;
+}
+
+.Info {
+  height: 3em;
+  width: 100%;
+  background-color: #8D24D6;
+}
+
+.canWindow {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  z-index: 1;
+}
