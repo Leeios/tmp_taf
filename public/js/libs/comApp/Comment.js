@@ -54,9 +54,6 @@ var Comment = Seed.extend({
 
   '+init': function () {
 
-    console.log('create new com');
-    console.log(this.el);
-
     /*Define div*/
     if (this.uid == -1) {
       this.uid = this.guid()();
@@ -66,7 +63,7 @@ var Comment = Seed.extend({
     /*Create or Edit*/
     this.create.addEventListener("click", function(e) {
       if (this.elDiv.innerHTML == "") {
-        this.fire("create");
+        this.fire("createEl");
       } else {
         this.valid();
         this.fire("editEl", this);

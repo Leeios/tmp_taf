@@ -32,7 +32,6 @@ var appComments = Seed.extend({
       this.servInterface.sendData('add', this.project.formate());
     }.bind(this));
 
-    document.body.appendChild(this.project.el);
 
     /*UploadFiles*/
     this.uploadFile = new r.UploadFile();
@@ -42,15 +41,17 @@ var appComments = Seed.extend({
       this.servInterface.sendData('add', parseFile);
     }.bind(this));
     this.uploadFile.on('uploadEnd', function () {
-     // this.project.display();
+      /*-MutationObserver peut être setsize les canvas ici*/
     }.bind(this));
+
+
 
     /*Username*/
     this.userName = new r.UserName();
     this.userName.on('userName', function(s) {
       this.project.setUsername(s);
     }.bind(this));
-    document.body.appendChild(this.project.el);
+    document.body.appendChild(this.userName.el);
 
 
     /*Server import*/
@@ -60,6 +61,9 @@ var appComments = Seed.extend({
     this.servInterface.on('resultServer', function(data) {
       this.project.setData(data);
     }.bind(this));
+
+  document.body.appendChild(this.project.el);
+
   }
 
 });

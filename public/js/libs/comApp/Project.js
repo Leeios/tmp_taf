@@ -1,5 +1,6 @@
 sand.define('Project', [
   'Container',
+  'GenerateLink',
   'HeaderFile',
   'Info',
   'Seed'
@@ -12,6 +13,7 @@ var Project = Seed.extend({
       tag: 'div.wrapper',
       children: [
         this.header.el,
+        this.gLink.el,
         this.infoProj.el,
         this.container.el
       ]
@@ -25,6 +27,7 @@ var Project = Seed.extend({
       header: new r.HeaderFile(),/*single*/
       infoProj: new r.Info(),/*used for files too*/
       container: new r.Container(),/*single*/
+      gLink: new r.GenerateLink(),
       uid: -1,
       uidParent: -1
     };
@@ -41,13 +44,14 @@ var Project = Seed.extend({
   setName: function(s) {
     this.name = s;
     this.uid = this.guid()();
+    this.gLink.setLink(this.uid);
     this.infoProj.setName(s);
   },
 
   formate: function() {
     var formateProj = {};
 
-    formateProj.model = "file";
+    formateProj.model = "Project";
     formateProj.name = this.name;
     formateProj.files = this.container.formate();
     formateProj.uid = this.uid;

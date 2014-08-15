@@ -35,6 +35,18 @@ var FileContainer = Seed.extend({
     };
   },
 
+  '+init': function() {
+    this.colComments.on('add', function(el) {
+      // this.fire('add');
+    });
+    this.colComments.on('edit', function(el) {
+      ;
+    });
+    this.colComments.on('delete', function(el) {
+      ;
+    });
+  },
+
   mutation: function(mutations) {
     this.canvasTrack.setSize(this.content.clientHeight, this.content.clientWidth);
     this.content.appendChild(this.canvasTrack.el);
@@ -46,6 +58,10 @@ var FileContainer = Seed.extend({
     var config = { childList: true };
     this.observer.observe(this.content, config);
 
+    if (typeof file.uid == "undefined")
+      this.uid = this.guid()();
+    else
+      this.uid = file.uid;
     this.infoFile.setName(file.name);
     this.content.innerHTML = file.content;
     hljs.highlightBlock(this.content);
@@ -59,6 +75,18 @@ var FileContainer = Seed.extend({
     formateFile.content = this.content.innerHTML;
     formateFile.comments = this.colComments.formate();
     return formateFile;
+  },
+
+  guid: function() {
+    function s4() {
+      return Math.floor((1 + Math.random()) * 0x10000)
+                 .toString(16)
+                 .substring(1);
+    }
+    return function() {
+      return s4() + s4() + '-' + s4() + '-' + s4() + '-' +
+             s4() + '-' + s4() + s4() + s4();
+    };
   }
 
 });

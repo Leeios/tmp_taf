@@ -14,14 +14,9 @@ var SingleComment = Inheritance.extend({
 
   '+init': function() {
     this.Schema = r.Comment;
-    console.log(this);
   },
 
   '-displaySub': function() {
-    console.log('display subcom')
-  },
-
-  '+addTmpComment': function() {
   },
 
   '-formate': function() {

@@ -34,7 +34,7 @@ var CommentsGroup = Seed.extend({
   addTmpComment: function() {
     if (!this.tmp) {
       this.tmp = new this.Schema({ txt: "Enter a comment ..."});
-      this.tmp.on("create", this.addComment.bind(this));
+      this.tmp.on("createEl", this.addComment.bind(this));
       // this.tmp.on("reply", this.addComment.bind(this));
       this.tmp.on("redraw", function() {
         this.displaySub();
@@ -68,7 +68,7 @@ var CommentsGroup = Seed.extend({
     var formateComGroup = [];
 
     for (var i = 0, len = this.sub.length; i < len; i++) {
-      formateComGroup.push(this.sub[i].formate());
+      formateComGroup.push(this.sub[i].formateEl());
     }
     return formateComGroup;
   },
