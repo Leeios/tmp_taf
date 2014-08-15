@@ -12,8 +12,10 @@ sand.define('SingleComment', [
 var Inheritance = r.CommentsGroup.extend(r.Comment.prototype);
 var SingleComment = Inheritance.extend({
 
-  '+init': function() {
-    this.Schema = r.Comment;
+  '-options': function() {
+    return {
+      Schema: r.Comment
+    };
   },
 
   '-displaySub': function() {

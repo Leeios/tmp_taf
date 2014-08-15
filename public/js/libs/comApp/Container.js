@@ -18,6 +18,21 @@ var Container = Seed.extend({
     tmpFileContainer.setFile(file);
     this.el.appendChild(tmpFileContainer.el);
     this.filesContainer.push(tmpFileContainer);
+    ['add', 'edit', 'delete'].each(function(e) {
+      tmpFileContainer.on(e, function(data) {
+        this.serv.sendData(e, data);
+      }.bind(this))
+    }.bind(this));
+  },
+
+  setFiles: function() {
+    for (var i = 0, len = this.filesContainer.length; i < len; i++) {
+      this.filesContainer[i].setFile(data[i]);
+    }
+  },
+
+  setServ: function(serv) {
+    this.serv = serv;
   },
 
   formate: function() {
@@ -26,13 +41,7 @@ var Container = Seed.extend({
       formateFiles.push(this.filesContainer[i].formate());
     }
     return formateFiles;
-  },
-
-  setFiles: function() {
-    for (var i = 0, len = this.filesContainer.length; i < len; i++) {
-      this.filesContainer[i].setFile(data[i]);
-    }
-  },
+  }
 
 });
 return Container;

@@ -23,6 +23,7 @@ var appComments = Seed.extend({
     this.servInterface = new r.ServerInterface({server: socket, protocol: "socket"});
 
     this.project = new r.Project();
+    this.project.relayServ(this.servInterface);
     this.project.setData(this.servData);
 
     this.projectName = new r.ProjectName();

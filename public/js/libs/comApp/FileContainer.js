@@ -36,15 +36,11 @@ var FileContainer = Seed.extend({
   },
 
   '+init': function() {
-    this.colComments.on('add', function(el) {
-      // this.fire('add');
-    });
-    this.colComments.on('edit', function(el) {
-      ;
-    });
-    this.colComments.on('delete', function(el) {
-      ;
-    });
+    ['add', 'edit', 'delete'].each(function(e) {
+      this.colComments.on(e, function(data) {
+        this.fire(e, {data: data, uid: this.uid, model: 'comment'});
+      }.bind(this))
+    }.bind(this));
   },
 
   mutation: function(mutations) {

@@ -48,6 +48,10 @@ var Project = Seed.extend({
     this.infoProj.setName(s);
   },
 
+  relayServ: function(serv) {
+    this.container.setServ(serv);
+  },
+
   formate: function() {
     var formateProj = {};
 
