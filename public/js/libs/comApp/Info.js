@@ -16,6 +16,11 @@ var Info = Seed.extend({
   setName: function(s) {
     this.name = s;
     this.el.innerHTML = s;
+  },
+
+  addVersion: function(s) {
+    this.versions.push(s);
+    this.el.innerHTML += "   -   " + s;
   }
 
 });

@@ -9,7 +9,15 @@ sand.define('SingleComment', [
 **Fire: 0
 **On:   0
 */
-var Inheritance = r.CommentsGroup.extend(r.Comment.prototype);
+var Inheritance = function() {
+  var P = {};
+  for (var i in r.Comment.prototype) {
+    P[i] = r.Comment.prototype[i];
+  }
+  delete(P.init);
+  return r.CommentsGroup.extend(P);
+}();
+
 var SingleComment = Inheritance.extend({
 
   '-options': function() {

@@ -4,5 +4,5 @@ sand.require('ComApp', function(r) {
   socket = io.connect();
 
   //Start comments app
-  app = new r.ComApp({servData: current_file.locals.file});
+  app = new r.ComApp({servData: current_proj.locals});
 });

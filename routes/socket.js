@@ -1,4 +1,5 @@
 var idUser = 0;
+var proj_method = require('../model/project');
 var file_method = require('../model/file');
 var com_method = require('../model/comment');
 
@@ -13,9 +14,11 @@ exports.socket = function(socket) {
   });
 
   socket.on('add', function (data) {
-    if (data.model == 'File') {
-      file_method.insertFiles(data);
-    } else if (data.model == 'Com') {
+    if (data.model == 'Project') {
+      proj_method.insertProj(data);
+    } else if (data.model == 'File') {
+      file_method.insertFile(data);
+    } else if (data.model == 'Comment') {
       com_method.insertCom(data);
     } else {
       console.log('Data model is not recognized');
@@ -23,7 +26,7 @@ exports.socket = function(socket) {
   });
 
   socket.on('edit', function (data) {
-    if (data.model == 'Com') {
+    if (data.model == 'Comment') {
       com_method.editCom(data);
     } else {
       console.log('Data model is not recognized');
@@ -31,7 +34,7 @@ exports.socket = function(socket) {
   });
 
   socket.on('delete', function (data) {
-    if (data.model == 'Com') {
+    if (data.model == 'Comment') {
       com_method.deleteCom(data);
     } else {
       console.log('Data model is not recognized');

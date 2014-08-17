@@ -13,13 +13,14 @@ sand.define('ComApp', [
 */
 var appComments = Seed.extend({
 
-  '+options': {
+  options: {
     servData: null
   },
 
-  'init': function() {
+  '+init': function() {
     /*Project*/
 
+    console.log("get: ", this.servData);
     this.servInterface = new r.ServerInterface({server: socket, protocol: "socket"});
 
     this.project = new r.Project();
@@ -30,6 +31,8 @@ var appComments = Seed.extend({
     document.body.appendChild(this.projectName.el);
     this.projectName.on('name', function(s) {
       this.project.setName(s);
+      this.servInterface.sendData('add', this.project.formate());
+      this.project.setVersion('v0.0');
       this.servInterface.sendData('add', this.project.formate());
     }.bind(this));
 
@@ -63,7 +66,7 @@ var appComments = Seed.extend({
       this.project.setData(data);
     }.bind(this));
 
-  document.body.appendChild(this.project.el);
+    document.body.appendChild(this.project.el);
 
   }
 

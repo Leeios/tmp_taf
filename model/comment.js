@@ -6,16 +6,17 @@ var File = mongoose.model('File');
 exports.insertCom = function(data) {
   var insert_com = new Com({
     uid: data.uid,
+    uidFile: data.uidFile,
     txt: data.txt,
     actualTop: data.actualTop,
     points: data.points,
     areas: data.areas
   });
-  File.update({uid: data.file_uid}, {$push: {comments: insert_com}}, function (err) {
+  insert_com.save(function(err) {
     if (err) {
-      console.log("File " + data.fileName + " unknown");
+      console.log("Comment " + data.txt + " not added to database");
     } else {
-      console.log("Comment added to file " + data.file_uid);
+      console.log("Comment added " + data.txt);
     }
   });
 }

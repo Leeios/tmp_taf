@@ -24,6 +24,7 @@ var Project = Seed.extend({
     return {
       userName: "unnamed",
       name: "unnamed",
+      versions: [],
       header: new r.HeaderFile(),/*single*/
       infoProj: new r.Info(),/*used for files too*/
       container: new r.Container(),/*single*/
@@ -48,6 +49,13 @@ var Project = Seed.extend({
     this.infoProj.setName(s);
   },
 
+  setVersion: function(s) {
+    this.name = s;
+    this.infoProj.addVersion(s);
+    this.uidParent = this.uid;
+    this.uid = this.guid()();
+  },
+
   relayServ: function(serv) {
     this.container.setServ(serv);
   },
@@ -57,7 +65,7 @@ var Project = Seed.extend({
 
     formateProj.model = "Project";
     formateProj.name = this.name;
-    formateProj.files = this.container.formate();
+    //formateProj.files = this.container.formate();
     formateProj.uid = this.uid;
     formateProj.uidParent = this.uidParent;
     return formateProj;
@@ -67,7 +75,9 @@ var Project = Seed.extend({
     this.container.addFile(file);
     this.header.addFile(file);
     var last_add = this.container.formate();
-    return last_add[last_add.length - 1];
+    last_add = last_add[last_add.length - 1];
+    last_add.uidProject = this.uid;
+    return last_add;
   },
 
   guid: function() {

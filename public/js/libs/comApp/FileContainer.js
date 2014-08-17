@@ -21,6 +21,7 @@ var FileContainer = Seed.extend({
 
   options : function() {
     return {
+      txt: "",
       infoFile: new r.Info(),
       content: r.toDOM({
         tag: 'pre.content',
@@ -38,7 +39,7 @@ var FileContainer = Seed.extend({
   '+init': function() {
     ['add', 'edit', 'delete'].each(function(e) {
       this.colComments.on(e, function(data) {
-        this.fire(e, {data: data, uid: this.uid, model: 'comment'});
+        this.fire(e, {data: data, uidFile: this.uid, model: 'Comment'});
       }.bind(this))
     }.bind(this));
   },
@@ -60,6 +61,7 @@ var FileContainer = Seed.extend({
       this.uid = file.uid;
     this.infoFile.setName(file.name);
     this.content.innerHTML = file.content;
+    this.txt = file.content;
     hljs.highlightBlock(this.content);
     this.colComments.setComGroup(file.comments, this.canvasTrack.getCtx());
     this.canvasTrack.on('valid', this.colComments.addArea.bind(this.colComments));
@@ -68,8 +70,10 @@ var FileContainer = Seed.extend({
 
   formate: function() {
     var formateFile = {};
-    formateFile.content = this.content.innerHTML;
-    formateFile.comments = this.colComments.formate();
+    formateFile.model = "File";
+    formateFile.uid = this.uid;
+    formateFile.content = this.txt;
+    // formateFile.comments = this.colComments.formate();
     return formateFile;
   },
 
