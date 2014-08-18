@@ -30,7 +30,6 @@ var Comment = Seed.extend({
       uid: -1,
       actualTop: 0,
       resolved: false,
-      areas: [],
       create: r.toDOM({
         tag:"input.createButton.button",
         attr: { type: "button", value: "Create" }
@@ -54,6 +53,7 @@ var Comment = Seed.extend({
 
   '+init': function () {
 
+    this.areas = [];
     /*Define div*/
     if (this.uid == -1) {
       this.uid = this.guid()();
@@ -81,7 +81,7 @@ var Comment = Seed.extend({
 
     /*Reply*/
     this.reply.addEventListener("click", function() {
-      this.fire("reply");
+      this.fire("replyEl");
     }.bind(this));
 
     /*Resize*/

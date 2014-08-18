@@ -21,6 +21,7 @@ var FileContainer = Seed.extend({
 
   options : function() {
     return {
+      subsOn: {},
       name: "unnamed",
       txt: "",
       infoFile: new r.Info(),
@@ -67,8 +68,11 @@ var FileContainer = Seed.extend({
     this.content.innerHTML = file.content;
     this.txt = file.content;
     hljs.highlightBlock(this.content);
+    this.setCom(file.comments);
+  },
 
-    this.colComments.setComGroup(file.comments, this.canvasTrack.getCtx());
+  setCom: function(comments) {
+    this.colComments.setComGroup(comments, this.canvasTrack.getCtx());
     this.canvasTrack.on('valid', this.colComments.addArea.bind(this.colComments));
     this.colComments.on('clearCanvas', this.canvasTrack.clearCanvas.bind(this.canvasTrack));
   },

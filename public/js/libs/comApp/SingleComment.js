@@ -26,7 +26,8 @@ var SingleComment = Inheritance.extend({
     };
   },
 
-  '-displaySub': function() {
+  '+init': function() {
+    this.reply
   },
 
   '-formate': function() {

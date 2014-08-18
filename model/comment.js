@@ -5,12 +5,12 @@ var File = mongoose.model('File');
 
 exports.insertCom = function(data) {
   var insert_com = new Com({
-    uid: data.uid,
+    uid: data.data.uid,
     uidFile: data.uidFile,
-    txt: data.txt,
-    actualTop: data.actualTop,
-    points: data.points,
-    areas: data.areas
+    txt: data.data.txt,
+    actualTop: data.data.actualTop,
+    points: data.data.points,
+    areas: data.data.areas
   });
   insert_com.save(function(err) {
     if (err) {

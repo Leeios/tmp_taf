@@ -19,7 +19,6 @@ var appComments = Seed.extend({
 
   '+init': function() {
     /*Project*/
-    console.log(this.servData);
 
     this.servInterface = new r.ServerInterface({server: socket, protocol: "socket"});
 

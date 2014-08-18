@@ -45,8 +45,10 @@ var Project = Seed.extend({
     this.infoProj.addVersion(data.versions[0].name);
     this.uidParent = data.versions[0].uidParent;
     this.gLink.setLink(this.uidParent);
-
-    this.container.setFiles(data);
+    for (var i = 0, len = data.files[0].length; i < len; i++) {
+      this.addFile(data.files[0][i]);
+    }
+    this.container.addComs(data.comments)
   },
 
   setName: function(s) {

@@ -13,23 +13,34 @@ var Container = Seed.extend({
     filesContainer: []
   },
 
-  addFile: function(file) {
+  addFile: function(file, indicator) {
     var tmpFileContainer = new r.FileContainer();
     tmpFileContainer.setFile(file);
     this.el.appendChild(tmpFileContainer.el);
     this.filesContainer.push(tmpFileContainer);
+    this.subscribeCom(tmpFileContainer);
+  },
+
+  subscribeCom: function(com) {
     ['add', 'edit', 'delete'].each(function(e) {
-      tmpFileContainer.on(e, function(data) {
+      com.subsOn[e] = com.on(e, function(data) {
         this.serv.sendData(e, data);
       }.bind(this))
     }.bind(this));
+  },
+
+  addComs: function(comments) {
+    for (var i = 0, len = this.filesContainer.length; i < len; i++) {
+      this.filesContainer[i].subsOn['add'].un();
+      this.filesContainer[i].setCom(comments[i]);
+      this.subscribeCom(this.filesContainer[i]);
+    }
   },
 
   setFiles: function(data) {
     for (var i = 0, len = data.length; i < len; i++) {
       this.addFile(data.files[i]);
     }
-    console.log(data.comments);
   },
 
   setServ: function(serv) {

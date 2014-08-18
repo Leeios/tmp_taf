@@ -24,6 +24,7 @@ var CommentsGroup = Seed.extend({
     this.sub.push(this.tmp);
     this.tmp.on("editEl", this.edit.bind(this));
     this.tmp.on("deleteEl", this.remove.bind(this));
+    this.tmp.on("replyEl", this.reply.bind(this));
     this.tmp = null;
     this.sub.sort(function (a, b) {
       return a.actualTop - b.actualTop;
@@ -64,6 +65,16 @@ var CommentsGroup = Seed.extend({
     }
   },
 
+  reply: function(rpSub) {
+    for (var i = 0, len = this.sub.length; i < len; i++) {
+      if (rpSub == this.sub[i]) {
+        this.addTmpComment.bind(this.sub[i]);
+        this.displaySub();
+        return ;
+      }
+    }
+  },
+
   formateAll: function() {
     var formateComGroup = [];
 
@@ -91,7 +102,7 @@ var CommentsGroup = Seed.extend({
     if (typeof data == "undefined")
       return ;
     for (var i = 0, len = data.length; i < len; i++) {
-      this.tmp = new this.schema(data[i]);
+      this.tmp = new this.Schema(data[i]);
       this.tmp.setAreas(data[i].areas, ctx);
       this.tmp.preValide();
       this.tmp.on("redraw", function() {
