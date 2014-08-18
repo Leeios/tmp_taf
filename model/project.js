@@ -47,8 +47,8 @@ exports.getProj = function(uid, callback) {
                     if (pending === 0) { callback(result); }
                   });
                   pending++;
-                  result.files.push(dataF);
                 }
+                result.files.push(dataF);
                 pending--;
               }
             });
