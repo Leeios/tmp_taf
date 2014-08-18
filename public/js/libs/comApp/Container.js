@@ -25,10 +25,11 @@ var Container = Seed.extend({
     }.bind(this));
   },
 
-  setFiles: function() {
-    for (var i = 0, len = this.filesContainer.length; i < len; i++) {
-      this.filesContainer[i].setFile(data[i]);
+  setFiles: function(data) {
+    for (var i = 0, len = data.length; i < len; i++) {
+      this.addFile(data.files[i]);
     }
+    console.log(data.comments);
   },
 
   setServ: function(serv) {

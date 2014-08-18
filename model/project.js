@@ -2,6 +2,7 @@ var mongoose = require('mongoose');
 var model = require('./model');
 var Project = mongoose.model('Project');
 var File = mongoose.model('File');
+var Com = mongoose.model('Com');
 
 
 exports.insertProj = function(data) {
@@ -19,23 +20,42 @@ exports.insertProj = function(data) {
   });
 };
 
+/*Attention les yeux, callbacks de la mort*/
 exports.getProj = function(uid, callback) {
+  var result = {};
 
-  Project.find({uidParent: uid}, {}, function(err, data) {
-    if (err) { console.log("Failed to find " + uid + " to database"); }
+  Project.findOne({uid: uid}, {}, function(err, motherOfProject) {/*Nom du projet*/
+    if (err) { console.log("Failed to find " + uid + " in database"); }
     else {
-      var result = data.slice(0);
-      result.files = [];
-      var pending = 0;
-      for (var i = 0, len = result.length; i < len; i++) {
-        File.find({uidProject: result[i].uid}, {}, function(err, dataF) {
-          if (err) { console.log("Failed to find to database"); }
-          else { result.files.push(dataF); }
-          pending--;
-          if (pending === 0) { callback(result); }
-        });
-        pending++;
-      }
+      result.name = motherOfProject.name;
+      Project.find({uidParent: uid}, {}, function(err, data) {/*Versions du projet*/
+        if (err) { console.log("Failed to find " + uid + " in database"); }
+        else {
+          result.versions = data.slice(0);
+          result.files = [];
+          result.comments = [];
+          var pending = 0;
+          for (var i = 0, len = result.versions.length; i < len; i++) {
+            File.find({uidProject: result.versions[i].uid}, {}, function(err, dataF) {/*Fichier associés aux versions*/
+              if (err) { console.log("Failed to find in database"); }
+              else {
+                for (var j = 0, len = dataF.length; j < len; j++) {
+                  Com.find({uidFile: dataF[j].uid}, {}, function(err, dataC) {
+                    if (err) { console.log("Failed to find com") }
+                    else { console.log(dataC);result.comments.push(dataC); }
+                    pending--;
+                    if (pending === 0) { callback(result); }
+                  });
+                  pending++;
+                  result.files.push(dataF);
+                }
+                pending--;
+              }
+            });
+            pending++;
+          }
+        }
+      });
     }
   });
 };

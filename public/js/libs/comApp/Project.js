@@ -35,11 +35,18 @@ var Project = Seed.extend({
   },
 
   setData: function(data) {
-    if (data == null) {
+    if (data === null)
       return ;
-    }
+    /*Gerer le multi version*/
+    console.log(data);
     this.name = data.name;
-    /*...*/
+    this.infoProj.setName(this.name);
+    this.uid = data.versions[0].uid; /*Attribuer par defaut la première version*/
+    this.infoProj.addVersion(data.versions[0].name);
+    this.uidParent = data.versions[0].uidParent;
+    this.gLink.setLink(this.uidParent);
+
+    this.container.setFiles(data);
   },
 
   setName: function(s) {

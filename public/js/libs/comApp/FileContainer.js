@@ -21,6 +21,7 @@ var FileContainer = Seed.extend({
 
   options : function() {
     return {
+      name: "unnamed",
       txt: "",
       infoFile: new r.Info(),
       content: r.toDOM({
@@ -59,10 +60,14 @@ var FileContainer = Seed.extend({
       this.uid = this.guid()();
     else
       this.uid = file.uid;
+
+    this.name = file.name;
     this.infoFile.setName(file.name);
+
     this.content.innerHTML = file.content;
     this.txt = file.content;
     hljs.highlightBlock(this.content);
+
     this.colComments.setComGroup(file.comments, this.canvasTrack.getCtx());
     this.canvasTrack.on('valid', this.colComments.addArea.bind(this.colComments));
     this.colComments.on('clearCanvas', this.canvasTrack.clearCanvas.bind(this.canvasTrack));
@@ -71,6 +76,7 @@ var FileContainer = Seed.extend({
   formate: function() {
     var formateFile = {};
     formateFile.model = "File";
+    formateFile.name = this.name;
     formateFile.uid = this.uid;
     formateFile.content = this.txt;
     // formateFile.comments = this.colComments.formate();
