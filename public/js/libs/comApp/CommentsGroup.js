@@ -22,9 +22,9 @@ var CommentsGroup = Seed.extend({
     this.el.appendChild(this.tmp.el);
     this.tmp.create.value = "Edit";
     this.sub.push(this.tmp);
+    console.log(this.tmp);
     this.tmp.on("editEl", this.edit.bind(this));
     this.tmp.on("deleteEl", this.remove.bind(this));
-    this.tmp.on("replyEl", this.reply.bind(this));
     this.tmp = null;
     this.sub.sort(function (a, b) {
       return a.actualTop - b.actualTop;
@@ -33,10 +33,9 @@ var CommentsGroup = Seed.extend({
   },
 
   addTmpComment: function() {
-    if (!this.tmp) {
+    if (!this.tmp && this.Schema) {
       this.tmp = new this.Schema({ txt: "Enter a comment ..."});
       this.tmp.on("createEl", this.addComment.bind(this));
-      // this.tmp.on("reply", this.addComment.bind(this));
       this.tmp.on("redraw", function() {
         this.displaySub();
       }.bind(this));
@@ -59,16 +58,6 @@ var CommentsGroup = Seed.extend({
       if (rmSub == this.sub[i]) {
         this.fire("delete", this.sub[i].formateEl());
         this.sub.splice(i, 1);
-        this.displaySub();
-        return ;
-      }
-    }
-  },
-
-  reply: function(rpSub) {
-    for (var i = 0, len = this.sub.length; i < len; i++) {
-      if (rpSub == this.sub[i]) {
-        this.addTmpComment.bind(this.sub[i]);
         this.displaySub();
         return ;
       }

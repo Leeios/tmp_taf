@@ -80,9 +80,7 @@ var Comment = Seed.extend({
     this.delete.addEventListener("click", this.removeEl.bind(this));
 
     /*Reply*/
-    this.reply.addEventListener("click", function() {
-      this.fire("replyEl");
-    }.bind(this));
+    this.reply.addEventListener("click", this.replyEl.bind(this));
 
     /*Resize*/
     this.elTxt.addEventListener("keypress", this.adjustHeight.bind(this));
@@ -111,6 +109,12 @@ var Comment = Seed.extend({
   removeEl: function() {
     this.fire("deleteEl", this);
     this.el.remove();
+  },
+
+  replyEl: function() {
+    this.fire("replyEl", this);
+    this.addTmpComment();
+    this.displaySub();
   },
 
   preValide: function() {

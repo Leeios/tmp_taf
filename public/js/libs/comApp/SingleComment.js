@@ -20,14 +20,12 @@ var Inheritance = function() {
 
 var SingleComment = Inheritance.extend({
 
-  '-options': function() {
-    return {
-      Schema: r.Comment
-    };
-  },
-
   '+init': function() {
-    this.reply
+    this.sub = [];
+    this.Schema = r.Comment;
+    this.reply.addEventListener('click', function() {
+      this.fire('replyEl');
+    }.bind(this));
   },
 
   '-formate': function() {
