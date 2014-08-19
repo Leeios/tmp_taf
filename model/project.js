@@ -42,7 +42,7 @@ exports.getProj = function(uid, callback) {
                 for (var j = 0, len = dataF.length; j < len; j++) {
                   Com.find({uidFile: dataF[j].uid}, {}, function(err, dataC) {
                     if (err) { console.log("Failed to find com") }
-                    else { console.log(dataC);result.comments.push(dataC); }
+                    else { result.comments.push(dataC); }
                     pending--;
                     if (pending === 0) { callback(result); }
                   });

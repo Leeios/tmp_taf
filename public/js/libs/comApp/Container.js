@@ -29,9 +29,15 @@ var Container = Seed.extend({
     }.bind(this));
   },
 
+  unsubscribeCom: function(com) {
+    ['add', 'edit', 'delete'].each(function(e) {
+      com.subsOn[e].un();
+    });
+  },
+
   addComs: function(comments) {
     for (var i = 0, len = this.filesContainer.length; i < len; i++) {
-      this.filesContainer[i].subsOn['add'].un();
+      this.unsubscribeCom(this.filesContainer[i]);
       this.filesContainer[i].setCom(comments[i]);
       this.subscribeCom(this.filesContainer[i]);
     }
