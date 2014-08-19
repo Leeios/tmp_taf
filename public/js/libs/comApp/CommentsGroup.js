@@ -8,7 +8,7 @@ sand.define('CommentsGroup', [
 */
 var CommentsGroup = Seed.extend({
 
-  options: {
+  '+options': {
     tmp: null,
     sub: []
   },
@@ -22,7 +22,6 @@ var CommentsGroup = Seed.extend({
     this.el.appendChild(this.tmp.el);
     this.tmp.create.value = "Edit";
     this.sub.push(this.tmp);
-    console.log(this.tmp);
     this.tmp.on("editEl", this.edit.bind(this));
     this.tmp.on("deleteEl", this.remove.bind(this));
     this.tmp = null;

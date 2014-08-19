@@ -26,7 +26,7 @@ var Comment = Seed.extend({
   options: function() {
     return {
       txt: "",
-      edit: 1,
+      edit_token: 1,
       uid: -1,
       actualTop: 0,
       resolved: false,
@@ -60,7 +60,7 @@ var Comment = Seed.extend({
     }
     this.switchEdit();
 
-    /*Create or Edit*/
+    /*Create or Edit_token*/
     this.create.addEventListener("click", function(e) {
       if (this.elDiv.innerHTML == "") {
         this.fire("createEl");
@@ -72,7 +72,7 @@ var Comment = Seed.extend({
 
     /*Edit mode*/
     this.elDiv.addEventListener("click", function() {
-      this.edit = 1;
+      this.edit_token = 1;
       this.switchEdit();
     }.bind(this));
 
@@ -92,7 +92,7 @@ var Comment = Seed.extend({
 
   /*Add/remove*/
   valid: function() {
-    this.edit = 0;
+    this.edit_token = 0;
     this.txt = this.elTxt.value;
     this.switchEdit();
     this.elDiv.innerHTML = this.txt.replace(/\[/g, '<pre>').replace(/\]/g, '</pre>');
@@ -128,7 +128,7 @@ var Comment = Seed.extend({
   },
 
   switchEdit: function() {
-    if (this.edit == 0) {
+    if (this.edit_token == 0) {
       this.el.style["z-index"] = 0;
       this.elDiv.innerHTML = this.txt;
       this.elTxt.remove();
