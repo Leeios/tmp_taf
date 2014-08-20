@@ -111,12 +111,6 @@ var Comment = Seed.extend({
     this.el.remove();
   },
 
-  replyEl: function() {
-    this.fire("replyEl", this);
-    this.addTmpComment();
-    this.displaySub();
-  },
-
   preValide: function() {
     this.elTxt.value = this.txt;
   },
@@ -166,6 +160,7 @@ var Comment = Seed.extend({
   addArea: function(canArea) {
     this.areas.push(canArea);
     this.actualTop = canArea.pos[1];
+    console.log(canArea.pos[1]);
     this.el.style.top = this.actualTop + "px";
     this.adjustHeight();
     this.elTxt.focus();

@@ -44,7 +44,7 @@ pre {
   position: absolute;
   right: 0px;
   width: 100%;
-  padding: 0.3em;
+  padding: 0.1em;
   box-sizing: border-box;
   background-color: #272822;
   border: 1px black ridge;
@@ -122,6 +122,7 @@ pre {
 
 .txtComment {
   display: block;
+  resize: none;
   float: right;
   width: 85%;
   height: 100%;

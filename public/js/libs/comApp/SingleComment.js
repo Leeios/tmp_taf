@@ -23,10 +23,15 @@ var SingleComment = Inheritance.extend({
   '+init': function() {
     this.sub = [];
     this.Schema = r.Comment;
-    this.reply.addEventListener('click', function() {
-      this.fire('replyEl');
-    }.bind(this));
+    this.reply.addEventListener("click", this.replyEl.bind(this));
   },
+
+  replyEl: function() {
+    this.fire("replyEl", this);
+    this.addTmpComment();
+    this.displaySub();
+  },
+
 
   '-formate': function() {
     var formateSinCom = {};

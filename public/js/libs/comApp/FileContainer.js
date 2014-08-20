@@ -72,6 +72,7 @@ var FileContainer = Seed.extend({
   },
 
   setCom: function(comments) {
+    console.log(comments);
     this.colComments.setComGroup(comments, this.canvasTrack.getCtx());
     this.canvasTrack.on('valid', this.colComments.addArea.bind(this.colComments));
     this.colComments.on('clearCanvas', this.canvasTrack.clearCanvas.bind(this.canvasTrack));

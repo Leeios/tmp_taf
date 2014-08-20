@@ -37,9 +37,15 @@ var Container = Seed.extend({
 
   addComs: function(comments) {
     for (var i = 0, len = this.filesContainer.length; i < len; i++) {
-      this.unsubscribeCom(this.filesContainer[i]);
-      this.filesContainer[i].setCom(comments[i]);
-      this.subscribeCom(this.filesContainer[i]);
+      for (var j = 0, len = comments.length; j < len; j++) {
+      console.log(comments[j], this.filesContainer[i].uid);
+        if (comments[j].length && comments[j][0].uidFile == this.filesContainer[i].uid) {
+          this.unsubscribeCom(this.filesContainer[i]);
+          this.filesContainer[i].setCom(comments[j]);
+          this.subscribeCom(this.filesContainer[i]);
+          break ;
+        }
+      }
     }
   },
 
