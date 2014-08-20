@@ -79,9 +79,6 @@ var Comment = Seed.extend({
     /*Delete*/
     this.delete.addEventListener("click", this.removeEl.bind(this));
 
-    /*Reply*/
-    this.reply.addEventListener("click", this.replyEl.bind(this));
-
     /*Resize*/
     this.elTxt.addEventListener("keypress", this.adjustHeight.bind(this));
 
