@@ -23,6 +23,13 @@ var ColComments = r.CommentsGroup.extend({
     this.displaySub();
   },
 
+  '-addComment': function(data) {
+    this.tmp.addReplies(data);
+    this.tmp.on("add", function(el) {
+      this.fire('add', el);
+    }.bind(this));
+  },
+
   '-displaySub': function() {
     this.fire('clearCanvas');
   },

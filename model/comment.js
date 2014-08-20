@@ -7,6 +7,7 @@ exports.insertCom = function(data) {
   var insert_com = new Com({
     uid: data.data.uid,
     uidFile: data.uidFile,
+    uidParent: data.data.uidParent,
     txt: data.data.txt,
     actualTop: data.data.actualTop,
     points: data.data.points,

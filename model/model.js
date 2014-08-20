@@ -21,6 +21,7 @@ var comSchema = new mongoose.Schema({
   uid: String,
   txt: String,
   uidFile: String,
+  uidParent: String,
   resolved: Boolean,
   author: String,
   actualTop: Number,

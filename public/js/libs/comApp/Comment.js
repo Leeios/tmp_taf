@@ -28,6 +28,7 @@ var Comment = Seed.extend({
       txt: "",
       edit_token: 1,
       uid: -1,
+      uidParent: -1,
       actualTop: 0,
       resolved: false,
       create: r.toDOM({
@@ -126,14 +127,18 @@ var Comment = Seed.extend({
       this.el.appendChild(this.elDiv);
       this.create.remove();
       this.el.appendChild(this.delete);
+      if (this.reply) {
       this.el.appendChild(this.reply);
+      }
     } else {
       this.el.style["z-index"] = 1;
       this.elTxt.placeholder = this.txt;
       this.elDiv.remove();
       this.el.appendChild(this.elTxt);
       this.delete.remove();
+      if (this.reply) {
       this.reply.remove();
+      }
       this.el.appendChild(this.create);
     }
     this.adjustHeight();
@@ -186,7 +191,7 @@ var Comment = Seed.extend({
     for (var i = 0, len = this.areas.length; i < len; i++) {
       parseAreas[i] = this.areas[i].formateArea();
     }
-    parseCom = {txt: this.txt, actualTop: this.actualTop, areas: parseAreas, uid: this.uid};
+    parseCom = {txt: this.txt, actualTop: this.actualTop, areas: parseAreas, uid: this.uid, uidParent: this.uidParent};
     return (parseCom);
   },
 

@@ -27,11 +27,33 @@ var SingleComment = Inheritance.extend({
   },
 
   replyEl: function() {
-    this.fire("replyEl", this);
     this.addTmpComment();
     this.displaySub();
   },
 
+  '+addTmpComment': function() {
+    this.tmp.uidParent = this.uid;
+    this.tmp.elTxt.focus();
+    this.tmp.reply.remove();
+    this.tmp.reply = null;
+    this.tmp.actualTop = this.el.offsetHeight;
+    this.tmp.switchEdit();
+  },
+
+  addReplies: function(data) {
+    if (typeof data == "undefined")
+      return ;
+    for (var i = 0, len = data.length; i < len; i++) {
+      if (data[i].uidParent == this.uid) {
+        this.tmp = new this.Schema(data[i]);
+        this.tmp.preValide();
+        this.tmp.on("redraw", function() {
+          this.displaySub();
+        }.bind(this));
+        this.addComment();
+      }
+    }
+  },
 
   '-formate': function() {
     var formateSinCom = {};

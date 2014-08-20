@@ -90,13 +90,15 @@ var CommentsGroup = Seed.extend({
     if (typeof data == "undefined")
       return ;
     for (var i = 0, len = data.length; i < len; i++) {
-      this.tmp = new this.Schema(data[i]);
-      this.tmp.setAreas(data[i].areas, ctx);
-      this.tmp.preValide();
-      this.tmp.on("redraw", function() {
-        this.displaySub();
-      }.bind(this));
-      this.addComment();
+      if (data[i].uidParent == -1) {
+        this.tmp = new this.Schema(data[i]);
+        this.tmp.setAreas(data[i].areas, ctx);
+        this.tmp.preValide();
+        this.tmp.on("redraw", function() {
+          this.displaySub();
+        }.bind(this));
+        this.addComment(data);
+      }
     }
   }
 
