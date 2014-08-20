@@ -157,7 +157,6 @@ var Comment = Seed.extend({
   addArea: function(canArea) {
     this.areas.push(canArea);
     this.actualTop = canArea.pos[1];
-    console.log(canArea.pos[1]);
     this.el.style.top = this.actualTop + "px";
     this.adjustHeight();
     this.elTxt.focus();
