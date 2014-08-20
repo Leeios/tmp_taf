@@ -29,7 +29,6 @@ var appComments = Seed.extend({
     this.projectName = new r.ProjectName();
     document.body.appendChild(this.projectName.el);
     this.projectName.on('name', function(s) {
-      this.project = new r.Project();
       this.project.setName(s);
       this.servInterface.sendData('add', this.project.formate());
       this.project.setVersion('v0.0');
