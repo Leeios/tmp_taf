@@ -13,8 +13,8 @@ var Project = Seed.extend({
       tag: 'div.wrapper',
       children: [
         this.header.el,
-        this.gLink.el,
         this.infoProj.el,
+        this.gLink.el,
         this.container.el
       ]
     };
@@ -55,7 +55,7 @@ var Project = Seed.extend({
     this.name = s;
     this.uid = this.guid()();
     this.gLink.setLink(this.uid);
-    this.infoProj.setName(s);
+    this.infoProj.setName(s, '0');
   },
 
   setVersion: function(s) {

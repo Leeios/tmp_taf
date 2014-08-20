@@ -5,22 +5,23 @@ sand.define('Info', [
 var Info = Seed.extend({
 
   tpl: {
-    tag: 'div.info'
+    tag: 'a.info'
   },
 
-  '+options': {
+  options: {
     name: "unnamed",
     versions: []
   },
 
-  setName: function(s) {
+  setName: function(s, id) {
     this.name = s;
+    this.el.setAttribute("name", id);
     this.el.innerHTML = s;
   },
 
   addVersion: function(s) {
     this.versions.push(s);
-    this.el.innerHTML += "   -   " + s;
+    this.el.innerHTML += "&nbsp&nbsp&nbsp&nbsp" + s;
   }
 
 });

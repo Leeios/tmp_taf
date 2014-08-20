@@ -63,7 +63,7 @@ var FileContainer = Seed.extend({
       this.uid = file.uid;
 
     this.name = file.name;
-    this.infoFile.setName(file.name);
+    this.infoFile.setName(file.name, file.uid);
 
     this.content.innerHTML = file.content;
     this.txt = file.content;

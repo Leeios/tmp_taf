@@ -2,35 +2,51 @@
 @import 'comments/comments'
 
 $primary-color: #FFFFFF
+$com-image: url('../img/42back.gif')
 
 html
   height: 100%
+  width: 100%
 
 body
-  background-color: $primary-color
+  background-image: $com-image
 
 pre
   margin: 0
+  border: 1px groove black
 
 .wrapper
   height: 100%
   width: 100%
 
 .projectName
+  +border-radius(10px)
   position: absolute
-  top: 0px
+  top: 2em
   right: 0px
-  width: 3em
-
+  height: 4em
+  width: 8em
+  resize: none
 
 .header
   position: fixed
   top: 0
+  height: 2em
   z-index: 2
   width: 100%
   color: white
   font-family: Arial, Helvetica, "Liberation Sans", FreeSans, sans-serif
   background-color: #3F3F3F
+
+.headerLink
+  color: #FFFFFF
+
+.uploadFile
+  max-width: 7em
+  font-size: 15px
+
+.generateLink
+  float: right
 
 .info
   width: 100%

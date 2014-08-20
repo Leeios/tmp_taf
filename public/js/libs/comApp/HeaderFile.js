@@ -1,4 +1,5 @@
 sand.define('HeaderFile', [
+  'DOM/toDOM',
   'Seed'
 ], function(r) {
 
@@ -17,8 +18,14 @@ var HeaderFile = Seed.extend({
   },
 
   addFile: function(file) {
-    this.filesName.push(file.name);
-    this.el.innerHTML += '/' + file.name;
+    var tmpEl = r.toDOM({
+      tag: 'a.headerLink',
+      innerHTML: file.name,
+      attr: { href: '#' + file.uid }
+    });
+    this.filesName.push(tmpEl);
+    this.el.appendChild(tmpEl);
+    this.el.innerHTML += '&nbsp&nbsp&nbsp&nbsp';
   }
 
 

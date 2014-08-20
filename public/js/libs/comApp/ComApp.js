@@ -29,6 +29,7 @@ var appComments = Seed.extend({
     this.projectName = new r.ProjectName();
     document.body.appendChild(this.projectName.el);
     this.projectName.on('name', function(s) {
+      this.project = new r.Project();
       this.project.setName(s);
       this.servInterface.sendData('add', this.project.formate());
       this.project.setVersion('v0.0');
@@ -38,7 +39,7 @@ var appComments = Seed.extend({
 
     /*UploadFiles*/
     this.uploadFile = new r.UploadFile();
-    document.body.appendChild(this.uploadFile.el);
+    this.project.header.el.appendChild(this.uploadFile.el);/*Placage à l'arrache du upload dans le header*/
     this.uploadFile.on('uploadFile', function(file) {
       var parseFile = this.project.addFile(file);
       this.servInterface.sendData('add', parseFile);
