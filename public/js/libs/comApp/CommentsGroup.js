@@ -24,10 +24,10 @@ var CommentsGroup = Seed.extend({
     this.sub.push(this.tmp);
     this.tmp.on("editEl", this.edit.bind(this));
     this.tmp.on("deleteEl", this.remove.bind(this));
-    this.tmp = null;
     this.sub.sort(function (a, b) {
       return a.actualTop - b.actualTop;
     });
+    this.tmp = null;
     this.displaySub();
   },
 

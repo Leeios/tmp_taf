@@ -13,7 +13,7 @@ var Container = Seed.extend({
     filesContainer: []
   },
 
-  addFile: function(file, indicator) {
+  addFile: function(file) {
     var tmpFileContainer = new r.FileContainer();
     tmpFileContainer.setFile(file);
     this.el.appendChild(tmpFileContainer.el);
@@ -46,6 +46,13 @@ var Container = Seed.extend({
         }
       }
     }
+  },
+
+  resetFiles: function() {
+    for (var i = 0, len = this.filesContainer.length; i < len; i++) {
+      this.filesContainer[i].resetFile();
+    }
+    this.filesContainer = [];
   },
 
   setFiles: function(data) {

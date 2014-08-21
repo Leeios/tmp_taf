@@ -73,8 +73,15 @@ var FileContainer = Seed.extend({
 
   setCom: function(comments) {
     this.colComments.setComGroup(comments, this.canvasTrack.getCtx());
+    this.colComments.addReplies(comments);
     this.canvasTrack.on('valid', this.colComments.addArea.bind(this.colComments));
     this.colComments.on('clearCanvas', this.canvasTrack.clearCanvas.bind(this.canvasTrack));
+  },
+
+  resetFile: function() {
+    console.log("remove")
+    this.colComments.remove();
+    this.content.remove();
   },
 
   formate: function() {

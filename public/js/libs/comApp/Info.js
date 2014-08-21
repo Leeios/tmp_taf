@@ -1,22 +1,39 @@
 sand.define('Info', [
-  'Seed'
+  'Seed',
+  'DOM/toDOM'
 ], function(r) {
 
 var Info = Seed.extend({
 
-  tpl: {
-    tag: 'a.info'
+  tpl: function() {
+    return {
+      tag: 'div.info',
+      children: [ this.aBalise, this.newVersion ]
+    }
   },
 
-  options: {
-    name: "unnamed",
-    versions: []
+  options: function() {
+    return {
+      name: "unnamed",
+      versions: [],
+      aBalise: r.toDOM({
+        tag: 'a'
+      }),
+      newVersion: r.toDOM({
+        tag:"input.addVersion.button",
+        attr: { type: "button", value: "New version" }
+      })
+    }
   },
 
   setName: function(s, id) {
+    this.newVersion.addEventListener("click", function() {
+      console.log("click for new version");
+      this.fire('newVersion');
+    }.bind(this));
     this.name = s;
-    this.el.setAttribute("name", id);
-    this.el.innerHTML = s;
+    this.aBalise.setAttribute("name", id);
+    this.el.innerHTML += s;
   },
 
   addVersion: function(s) {

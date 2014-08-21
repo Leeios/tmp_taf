@@ -10,7 +10,7 @@ sand.define('UploadFile', [
 var UploadFile = Seed.extend({
 
   tpl: {
-    tag: "input.uploadFile",
+    tag: "input.uploadFile.button",
     attr: { type: "file", multiple: "multiple" },
   },
 

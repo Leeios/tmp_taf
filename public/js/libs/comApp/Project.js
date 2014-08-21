@@ -56,6 +56,7 @@ var Project = Seed.extend({
     this.uid = this.guid()();
     this.gLink.setLink(this.uid);
     this.infoProj.setName(s, '0');
+    this.infoProj.on('newVersion', this.addVersion.bind(this));
   },
 
   setVersion: function(s) {
@@ -87,6 +88,11 @@ var Project = Seed.extend({
     last_add = last_add[last_add.length - 1];
     last_add.uidProject = this.uid;
     return last_add;
+  },
+
+  addVersion: function(file) {
+    console.log("addVersion")
+    this.container.resetFiles();
   },
 
   guid: function() {

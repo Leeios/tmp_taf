@@ -50,6 +50,7 @@ var SingleComment = Inheritance.extend({
         this.tmp.on("redraw", function() {
           this.displaySub();
         }.bind(this));
+        this.addTmpComment();
         this.addComment();
       }
     }
