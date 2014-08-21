@@ -15,7 +15,7 @@
   text-align: center;
   background-color: #1E90FF; }
 
-.addvVersion {
+.addVersion {
   width: 2em; }
 
 .button {
@@ -122,9 +122,6 @@ pre {
 .uploadFile {
   max-width: 7em;
   font-size: 15px; }
-
-.generateLink {
-  float: left; }
 
 .info {
   width: 100%;
