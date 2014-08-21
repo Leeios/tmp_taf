@@ -54,7 +54,8 @@ var Comment = Seed.extend({
 
   '+init': function () {
 
-    this.areas = [];
+    this.areas = [];/*Ne pas mettre dans options!*/
+
     /*Define div*/
     if (this.uid == -1) {
       this.uid = this.guid()();

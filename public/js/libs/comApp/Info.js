@@ -27,8 +27,13 @@ var Info = Seed.extend({
   },
 
   setName: function(s, id) {
-    this.newVersion.addEventListener("click", function() {
-      console.log("click for new version");
+    this.el.addEventListener("click", function(e) {
+      console.log(e.target, this.newVersion);
+      if (e.target !== this.newVersion) {
+        console.log('not good');
+        return ;
+      }
+      console.log("good");
       this.fire('newVersion');
     }.bind(this));
     this.name = s;
