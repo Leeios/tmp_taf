@@ -8,7 +8,7 @@ var Info = Seed.extend({
   tpl: function() {
     return {
       tag: 'div.info',
-      children: [ this.aBalise, this.newVersion ]
+      children: [ this.aBalise ]
     }
   },
 
@@ -17,7 +17,7 @@ var Info = Seed.extend({
       name: "unnamed",
       versions: [],
       aBalise: r.toDOM({
-        tag: 'a.balise'
+        tag: 'a'
       }),
       newVersion: r.toDOM({
         tag:"input.addVersion.button",
@@ -27,14 +27,14 @@ var Info = Seed.extend({
   },
 
   setName: function(s, id) {
-    this.name = s;
-    this.aBalise.setAttribute("name", id);
-    this.el.innerHTML += s;
-
     this.newVersion.addEventListener("click", function() {
       console.log("click for new version");
       this.fire('newVersion');
     }.bind(this));
+    this.el.appendChild(this.newVersion);
+    this.name = s;
+    this.aBalise.setAttribute("name", id);
+    this.el.innerHTML += s;
   },
 
   addVersion: function(s) {

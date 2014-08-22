@@ -35,20 +35,23 @@ var Project = Seed.extend({
   },
 
   setData: function(data) {
+    console.log(data);
     if (data === null)
       return ;
-    /*Gerer le multi version*/
-    console.log(data);
-    this.name = data.name;
-    this.infoProj.setName(this.name);
-    this.uid = data.versions[0].uid; /*Attribuer par defaut la première version*/
-    this.infoProj.addVersion(data.versions[0].name);
-    this.uidParent = data.versions[0].uidParent;
-    this.gLink.setLink(this.uidParent);
-    for (var i = 0, len = data.files[0].length; i < len; i++) {
-      this.addFile(data.files[0][i]);
+    if (this.data == null) {
+      this.data = data;
     }
-    this.container.addComs(data.comments)
+    /*Gerer le multi version*/
+    this.name = this.data.name;
+    this.infoProj.setName(this.name);
+    this.uid = this.data.versions[0].uid; /*Attribuer par defaut la première version*/
+    this.infoProj.addVersion(this.data.versions[0].name);
+    this.uidParent = this.data.versions[0].uidParent;
+    this.gLink.setLink(this.uidParent);
+    for (var i = 0, len = this.data.files[0].length; i < len; i++) {
+      this.addFile(this.data.files[0][i]);
+    }
+    this.container.addComs(this.data.comments)
   },
 
   setName: function(s) {

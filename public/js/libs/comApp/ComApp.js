@@ -23,6 +23,7 @@ var appComments = Seed.extend({
     this.servInterface = new r.ServerInterface({server: socket, protocol: "socket"});
 
     this.project = new r.Project();
+    document.body.appendChild(this.project.el);
     this.project.relayServ(this.servInterface);
     this.project.setData(this.servData);
 
@@ -65,7 +66,6 @@ var appComments = Seed.extend({
       this.project.setData(data);
     }.bind(this));
 
-    document.body.appendChild(this.project.el);
 
   }
 

@@ -79,7 +79,6 @@ var FileContainer = Seed.extend({
   },
 
   resetFile: function() {
-    console.log("remove")
     this.colComments.remove();
     this.content.remove();
   },

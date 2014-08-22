@@ -91,7 +91,7 @@ pre {
   border: 1px groove black; }
 
 .wrapper {
-  height: 100%;
+  top: 3em;
   width: 100%; }
 
 .projectName {
@@ -109,6 +109,7 @@ pre {
 .header {
   position: fixed;
   top: 0;
+  display: inline;
   height: 2em;
   z-index: 2;
   width: 100%;
@@ -124,8 +125,10 @@ pre {
   font-size: 15px; }
 
 .info {
+  position: relative;
   width: 100%;
   font-size: 130%;
+  font-family: Arial, Helvetica, "Liberation Sans", FreeSans, sans-serif;
   font-weight: bold; }
 
 .content {
