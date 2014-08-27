@@ -25,7 +25,7 @@ exports.getProj = function(uid, callback) {
   var result = {};
 
   Project.findOne({uid: uid}, {}, function(err, motherOfProject) {/*Nom du projet*/
-    if (err) { console.log("Failed to find " + uid + " in database"); }
+    if (err || motherOfProject === null) { console.log("Failed to find " + uid + " in database"); }
     else {
       result.name = motherOfProject.name;
       Project.find({uidParent: uid}, {}, function(err, data) {/*Versions du projet*/

@@ -9,19 +9,9 @@ sand.define('UploadFile', [
 */
 var UploadFile = Seed.extend({
 
-  tpl: function() {
-    return {
-      tag: "input.uploadFile.button",
-      attr: { type: "file", multiple: "multiple" }
-    }
-  },
-
-  option: function() {
-    return {
-      complete: function() {
-        console.log('FileView not defined');
-      }
-    }
+  tpl: {
+    tag: "input.uploadFile.button",
+    attr: { type: "file", multiple: "multiple" },
   },
 
   '+init': function () {
@@ -40,7 +30,7 @@ var UploadFile = Seed.extend({
     reader.readAsText(fRead);
     reader.addEventListener("loadend", function (e) {
       file.content = reader.result.replace(/</g, '&lt;').replace(/>/g, '&gt;');
-      this.complete(file);
+      this.fire('uploadFile', file);
       if (end) { this.fire('uploadEnd'); }
     }.bind(this));
   },
