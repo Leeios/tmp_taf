@@ -7,7 +7,6 @@ var ProjectName = Seed.extend({
 
   tpl: {
     tag: 'div.projectNameButton',
-    innerHTML: "NEW PROJECT"
   },
 
   '+options': {
@@ -16,16 +15,14 @@ var ProjectName = Seed.extend({
 
   '+init': function() {
     this.el.addEventListener('click', function() {
-      var tmpName = r.toDOM({
-        tag: 'textarea.projectName',
-        attr: { placeholder: "Enter name project..." }
+      var tmpInput = r.toDOM({
+        tag: 'input.projectName'
       });
-      document.body.appendChild(tmpName);
-      tmpName.focus();
-      tmpName.addEventListener('keypress', function(e) {
+      document.body.appendChild(tmpInput);
+      tmpInput.addEventListener('keypress', function(e) {
         if (e.charCode == 13) {
-          this.fire('name', tmpName.value);
-          tmpName.remove();
+          this.fire('name', tmpInput.value);
+          tmpInput.remove();
         }
       }.bind(this));
     }.bind(this));

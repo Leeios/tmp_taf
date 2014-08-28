@@ -2,12 +2,9 @@ var mongoose = require('mongoose');
 var model = require('./model');
 var File = mongoose.model('File');
 
-exports.insertFile = function(data) {
-  console.log(data);
+function insertFile(data) {
     var insert_file = new File({
       uid: data.uid,
-      uidParent: data.uidParent,
-      uidProject: data.uidProject,
       name: data.name,
       size: data.size,
       type: data.type,
@@ -20,6 +17,12 @@ exports.insertFile = function(data) {
         console.log("File " + data.name + " added to database");
       }
   });
+}
+
+exports.insertFiles = function(data) {
+  for (var i = 0, len = data.files.length; i < len; i++) {
+    insertFile(data.files[i]);
+  }
 }
 
 exports.getFile = function(id, callback) {

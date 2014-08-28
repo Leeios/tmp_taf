@@ -9,63 +9,56 @@ sand.define('Comment', [
 **On:   0
 */
 var Comment = Seed.extend({
-
-  tpl: function() {
-    return {
-      tag: "div.comment",
-      children: [
-        this.elDiv,
-        this.elTxt,
-        this.create,
-        this.delete,
-        this.reply
-      ]
-    }
+  tpl: {
+    tag: "div.comment"
   },
-
-  options: function() {
-    return {
-      txt: "",
-      edit_token: 1,
-      uid: -1,
-      uidParent: -1,
-      actualTop: 0,
-      resolved: false,
-      create: r.toDOM({
-        tag:"input.createButton.button",
-        attr: { type: "button", value: "Create" }
-      }),
-      delete: r.toDOM({
-        tag:"input.deleteButton.button",
-        attr: { type: "button", value: "Delete" }
-      }),
-      reply: r.toDOM({
-        tag:"input.replyButton.button",
-        attr: { type: "button", value: "Reply" }
-      }),
-      elDiv: r.toDOM({
-        tag:"div.divComment"
-      }),
-      elTxt: r.toDOM({
-        tag:"textarea.txtComment"
-      })
-    }
+  '+options': {
+    txt: "",
+    edit: 1,
+    uid: -1,
+    actualTop: 0,
+    resolved: false
   },
 
   '+init': function () {
 
-    this.areas = [];/*Ne pas mettre dans options!*/
+    this.areas = [];
 
     /*Define div*/
+    this.create = r.toDOM({
+      tag:"input.createButton.button",
+      attr: { type: "button", value: "Create" }
+    });
+    this.delete = r.toDOM({
+      tag:"input.deleteButton.button",
+      attr: { type: "button", value: "Delete" }
+    });
+    this.reply = r.toDOM({
+      tag:"input.replyButton.button",
+      attr: { type: "button", value: "Reply" }
+    });
+    this.elDiv = r.toDOM({
+      tag:"div.divComment"
+    });
+    this.elTxt = r.toDOM({
+      tag:"textarea.txtComment"
+    });
+
+    this.el.appendChild(this.elDiv);
+    this.el.appendChild(this.elTxt);
+    this.el.appendChild(this.create);
+    this.el.appendChild(this.delete);
+    this.el.appendChild(this.reply);
+
     if (this.uid == -1) {
       this.uid = this.guid()();
     }
     this.switchEdit();
 
-    /*Create or Edit_token*/
+    /*Create or Edit*/
     this.create.addEventListener("click", function(e) {
       if (this.elDiv.innerHTML == "") {
-        this.fire("createEl");
+        this.fire("create");
       } else {
         this.valid();
         this.fire("editEl", this);
@@ -74,12 +67,17 @@ var Comment = Seed.extend({
 
     /*Edit mode*/
     this.elDiv.addEventListener("click", function() {
-      this.edit_token = 1;
+      this.edit = 1;
       this.switchEdit();
     }.bind(this));
 
     /*Delete*/
     this.delete.addEventListener("click", this.removeEl.bind(this));
+
+    /*Reply*/
+    this.reply.addEventListener("click", function() {
+      this.fire("reply");
+    }.bind(this));
 
     /*Resize*/
     this.elTxt.addEventListener("keypress", this.adjustHeight.bind(this));
@@ -91,9 +89,9 @@ var Comment = Seed.extend({
 
   /*Add/remove*/
   valid: function() {
-    this.edit_token = 0;
-    this.txt = this.elTxt.value;
+    this.edit = 0;
     this.switchEdit();
+    this.txt = this.elTxt.value;
     this.elDiv.innerHTML = this.txt.replace(/\[/g, '<pre>').replace(/\]/g, '</pre>');
     for (var i = 0, len = this.elDiv.childNodes.length; i < len; i++) {
       if (this.elDiv.childNodes[i].tagName == "PRE") {
@@ -121,25 +119,21 @@ var Comment = Seed.extend({
   },
 
   switchEdit: function() {
-    if (this.edit_token == 0) {
+    if (this.edit == 0) {
       this.el.style["z-index"] = 0;
       this.elDiv.innerHTML = this.txt;
-      this.elTxt.remove();
+      this.el.removeChild(this.elTxt);
       this.el.appendChild(this.elDiv);
-      this.create.remove();
+      this.el.removeChild(this.create);
       this.el.appendChild(this.delete);
-      if (this.reply) {
       this.el.appendChild(this.reply);
-      }
     } else {
       this.el.style["z-index"] = 1;
       this.elTxt.placeholder = this.txt;
-      this.elDiv.remove();
+      this.el.removeChild(this.elDiv);
       this.el.appendChild(this.elTxt);
-      this.delete.remove();
-      if (this.reply) {
-      this.reply.remove();
-      }
+      this.el.removeChild(this.delete);
+      this.el.removeChild(this.reply);
       this.el.appendChild(this.create);
     }
     this.adjustHeight();
@@ -192,7 +186,7 @@ var Comment = Seed.extend({
     for (var i = 0, len = this.areas.length; i < len; i++) {
       parseAreas[i] = this.areas[i].formateArea();
     }
-    parseCom = {txt: this.txt, actualTop: this.actualTop, areas: parseAreas, uid: this.uid, uidParent: this.uidParent};
+    parseCom = {txt: this.txt, actualTop: this.actualTop, areas: parseAreas, uid: this.uid};
     return (parseCom);
   },
 

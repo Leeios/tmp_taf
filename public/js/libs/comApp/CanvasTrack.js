@@ -43,7 +43,6 @@ var CanvasTrack = Seed.extend({
 
   clearCanvas: function() {
     this.setSize(this.el.height, this.el.width);
-    this.fire('clear', this.canvasArea);
   },
 
   /*Start/Save & Valid selection*/

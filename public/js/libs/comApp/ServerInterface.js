@@ -14,6 +14,7 @@ var ServerInterface = Seed.extend({
 
   sendData: function(operation, data) {
     console.log("Send to server : ", operation, data);
+    return ;
     if (this.protocol == "socket") {
       this.server.emit(operation, data);
     } else {

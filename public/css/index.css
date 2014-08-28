@@ -1,0 +1,117 @@
+html {
+  height: 98%;
+}
+
+body {
+  background-color: #3F3F3F;
+}
+
+pre {
+  margin: 0;
+}
+
+.wrapper {
+  position: relative;
+  overflow-x: hidden;
+  background-color: #4F4F4F;
+  border: 1px groove black;
+  width: 60%;
+}
+
+.canWindow {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  z-index: 1;
+}
+
+.commentsGroup {
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  width: 40%;
+  min-height: 100%;
+}
+
+.viewFile {
+  overflow-x: hidden;
+  display: inline-block;
+  min-width: 100%;
+  z-index: 0;
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.uploadFile {
+}
+
+.generateLink {
+}
+
+.comment {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 100%;
+  padding: 0.3em;
+  box-sizing: border-box;
+  background-color: #272822;
+  border: 1px black ridge;
+  transition: top 1s;
+}
+
+.comment.comment {
+  width: 95%;
+}
+
+.button {
+  width: 10%;
+  float: left;
+  clear: left;
+  border-color: #272822;
+  font-size: x-small;
+  font-family: Verdana;
+  transition: color 0.8s;
+}
+
+.button:hover {
+  background-color: #4F4F4F;
+}
+.createButton {
+  background-color: #6699cc;
+}
+
+.deleteButton {
+  background-color: #f99157;
+}
+
+.replyButton {
+  background-color: #cc99cc;
+}
+
+.divComment {
+  display: block;
+  float: right;
+  width: 85%;
+  height: 100%;
+  box-sizing: border-box;
+  background-image: url('../img/42back.gif');
+  font-family: Tahoma, sans-serif;
+  font-size: small;
+  padding: 0.2em;
+  white-space: pre;
+}
+
+.txtComment {
+  display: block;
+  float: right;
+  width: 85%;
+  height: 100%;
+  padding: 5px;
+  font-family: Tahoma, sans-serif;
+  font-size: small;
+  background-image: url('../img/42back.gif');
+  resize: horizontal;
+}
