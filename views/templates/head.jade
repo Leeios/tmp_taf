@@ -4,7 +4,7 @@ head
 	meta(name="viewport", content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0")
 
 	link(rel='stylesheet', href='css/comApp.css', type='text/css')
-	link(rel='stylesheet', href='css/styles/tomorrow-night-eighties.css', type='text/css')
+	link(rel='stylesheet', href='css/styles/github.css', type='text/css')
 	link(rel='icon', href='/img/icon.png')
 
 	script(type = 'text/javascript', src = "http://localhost:3000/socket.io/socket.io.js")
@@ -12,7 +12,7 @@ head
 	script(type = 'text/javascript', src = "js/libs/Seed.js")
 	script(type = 'text/javascript', src = "js/libs/toDOM.sand.js")
 	script(type = 'text/javascript').
-		var current_file = !{JSON.stringify(locals)};
+		var current_proj = !{JSON.stringify(locals)};
 
 	script(type = 'text/javascript', src = "http://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.1/highlight.min.js")
 
@@ -24,9 +24,10 @@ head
 	script(type = 'text/javascript', src = "js/libs/comApp/CommentsGroup.js")
 	script(type = 'text/javascript', src = "js/libs/comApp/Container.js")
 	script(type = 'text/javascript', src = "js/libs/comApp/FileContainer.js")
-	script(type = 'text/javascript', src = "js/libs/comApp/HeaderFile.js")
-	script(type = 'text/javascript', src = "js/libs/comApp/Info.js")
-	script(type = 'text/javascript', src = "js/libs/comApp/Project.js")
+	script(type = 'text/javascript', src = "js/libs/comApp/GenerateLink.js")
+	script(type = 'text/javascript', src = "js/libs/comApp/Header.js")
+	script(type = 'text/javascript', src = "js/libs/comApp/VersionPicker.js")
+	script(type = 'text/javascript', src = "js/libs/comApp/ProjectViewer.js")
 	script(type = 'text/javascript', src = "js/libs/comApp/ProjectName.js")
 	script(type = 'text/javascript', src = "js/libs/comApp/ServerInterface.js")
 	script(type = 'text/javascript', src = "js/libs/comApp/SingleComment.js")

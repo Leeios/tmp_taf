@@ -1,52 +1,142 @@
+.projectNameButton {
+  -webkit-border-radius: 10px;
+  -moz-border-radius: 10px;
+  -ms-border-radius: 10px;
+  border-radius: 10px;
+  position: absolute;
+  padding: 0.2em;
+  top: 2em;
+  right: 0px;
+  height: 3em;
+  width: 6.5em;
+  color: #FFFFFF;
+  font-family: Verdana, Geneva, sans-serif;
+  font-weight: bold;
+  text-align: center;
+  background-color: #1E90FF; }
+
+.addVersion {
+  width: 2em; }
+
+.button {
+  width: 12%;
+  float: left;
+  clear: left;
+  color: #3F3F3F;
+  font-weight: bold;
+  border-color: #272822;
+  font-size: x-small;
+  font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+  background-color: #FFFFFF;
+  transition: color 1s; }
+
+.button:hover {
+  background-color: #0465AA; }
+
+.commentsGroup {
+  position: relative;
+  float: right;
+  clear: right;
+  right: 0px;
+  width: 28%;
+  min-height: 100%; }
+
+.comment {
+  position: absolute;
+  right: 0px;
+  width: 100%;
+  padding: 0.3em;
+  padding-left: 0px;
+  box-sizing: border-box;
+  background-color: #272822;
+  border: 1px black ridge;
+  transition: top 0.5s; }
+
+.container {
+  position: relative; }
+
+.divComment {
+  display: block;
+  float: right;
+  width: 85%;
+  height: 100%;
+  box-sizing: border-box;
+  background-image: url("../img/42back.gif");
+  font-family: Tahoma, sans-serif;
+  font-size: small;
+  padding: 0.2em;
+  white-space: pre; }
+
+.txtComment {
+  display: block;
+  resize: none;
+  float: right;
+  width: 85%;
+  height: 100%;
+  padding: 5px;
+  font-family: Tahoma, sans-serif;
+  font-size: small;
+  background-image: url("../img/42back.gif");
+  resize: horizontal; }
+
 html {
   height: 100%;
-}
+  width: 100%; }
 
 body {
-  background-color: #3F3F3F;
-}
+  background-image: url("../img/42back.gif"); }
 
 pre {
   margin: 0;
-}
+  border: 1px groove black; }
 
-.wrapper {
-  width: 100%;
-  border: 1px groove black;
-}
-
-.projectNameButton {
-  position: absolute;
-  top: 0px;
-  right: 0px;
-  height: 5em;
-  width: 10em;
-  background-color: #AEAE14;
-}
+.projView {
+  position: relative;
+  width: 100%; }
 
 .projectName {
+  -webkit-border-radius: 10px;
+  -moz-border-radius: 10px;
+  -ms-border-radius: 10px;
+  border-radius: 10px;
   position: absolute;
-  top: 0px;
-  right: 0px;
-  width: 3em;
-  background-color: #AEAE14;
-}
+  height: 4em;
+  width: 8em;
+  resize: none; }
 
 .header {
-  height: 2em;
+  position: absolute;
+  display: inline;
   width: 100%;
-  background-color: #7875E6;
-}
+  color: white;
+  font-family: Arial, Helvetica, "Liberation Sans", FreeSans, sans-serif;
+  background-color: #3F3F3F; }
 
-.Info {
-  height: 3em;
+.headerLink {
+  color: #FFFFFF; }
+
+.uploadFile {
+  max-width: 7em;
+  font-size: 15px; }
+
+.info {
+  position: relative;
   width: 100%;
-  background-color: #8D24D6;
-}
+  font-size: 130%;
+  font-family: Arial, Helvetica, "Liberation Sans", FreeSans, sans-serif;
+  font-weight: bold; }
+
+.content {
+  position: relative;
+  width: 70%;
+  z-index: 0;
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  user-select: none; }
 
 .canWindow {
   position: absolute;
   top: 0px;
   left: 0px;
-  z-index: 1;
-}
+  z-index: 1; }
