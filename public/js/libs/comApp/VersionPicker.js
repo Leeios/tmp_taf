@@ -19,6 +19,10 @@ var VersionPicker = Seed.extend({
     }
   },
 
+  setCurrent: function() {
+    ;
+  },
+
   addVersion: function(id) {
     var newVersion = r.toDOM({
       tag: div.versionProject,

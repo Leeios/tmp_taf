@@ -1,8 +1,9 @@
 sand.define('ProjectViewer', [
-  'Container',
+  'FileContainer',
   'Seed',
   'VersionPicker',
-  'UploadFile'
+  'UploadFile',
+  'DOM/toDOM'
 ], function(r) {
 
 var ProjectViewer = Seed.extend({
@@ -15,6 +16,7 @@ var ProjectViewer = Seed.extend({
 
   tpl : function() {
     return {
+      tag: 'div.projView',
       children : [
         ['.project-row.row', [
           '.name',
@@ -22,7 +24,7 @@ var ProjectViewer = Seed.extend({
         ]],
 
         ['.file-nav-row.row', [
-          this.create(r.UploadFile, { complete : this.onAddFile.bind(this) }, 'upload'),
+          this.create(r.UploadFile, { complete : this.onAddFile.bind(this) }, 'upload').el,
           { tag : '.files-list', as : 'filesList' }
         ]],
 
@@ -32,10 +34,7 @@ var ProjectViewer = Seed.extend({
   },
 
   '+init' : function() {
-    // console.log(this.data)
-    if (data === null) {
-      this.newProject();
-    } else {
+    if (this.data !== null) {
       this.setCurrent(this.data.projects.last());
     }
   },
@@ -46,21 +45,23 @@ var ProjectViewer = Seed.extend({
 
     this.name.innerHTML = this.current.name;
 
-    // on reset la liste des fichiers et l'affichage des fichiers et de leurs commentaires
     this.filesList.innerHTML = '';
     this.files.innerHTML = '';
 
-    this.getFiles().each(this._appendFile.bind(this));
+    this.getFiles();
   },
 
   getFiles : function() { // récupère tous les fichiers qui sont dans le projet courant (la version courante)
-    return this.data.files.where(function(e) {
-      return e.project_id === this.current.id
-    }.bind(this));
+    if (this.data === null) { return ;}
+    for (var i = 0, len = this.data.files.length; i< len; i++) {
+      if (this.current.id == this.data.files[i].idProject) {
+        this._appendFile(this.data.files[i]);
+      }
+    }
   },
 
   onAddFile : function(file) {
-    this.data.files.push(file); //todo //server // il faudra changer ça quand on pluguera avec le serveur
+    // this.data.files.push(file); //todo //server // il faudra changer ça quand on pluguera avec le serveur
     this._appendFile(file);
   },
 
@@ -73,7 +74,7 @@ var ProjectViewer = Seed.extend({
         }.bind(this)
       }
     }));
-    this.files.appendChild(this.create(r.FileContainer, { file : file, data : this.data }).el);
+    this.files.appendChild(this.create(r.FileContainer, { data : file }).el);
   },
 
   guid: function() {

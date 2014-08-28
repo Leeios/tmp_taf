@@ -38,7 +38,6 @@ var appComments = Seed.extend({
     //todo //server bind this with socket
 
     var newProject = {
-      project_id : this.projectViewer.current.id,
       name : 'Untitled'
     };
 

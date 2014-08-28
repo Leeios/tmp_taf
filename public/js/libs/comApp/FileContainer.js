@@ -2,7 +2,7 @@ sand.define('FileContainer', [
   'Seed',
   'CanvasTrack',
   'ColComments',
-  'Info',
+  'VersionPicker',
   'DOM/toDOM'
 ], function(r) {
 
@@ -12,29 +12,26 @@ var FileContainer = Seed.extend({
     return {
         tag: 'div.fileContainer',
         children: [
-          this.infoFile.el,
-          this.colComments.el,
-          this.content
+          this.create(r.VersionPicker, {}, 'infoFile').el,
+          this.create(r.ColComments, {}, 'colComments').el,
+          { tag: 'pre.content',
+            as: 'content',
+            attr: {
+              unselectable: 'on',
+              onselectstart: 'return false;',
+              onmousedown: 'return false;'
+            }
+          }
         ]
       }
     },
 
   options : function() {
     return {
-      subsOn: {},
+      data: null,
       name: "unnamed",
       txt: "",
-      infoFile: new r.Info(),
-      content: r.toDOM({
-        tag: 'pre.content',
-        attr: {
-          unselectable: 'on',
-          onselectstart: 'return false;',
-          onmousedown: 'return false;'
-        }
-      }),
-      canvasTrack: new r.CanvasTrack({form: "points"}),
-      colComments: new r.ColComments()
+      canvasTrack: this.create(r.CanvasTrack, {form: "points"})
     };
   },
 
@@ -44,6 +41,22 @@ var FileContainer = Seed.extend({
         this.fire(e, {data: data, uidFile: this.uid, model: 'Comment'});
       }.bind(this))
     }.bind(this));
+
+    this.observer = new MutationObserver(this.mutation.bind(this));
+    var config = { childList: true };
+    this.observer.observe(this.content, config);
+
+    if (typeof this.data.id == "undefined")
+      this.uid = this.guid()();
+    else
+      this.uid = this.data.uid;
+
+    this.name = this.data.name;
+
+    this.content.innerHTML = this.data.content;
+    this.txt = this.data.content;
+    hljs.highlightBlock(this.content);
+    this.setCom(this.data.comments);
   },
 
   mutation: function(mutations) {
@@ -52,35 +65,11 @@ var FileContainer = Seed.extend({
     this.observer.disconnect();
   },
 
-  setFile: function(file) {
-    this.observer = new MutationObserver(this.mutation.bind(this));
-    var config = { childList: true };
-    this.observer.observe(this.content, config);
-
-    if (typeof file.uid == "undefined")
-      this.uid = this.guid()();
-    else
-      this.uid = file.uid;
-
-    this.name = file.name;
-    this.infoFile.setName(file.name, file.uid);
-
-    this.content.innerHTML = file.content;
-    this.txt = file.content;
-    hljs.highlightBlock(this.content);
-    this.setCom(file.comments);
-  },
-
   setCom: function(comments) {
     this.colComments.setComGroup(comments, this.canvasTrack.getCtx());
     this.colComments.addReplies(comments);
     this.canvasTrack.on('valid', this.colComments.addArea.bind(this.colComments));
     this.colComments.on('clearCanvas', this.canvasTrack.clearCanvas.bind(this.canvasTrack));
-  },
-
-  resetFile: function() {
-    this.colComments.remove();
-    this.content.remove();
   },
 
   formate: function() {

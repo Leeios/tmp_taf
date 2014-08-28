@@ -16,7 +16,7 @@ var UploadFile = Seed.extend({
     }
   },
 
-  option: function() {
+  options: function() {
     return {
       complete: function() {
         console.log('FileView not defined');

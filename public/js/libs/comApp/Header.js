@@ -8,27 +8,18 @@ var Header = Seed.extend({
   tpl: function() {
     return {
       tag: 'div.header',
-      children: [ this.banner, this.newProject ]
+      children: [
+        { tag: 'img.banner', attr: { src: '/img/banner.gif' } },
+        { tag: 'div.projectNameButton', innerHTML: 'NEW PROJECT',
+          events: {
+            click: function() {
+              this.fire('newProject:click');
+            }.bind(this)
+          }
+        }
+      ]
     }
   },
-
-  options: function() {
-    return {
-      banner: r.toDOM({
-        tag: 'img.banner',
-        attr: { src: '/img/banner.gif' }
-      }),
-      newProject: r.toDOM({
-        tag: 'div.projectNameButton',
-        innerHTML: 'NEW PROJECT',
-        events: {
-          click: function() {
-            this.fire('newProject:click');
-          }.bind(this)
-        }
-      })
-    }
-  }
 
 });
 return Header;

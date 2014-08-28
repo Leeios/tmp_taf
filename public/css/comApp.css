@@ -90,8 +90,8 @@ pre {
   margin: 0;
   border: 1px groove black; }
 
-.wrapper {
-  top: 3em;
+.projView {
+  position: relative;
   width: 100%; }
 
 .projectName {
@@ -100,17 +100,13 @@ pre {
   -ms-border-radius: 10px;
   border-radius: 10px;
   position: absolute;
-  top: 2em;
-  right: 0px;
   height: 4em;
   width: 8em;
   resize: none; }
 
 .header {
-  position: fixed;
-  top: 0;
+  position: absolute;
   display: inline;
-  z-index: 2;
   width: 100%;
   color: white;
   font-family: Arial, Helvetica, "Liberation Sans", FreeSans, sans-serif;
