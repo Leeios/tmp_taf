@@ -8,7 +8,7 @@ sand.define('CanvasTrack', [
 **Fire: 1
 **On:   0
 */
-var CanvasTrack = Seed.extend({
+var CanvasTrack = r.Seed.extend({
   tpl: {
     tag: "canvas.canWindow",
     attr : {

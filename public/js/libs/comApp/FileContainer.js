@@ -7,7 +7,7 @@ sand.define('FileContainer', [
   'DOM/toDOM'
 ], function(r) {
 
-var FileContainer = Seed.extend({
+var FileContainer = r.Seed.extend({
 
   tpl: function() {
     return {
@@ -79,7 +79,7 @@ var FileContainer = Seed.extend({
   },
 
   setVersion: function(file) {
-    this.fire('newVersion', {file: file, prevFile: this.el});
+    this.fire('newVersion', {file: file, prevFile: this.el});//Create new version here, get back oninsert in pjview
   },
 
   formate: function() {

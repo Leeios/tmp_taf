@@ -3,7 +3,7 @@ sand.define('Container', [
   'FileContainer'
 ], function(r) {
 
-var Container = Seed.extend({
+var Container = r.Seed.extend({
 
   tpl: {
     tag: 'div.container',

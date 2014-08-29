@@ -6,7 +6,7 @@ sand.define('ServerInterface', [
 **Fire: 0
 **On:   0
 */
-var ServerInterface = Seed.extend({
+var ServerInterface = r.Seed.extend({
   '+options': {
     server: null,
     protocol: "none"

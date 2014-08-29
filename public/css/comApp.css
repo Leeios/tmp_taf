@@ -142,6 +142,9 @@ a {
   height: 2em;
   border-bottom: 2px groove black; }
 
+.files-list {
+  margin-left: 1em; }
+
 .file {
   display: inline; }
 

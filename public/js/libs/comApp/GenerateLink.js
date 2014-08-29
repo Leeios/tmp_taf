@@ -7,7 +7,7 @@ sand.define('GenerateLink', [
 **Fire: 0
 **On:   0
 */
-var GenerateLink = Seed.extend({
+var GenerateLink = r.Seed.extend({
   tpl: {
     tag: 'input.generateLink',
     attr: {

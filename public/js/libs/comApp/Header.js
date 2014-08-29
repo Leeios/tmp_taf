@@ -3,7 +3,7 @@ sand.define('Header', [
   'Seed'
 ], function(r) {
 
-var Header = Seed.extend({
+var Header = r.Seed.extend({
 
   tpl: function() {
     return {

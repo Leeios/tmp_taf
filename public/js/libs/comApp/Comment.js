@@ -8,7 +8,7 @@ sand.define('Comment', [
 **Fire: 5
 **On:   0
 */
-var Comment = Seed.extend({
+var Comment = r.Seed.extend({
 
   tpl: function() {
     return {
@@ -41,7 +41,6 @@ var Comment = Seed.extend({
   '+init': function () {
 
     this.areas = [];/*Ne pas mettre dans options!*/
-    console.log(this);
     this.wrap.style['border-left-color'] = this.color;
 
     /*Define div*/

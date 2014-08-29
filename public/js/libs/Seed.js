@@ -1,7 +1,6 @@
 sand.define('Seed', [
   'DOM/toDOM'
   ], function(r) {
-(function(name) {
 
   var extend = function(o, p) {
     for (var i in p) {
@@ -213,5 +212,5 @@ sand.define('Seed', [
     return C;
   };
 
-})('Seed');
+return Seed;
 });

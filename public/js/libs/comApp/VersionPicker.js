@@ -3,7 +3,7 @@ sand.define('VersionPicker', [
   'DOM/toDOM'
 ], function(r) {
 
-var VersionPicker = Seed.extend({
+var VersionPicker = r.Seed.extend({
 
   tpl: function() {
     return {

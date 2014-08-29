@@ -7,7 +7,7 @@ sand.define('UploadFile', [
 **Fire: 2
 **On:   0
 */
-var UploadFile = Seed.extend({
+var UploadFile = r.Seed.extend({
 
   tpl: function() {
     return {

@@ -11,7 +11,7 @@ sand.define('ComApp', [
 **Fire: 0
 **On:   5
 */
-var appComments = Seed.extend({
+var appComments = r.Seed.extend({
 
   options: function() {
     return {

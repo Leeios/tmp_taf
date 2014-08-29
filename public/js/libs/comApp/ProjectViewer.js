@@ -3,14 +3,22 @@ sand.define('ProjectViewer', [
   'Seed',
   'VersionPicker',
   'UploadFile',
-  'DOM/toDOM'
+  'DOM/toDOM',
+  'DataPackage/Controller->DP'
 ], function(r) {
 
-var ProjectViewer = Seed.extend({
+var ProjectViewer = r.Seed.extend({
 
   options: function() {
     return {
-      data : null
+      data : null,
+      dp: new r.DP({
+        data: {
+          projects: [{ id: -1, idParent: -1, name: 'Untitled' }],
+          files: [{ id: -1, idParent: -1, idProject: -1, name: 'Untitled', size: 0, type: 'none', content: 'empty' }],
+          comments: [{ id: -1, idParent: -1, idFile: -1, content: 'empty', actualTop: 0, areas:{}, resolved: false, author: 'Unnamed' }]
+        }
+      })
     }
   },
 
@@ -36,7 +44,7 @@ var ProjectViewer = Seed.extend({
 
   '+init' : function() {
     if (this.data == null) {
-      this.data = {id: -1, idParent: -1, projects: [{name: 'No project yet'}], files: []};
+      this.data = {projects: [{id: -1, idParent: -1, name: 'No project yet', files: [] }]};
     }
     this.setCurrent(this.data.projects.last());
   },
@@ -44,19 +52,18 @@ var ProjectViewer = Seed.extend({
   setCurrent : function(project) {
     this.current = project;
 
-    this.name.innerHTML = this.current.name;
+    this.id = project.id;
+    this.idParent = project.idParent;
+    this.name.innerHTML = project.name;
 
     this.filesList.innerHTML = '';
     this.files.innerHTML = '';
 
-    this.getFiles();
-  },
+    /*Search file in data and print*/
 
-  getFiles : function() { // récupère tous les fichiers qui sont dans le projet courant (la version courante)
-    if (this.data === null) { return ;}
-    for (var i = 0, len = this.data.files.length; i< len; i++) {
-      if (this.current.id == this.data.files[i].idProject) {
-        this._appendFile(this.data.files[i]);
+    for (var i = 0, len = project.files.length; i< len; i++) {
+      if (this.current.id == project.files[i].idProject) {
+        this._appendFile(project.files[i]);
       }
     }
   },
@@ -80,6 +87,7 @@ var ProjectViewer = Seed.extend({
   },
 
   replaceFile: function(data) {
+    // this.data.files.push(file); //todo //server // il faudra changer ça quand on pluguera avec le serveur
     this.files.replaceChild(this.create(r.FileContainer, { data : data.file }, 'lastFile').el,
       data.prevFile);
     this.lastFile.on('newVersion', this.replaceFile.bind(this), this);

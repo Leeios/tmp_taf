@@ -6,7 +6,7 @@ sand.define('CanvasArea', [
 **Fire: 0
 **On:   0
 */
-var CanvasArea = Seed.extend({
+var CanvasArea = r.Seed.extend({
 
   '+options': {
     pos: [],

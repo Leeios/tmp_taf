@@ -2,7 +2,7 @@ sand.define('UserName', [
   'Seed'
 ], function(r) {
 
-var UserName = Seed.extend({
+var UserName = r.Seed.extend({
 
   tpl: {
     tag: 'input.userName',

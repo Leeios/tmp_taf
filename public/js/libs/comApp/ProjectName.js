@@ -3,7 +3,7 @@ sand.define('ProjectName', [
   'DOM/toDOM'
 ], function(r) {
 
-var ProjectName = Seed.extend({
+var ProjectName = r.Seed.extend({
 
   tpl: {
     tag: 'div.projectNameButton',
