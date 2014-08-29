@@ -18,8 +18,8 @@ var ProjectViewer = Seed.extend({
     return {
       tag: 'div.project',
       children : [
-        ['.project-row.row', [
-          {tag: 'div.project-name', as: 'name'},
+        ['.project-info.row', [
+          {tag: 'div.project-name.name', as: 'name'},
           this.create(r.VersionPicker, {
             onPick: this.setCurrent.bind(this),
             onAdd: this.createProject.bind(this) }, 'versionPicker').el,
@@ -36,7 +36,7 @@ var ProjectViewer = Seed.extend({
 
   '+init' : function() {
     if (this.data == null) {
-      this.data = {id: -1, idParent: -1, projects: [{name: ''}], files: []};
+      this.data = {id: -1, idParent: -1, projects: [{name: 'No project yet'}], files: []};
     }
     this.setCurrent(this.data.projects.last());
   },

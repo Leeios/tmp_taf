@@ -16,9 +16,16 @@ pre
   float: left
   width: 100%
 .project-name
+  font-size: large
+  font-weight: bold
+.name
   float: left
-.project-row
+.project-info
+  width: 100%
+  z-index: 5
   font-family: 'Lato', sans-serif
+  margin-top: 1em
+  margin-bottom: 1em
 
 .header
   float: left
@@ -26,10 +33,14 @@ pre
   margin-top: 3em
   font-family: 'Lato', sans-serif
 
+.container-content
+  float: left
+  width: 100%
+  z-index: 0
 .content
   position: relative
-  width: 70%
-  z-index: 0
+  width: 50%
+  z-index: 1
   -moz-user-select: none
   -webkit-user-select: none
   -ms-user-select: none
@@ -38,7 +49,7 @@ pre
   position: absolute
   top: 0px
   left: 0px
-  z-index: 1
+  z-index: 2
 
 .row
   width: 100%
@@ -61,5 +72,8 @@ pre
   font-size: large
 
 .container-info
-  display: block
+  float: left
+  width: 100%
   font-family: 'Lato', sans-serif
+  margin-top: 1em
+  margin-bottom: 1em

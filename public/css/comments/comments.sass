@@ -1,12 +1,11 @@
 $com-image: url('../img/42back.gif')
 
-
 .commentsGroup
   position: relative
   float: right
   clear: right
   right: 0px
-  width: 28%
+  width: 40%
   min-height: 100%
 
 .comment
@@ -14,10 +13,10 @@ $com-image: url('../img/42back.gif')
   right: 0px
   width: 100%
   padding: 0.3em
-  box-sizing: border-box
+  z-index: 4
   font-family: 'Open Sans', sans-serif
-  border: 1px #F4F4F4 ridge
   transition: top 0.5s
+  border-left: 5px groove
 
 .container
   position: relative
@@ -26,7 +25,6 @@ $com-image: url('../img/42back.gif')
   display: block
   float: left
   width: 100%
-  height: 100%
   box-sizing: border-box
   font-family: 'Open Sans', sans-serif
   font-size: small
@@ -38,8 +36,7 @@ $com-image: url('../img/42back.gif')
   resize: none
   float: left
   width: 100%
-  height: 100%
-  padding: 5px
+  padding: 0.2em
   font-family: 'Open Sans', sans-serif
   font-size: small
   background-image: $com-image

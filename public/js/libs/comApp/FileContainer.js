@@ -14,7 +14,7 @@ var FileContainer = Seed.extend({
         tag: 'div.container',
         children: [
           ['.container-info', [
-            {tag: 'div.container-name', as: 'name'},
+            {tag: 'div.container-name.name', as: 'name'},
             this.create(r.VersionPicker, {
               el: this.create(r.UploadFile).el,
               onPick: this.setVersion.bind(this)}, 'infoFile').el,
