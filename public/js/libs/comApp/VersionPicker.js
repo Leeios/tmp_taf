@@ -14,13 +14,16 @@ var VersionPicker = Seed.extend({
 
   options: function() {
     return {
-      addEl: r.toDOM({tag: 'div.addVersion.button', innerHTML: '+'}),
       onPick: function(id) {
         console.log('Version ' + id + ' is not available');
       },
       onAdd: function() {
         console.log('Versioning is not available for this element');
-      }
+      },
+      addEl: r.toDOM({
+        tag: 'div.addVersion.button', innerHTML: '+',
+        events: { click: function() { this.onAdd(); }.bind(this) }
+      })
     }
   },
 

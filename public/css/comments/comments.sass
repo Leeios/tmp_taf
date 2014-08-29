@@ -9,6 +9,7 @@ $com-image: url('../img/42back.gif')
   min-height: 100%
 
 .comment
+  box-sizing: border-box
   position: absolute
   float: right
   width: 100%
@@ -16,7 +17,13 @@ $com-image: url('../img/42back.gif')
   z-index: 4
   font-family: 'Open Sans', sans-serif
   transition: top 0.5s
+  background-color: #FFFFFF
+  border: 1px solid #4F4F4F
+
+.comment-wrapper
   border-left: 5px solid
+  padding-left: 1em
+
 
 .container
   position: relative
@@ -25,19 +32,17 @@ $com-image: url('../img/42back.gif')
   display: block
   float: left
   width: 100%
-  box-sizing: border-box
   font-family: 'Open Sans', sans-serif
   font-size: small
   padding: 0.2em
-  background-image: $com-image
   white-space: pre
 
 .txtComment
   display: block
   resize: none
+  border: none
   float: left
   width: 100%
   padding: 0.2em
   font-family: 'Open Sans', sans-serif
   font-size: small
-  background-image: $com-image

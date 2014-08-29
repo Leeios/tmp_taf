@@ -77,8 +77,9 @@ var CommentsGroup = Seed.extend({
     var previous_down;
     this.tmp && this.tmp.displayArea();
     for (var i = 0, len = this.sub.length; i < len; i++) {
+      console.log(this.sub[i]);
       this.sub[i].el.style.top = this.sub[i].actualTop + "px";
-      i > 0 && (previous_down = parseInt(this.sub[i - 1].el.style.top) + parseInt(this.sub[i - 1].el.offsetHeight))
+      i > 0 && (previous_down = parseInt(this.sub[i - 1].el.style.top) + this.sub[i - 1].getHeight())
       && (previous_down >= parseInt(this.sub[i].el.style.top))
       && (this.sub[i].el.style.top = previous_down + "px");
       this.sub[i].displayArea();

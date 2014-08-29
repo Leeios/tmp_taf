@@ -36,7 +36,7 @@ var SingleComment = Inheritance.extend({
     this.tmp.elTxt.focus();
     this.tmp.reply.remove();
     this.tmp.reply = null;
-    this.tmp.actualTop = this.el.offsetHeight;
+    this.tmp.actualTop = this.el.offsetHeight - 5;
     this.tmp.switchEdit();
   },
 

@@ -14,12 +14,14 @@ var Comment = Seed.extend({
     return {
       tag: "div.comment",
       children: [
-        { tag:"div.comButton.button", as: 'create', innerHTML: ' Create ' },
-        { tag:"div.comButton.button", as: 'delete', innerHTML: ' Delete ' },
-        { tag:"div.comButton.button", as: 'reply', innerHTML: ' Reply ' },
-        { tag:"div.comButton.button", as: 'editEl', innerHTML: ' Edit ' },
-        { tag:"div.divComment", as: 'elDiv' },
-        { tag:"textarea.txtComment", as: 'elTxt' }
+        {tag: 'div.comment-wrapper', as: 'wrap', children: [
+          { tag:"div.comButton.button", as: 'create', innerHTML: ' Create ' },
+          { tag:"div.comButton.button", as: 'delete', innerHTML: ' Delete ' },
+          { tag:"div.comButton.button", as: 'reply', innerHTML: ' Reply ' },
+          { tag:"div.comButton.button", as: 'editEl', innerHTML: ' Edit ' },
+          { tag:"div.divComment", as: 'elDiv' },
+          { tag:"textarea.txtComment", as: 'elTxt' }
+        ]}
       ]
     }
   },
@@ -32,14 +34,15 @@ var Comment = Seed.extend({
       uidParent: -1,
       actualTop: 0,
       resolved: false,
-      color: '#E3E3F9'
+      color: '#B3B3F9'
     }
   },
 
   '+init': function () {
 
     this.areas = [];/*Ne pas mettre dans options!*/
-    this.el.style['border-left-color'] = this.color;
+    console.log(this);
+    this.wrap.style['border-left-color'] = this.color;
 
     /*Define div*/
     if (this.uid == -1) {
@@ -106,23 +109,23 @@ var Comment = Seed.extend({
   },
 
   switchEdit: function() {
-    this.el.innerHTML = '';
+    this.wrap.innerHTML = '';
     if (this.edit_token == 0) {
       this.el.style["z-index"] = 0;
       this.elDiv.innerHTML = this.txt;
-      this.el.appendChild(this.elDiv);
-      this.el.appendChild(this.delete);
-      this.el.appendChild(document.createTextNode('•'))
-      this.el.appendChild(this.editEl);
+      this.wrap.appendChild(this.elDiv);
+      this.wrap.appendChild(this.delete);
+      this.wrap.appendChild(document.createTextNode('•'))
+      this.wrap.appendChild(this.editEl);
       if (this.reply) {
-        this.el.appendChild(document.createTextNode('•'))
-        this.el.appendChild(this.reply);
+        this.wrap.appendChild(document.createTextNode('•'))
+        this.wrap.appendChild(this.reply);
       }
     } else {
       this.el.style["z-index"] = 1;
       this.elTxt.placeholder = this.txt;
-      this.el.appendChild(this.elTxt);
-      this.el.appendChild(this.create);
+      this.wrap.appendChild(this.elTxt);
+      this.wrap.appendChild(this.create);
     }
     this.adjustHeight();
   },
@@ -139,6 +142,15 @@ var Comment = Seed.extend({
   usualStyle: function() {
     this.el.style["background-color"] = "#FFFFFF";
     this.fire('redraw');
+  },
+
+  getHeight: function() {
+    var tmpHeight = 0;
+    for (var i = 0, len = this.sub.length; i < len; i++) {
+      tmpHeight += this.sub[i].el.offsetHeight;
+    }
+    console.log(tmpHeight);
+    return (tmpHeight + this.el.offsetHeight);
   },
 
   /*Areas functions*/
