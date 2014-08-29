@@ -16,13 +16,14 @@ var ProjectViewer = Seed.extend({
 
   tpl : function() {
     return {
-      tag: 'div.projView',
+      tag: 'div.project',
       children : [
         ['.project-row.row', [
-          '.name',
-          this.create(r.VersionPicker, { onPick : this.setCurrent.bind(this) }, 'versionPicker').el, // ça permet juste de faire this.versionPicker = this.create(r.VersionPicker)
+          {tag: 'div.project-name', as: 'name'},
+          this.create(r.VersionPicker, {
+            onPick: this.setCurrent.bind(this),
+            onAdd: this.createProject.bind(this) }, 'versionPicker').el,
         ]],
-
         ['.file-nav-row.row', [
           this.create(r.UploadFile, { complete : this.onAddFile.bind(this) }, 'upload').el,
           { tag : '.files-list', as : 'filesList' }
@@ -34,14 +35,14 @@ var ProjectViewer = Seed.extend({
   },
 
   '+init' : function() {
-    if (this.data !== null) {
-      this.setCurrent(this.data.projects.last());
+    if (this.data == null) {
+      this.data = {id: -1, idParent: -1, projects: [{name: ''}], files: []};
     }
+    this.setCurrent(this.data.projects.last());
   },
 
   setCurrent : function(project) {
     this.current = project;
-    this.versionPicker.setCurrent(this.current);
 
     this.name.innerHTML = this.current.name;
 
@@ -76,6 +77,18 @@ var ProjectViewer = Seed.extend({
     }));
     this.files.appendChild(this.create(r.FileContainer, { data : file }).el);
   },
+
+  createProject : function() {
+    //todo //server bind this with socket
+
+    var newProject = {
+      name : 'Default Project Name'
+    };
+
+    /*Send to server*/
+    this.setCurrent(newProject);
+  },
+
 
   guid: function() {
     function s4() {

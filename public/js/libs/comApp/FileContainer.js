@@ -3,6 +3,7 @@ sand.define('FileContainer', [
   'CanvasTrack',
   'ColComments',
   'VersionPicker',
+  'UploadFile',
   'DOM/toDOM'
 ], function(r) {
 
@@ -10,18 +11,25 @@ var FileContainer = Seed.extend({
 
   tpl: function() {
     return {
-        tag: 'div.fileContainer',
+        tag: 'div.container',
         children: [
-          this.create(r.VersionPicker, {}, 'infoFile').el,
-          this.create(r.ColComments, {}, 'colComments').el,
-          { tag: 'pre.content',
-            as: 'content',
-            attr: {
-              unselectable: 'on',
-              onselectstart: 'return false;',
-              onmousedown: 'return false;'
+          ['.container-info', [
+            {tag: 'div.container-name', as: 'name'},
+            this.create(r.VersionPicker, {
+              el: this.create(r.UploadFile).el,
+              onPick: this.setVersion.bind(this)}, 'infoFile').el,
+          ]],
+          ['.container-content', [
+            this.create(r.ColComments, {}, 'colComments').el,
+            { tag: 'pre.content',
+              as: 'content',
+              attr: {
+                unselectable: 'on',
+                onselectstart: 'return false;',
+                onmousedown: 'return false;'
+              }
             }
-          }
+          ]]
         ]
       }
     },
@@ -29,7 +37,6 @@ var FileContainer = Seed.extend({
   options : function() {
     return {
       data: null,
-      name: "unnamed",
       txt: "",
       canvasTrack: this.create(r.CanvasTrack, {form: "points"})
     };
@@ -51,12 +58,16 @@ var FileContainer = Seed.extend({
     else
       this.uid = this.data.uid;
 
-    this.name = this.data.name;
+    this.name.innerHTML = this.data.name;
 
     this.content.innerHTML = this.data.content;
     this.txt = this.data.content;
     hljs.highlightBlock(this.content);
-    this.setCom(this.data.comments);
+
+    this.colComments.setComGroup(this.data.comments, this.canvasTrack.getCtx());
+    this.colComments.addReplies(this.data.comments);
+    this.canvasTrack.on('valid', this.colComments.addArea.bind(this.colComments));
+    this.colComments.on('clearCanvas', this.canvasTrack.clearCanvas.bind(this.canvasTrack));
   },
 
   mutation: function(mutations) {
@@ -65,11 +76,11 @@ var FileContainer = Seed.extend({
     this.observer.disconnect();
   },
 
-  setCom: function(comments) {
-    this.colComments.setComGroup(comments, this.canvasTrack.getCtx());
-    this.colComments.addReplies(comments);
-    this.canvasTrack.on('valid', this.colComments.addArea.bind(this.colComments));
-    this.colComments.on('clearCanvas', this.canvasTrack.clearCanvas.bind(this.canvasTrack));
+  setVersion: function(file) {
+    this.colComments.reset();
+    this.content.innerHTML = file.content;
+    this.name.innerHTML = name;
+    this.mutations();
   },
 
   formate: function() {

@@ -14,11 +14,12 @@ var Comment = Seed.extend({
     return {
       tag: "div.comment",
       children: [
-        this.elDiv,
-        this.elTxt,
-        this.create,
-        this.delete,
-        this.reply
+        { tag:"div.createButton.button", as: 'create', innerHTML: 'Create' },
+        { tag:"div.deleteButton.button", as: 'delete', innerHTML: 'Delete' },
+        { tag:"div.replyButton.button", as: 'reply', innerHTML: 'Reply' },
+        { tag:"div.editButton.button", as: 'edit', innerHTML: 'Edit' },
+        { tag:"div.divComment", as: 'elDiv' },
+        { tag:"textarea.txtComment", as: 'elTxt' }
       ]
     }
   },
@@ -31,24 +32,6 @@ var Comment = Seed.extend({
       uidParent: -1,
       actualTop: 0,
       resolved: false,
-      create: r.toDOM({
-        tag:"input.createButton.button",
-        attr: { type: "button", value: "Create" }
-      }),
-      delete: r.toDOM({
-        tag:"input.deleteButton.button",
-        attr: { type: "button", value: "Delete" }
-      }),
-      reply: r.toDOM({
-        tag:"input.replyButton.button",
-        attr: { type: "button", value: "Reply" }
-      }),
-      elDiv: r.toDOM({
-        tag:"div.divComment"
-      }),
-      elTxt: r.toDOM({
-        tag:"textarea.txtComment"
-      })
     }
   },
 
@@ -73,7 +56,7 @@ var Comment = Seed.extend({
     }.bind(this));
 
     /*Edit mode*/
-    this.elDiv.addEventListener("click", function() {
+    this.edit.addEventListener("click", function() {
       this.edit_token = 1;
       this.switchEdit();
     }.bind(this));
@@ -128,8 +111,11 @@ var Comment = Seed.extend({
       this.el.appendChild(this.elDiv);
       this.create.remove();
       this.el.appendChild(this.delete);
+      this.el.innerHTML += '  •  ';
+      this.el.appendChild(this.edit);
       if (this.reply) {
-      this.el.appendChild(this.reply);
+        this.el.innerHTML += '  •  ';
+        this.el.appendChild(this.reply);
       }
     } else {
       this.el.style["z-index"] = 1;
@@ -137,8 +123,9 @@ var Comment = Seed.extend({
       this.elDiv.remove();
       this.el.appendChild(this.elTxt);
       this.delete.remove();
+      this.edit.remove();
       if (this.reply) {
-      this.reply.remove();
+        this.reply.remove();
       }
       this.el.appendChild(this.create);
     }
@@ -146,7 +133,7 @@ var Comment = Seed.extend({
   },
 
   highStyle: function() {
-    this.el.style["background-color"] = "#17657D";
+    this.el.style["background-color"] = "#F3F3F4";
     this.fire('redraw');
     //Then redraw on select area with other stroke
     this.areas[0] && (this.areas[0].ctx.strokeStyle =  "rgba(23, 101, 125, 0.2)");
@@ -155,7 +142,7 @@ var Comment = Seed.extend({
   },
 
   usualStyle: function() {
-    this.el.style["background-color"] = "#272822";
+    this.el.style["background-color"] = "#FFFFFF";
     this.fire('redraw');
   },
 

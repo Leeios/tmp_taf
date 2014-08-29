@@ -37,6 +37,10 @@ var ColComments = r.CommentsGroup.extend({
     }.bind(this));
   },
 
+  reset: function() {
+    this.sub = [];
+  },
+
   '-displaySub': function() {
     this.fire('clearCanvas');
   },

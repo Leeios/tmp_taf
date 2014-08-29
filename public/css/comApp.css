@@ -1,16 +1,12 @@
-.projectNameButton {
-  -webkit-border-radius: 10px;
-  -moz-border-radius: 10px;
-  -ms-border-radius: 10px;
-  border-radius: 10px;
-  position: absolute;
+.banner {
+  float: left; }
+
+.header-project {
+  float: right;
   padding: 0.2em;
-  top: 2em;
-  right: 0px;
   height: 3em;
-  width: 6.5em;
+  width: 6em;
   color: #FFFFFF;
-  font-family: Verdana, Geneva, sans-serif;
   font-weight: bold;
   text-align: center;
   background-color: #1E90FF; }
@@ -19,16 +15,10 @@
   width: 2em; }
 
 .button {
-  width: 12%;
-  float: left;
-  clear: left;
-  color: #3F3F3F;
+  display: inline;
+  color: #3F3F65;
   font-weight: bold;
-  border-color: #272822;
-  font-size: x-small;
-  font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
-  background-color: #FFFFFF;
-  transition: color 1s; }
+  font-size: x-small; }
 
 .button:hover {
   background-color: #0465AA; }
@@ -46,10 +36,9 @@
   right: 0px;
   width: 100%;
   padding: 0.3em;
-  padding-left: 0px;
   box-sizing: border-box;
-  background-color: #272822;
-  border: 1px black ridge;
+  font-family: "Open Sans", sans-serif;
+  border: 1px #F4F4F4 ridge;
   transition: top 0.5s; }
 
 .container {
@@ -57,12 +46,11 @@
 
 .divComment {
   display: block;
-  float: right;
-  width: 85%;
+  float: left;
+  width: 100%;
   height: 100%;
   box-sizing: border-box;
-  background-image: url("../img/42back.gif");
-  font-family: Tahoma, sans-serif;
+  font-family: "Open Sans", sans-serif;
   font-size: small;
   padding: 0.2em;
   white-space: pre; }
@@ -70,61 +58,37 @@
 .txtComment {
   display: block;
   resize: none;
-  float: right;
-  width: 85%;
+  float: left;
+  width: 100%;
   height: 100%;
   padding: 5px;
-  font-family: Tahoma, sans-serif;
+  font-family: "Open Sans", sans-serif;
   font-size: small;
-  background-image: url("../img/42back.gif");
-  resize: horizontal; }
-
-html {
-  height: 100%;
-  width: 100%; }
+  background-image: url("../img/42back.gif"); }
 
 body {
-  background-image: url("../img/42back.gif"); }
+  background-image: url("../img/42back.gif");
+  margin: 0px; }
 
 pre {
   margin: 0;
   border: 1px groove black; }
 
-.projView {
-  position: relative;
+.project {
+  float: left;
   width: 100%; }
 
-.projectName {
-  -webkit-border-radius: 10px;
-  -moz-border-radius: 10px;
-  -ms-border-radius: 10px;
-  border-radius: 10px;
-  position: absolute;
-  height: 4em;
-  width: 8em;
-  resize: none; }
+.project-name {
+  float: left; }
+
+.project-row {
+  font-family: "Lato", sans-serif; }
 
 .header {
-  position: absolute;
-  display: inline;
+  float: left;
   width: 100%;
-  color: white;
-  font-family: Arial, Helvetica, "Liberation Sans", FreeSans, sans-serif;
-  background-color: #3F3F3F; }
-
-.headerLink {
-  color: #FFFFFF; }
-
-.uploadFile {
-  max-width: 7em;
-  font-size: 15px; }
-
-.info {
-  position: relative;
-  width: 100%;
-  font-size: 130%;
-  font-family: Arial, Helvetica, "Liberation Sans", FreeSans, sans-serif;
-  font-weight: bold; }
+  margin-top: 3em;
+  font-family: "Lato", sans-serif; }
 
 .content {
   position: relative;
@@ -140,3 +104,28 @@ pre {
   top: 0px;
   left: 0px;
   z-index: 1; }
+
+.row {
+  width: 100%;
+  display: inline; }
+
+.file-nav-row {
+  position: fixed;
+  top: 0px;
+  z-index: 10;
+  color: #FFFFFF;
+  background-color: #4F4F4F;
+  height: 3em; }
+
+.file {
+  display: inline; }
+
+.addVersion {
+  display: inline;
+  float: right;
+  font-weight: bold;
+  font-size: large; }
+
+.container-info {
+  display: block;
+  font-family: "Lato", sans-serif; }
