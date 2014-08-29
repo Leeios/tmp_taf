@@ -11,7 +11,7 @@ var UploadFile = Seed.extend({
 
   tpl: function() {
     return {
-      tag: "input.uploadFile.button",
+      tag: "input.upload-file.button",
       attr: { type: "file", multiple: "multiple" }
     }
   },

@@ -67,22 +67,30 @@ var ProjectViewer = Seed.extend({
   },
 
   _appendFile : function(file) {
+    this.files.appendChild(this.create(r.FileContainer, { data : file }, 'lastFile').el);
+    this.lastFile.on('newVersion', this.replaceFile.bind(this), this);
+    if (this.filesList.innerHTML != '') {
+      this.filesList.innerHTML += ' • ';
+    }
     this.filesList.appendChild(r.toDOM({
-      tag : '.file ' + file.name,
-      events : {
-        click : function() {
-          this.toFile(file);
-        }.bind(this)
-      }
+      tag : 'a.file',
+      innerHTML: this.lastFile.name.innerHTML,
+      attr : { href: '#' + this.lastFile.id }
     }));
-    this.files.appendChild(this.create(r.FileContainer, { data : file }).el);
+  },
+
+  replaceFile: function(data) {
+    this.files.replaceChild(this.create(r.FileContainer, { data : data.file }, 'lastFile').el,
+      data.prevFile);
+    this.lastFile.on('newVersion', this.replaceFile.bind(this), this);
   },
 
   createProject : function() {
     //todo //server bind this with socket
 
     var newProject = {
-      name : 'Default Project Name'
+      name : 'Default Project Name',
+      idProject: this.current.id
     };
 
     /*Send to server*/

@@ -14,10 +14,10 @@ var Comment = Seed.extend({
     return {
       tag: "div.comment",
       children: [
-        { tag:"div.createButton.button", as: 'create', innerHTML: ' Create ' },
-        { tag:"div.deleteButton.button", as: 'delete', innerHTML: ' Delete • ' },
-        { tag:"div.replyButton.button", as: 'reply', innerHTML: ' Reply ' },
-        { tag:"div.editButton.button", as: 'editEl', innerHTML: ' Edit • ' },
+        { tag:"div.comButton.button", as: 'create', innerHTML: ' Create ' },
+        { tag:"div.comButton.button", as: 'delete', innerHTML: ' Delete ' },
+        { tag:"div.comButton.button", as: 'reply', innerHTML: ' Reply ' },
+        { tag:"div.comButton.button", as: 'editEl', innerHTML: ' Edit ' },
         { tag:"div.divComment", as: 'elDiv' },
         { tag:"textarea.txtComment", as: 'elTxt' }
       ]
@@ -32,14 +32,14 @@ var Comment = Seed.extend({
       uidParent: -1,
       actualTop: 0,
       resolved: false,
-      color: '#4F234F'
+      color: '#E3E3F9'
     }
   },
 
   '+init': function () {
 
-    this.el.style['border-color'] = this.color;
     this.areas = [];/*Ne pas mettre dans options!*/
+    this.el.style['border-left-color'] = this.color;
 
     /*Define div*/
     if (this.uid == -1) {
@@ -57,7 +57,6 @@ var Comment = Seed.extend({
       }
     }.bind(this));
 
-    console.log(this);
     /*Edit mode*/
     this.editEl.addEventListener("click", function() {
       this.edit_token = 1;
@@ -107,27 +106,22 @@ var Comment = Seed.extend({
   },
 
   switchEdit: function() {
+    this.el.innerHTML = '';
     if (this.edit_token == 0) {
       this.el.style["z-index"] = 0;
       this.elDiv.innerHTML = this.txt;
-      this.elTxt.remove();
       this.el.appendChild(this.elDiv);
-      this.create.remove();
       this.el.appendChild(this.delete);
+      this.el.appendChild(document.createTextNode('•'))
       this.el.appendChild(this.editEl);
       if (this.reply) {
+        this.el.appendChild(document.createTextNode('•'))
         this.el.appendChild(this.reply);
       }
     } else {
       this.el.style["z-index"] = 1;
       this.elTxt.placeholder = this.txt;
-      this.elDiv.remove();
       this.el.appendChild(this.elTxt);
-      this.delete.remove();
-      this.editEl.remove();
-      if (this.reply) {
-        this.reply.remove();
-      }
       this.el.appendChild(this.create);
     }
     this.adjustHeight();

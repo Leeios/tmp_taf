@@ -10,7 +10,7 @@ var Header = Seed.extend({
       tag: 'div.header',
       children: [
         { tag: 'img.banner', attr: { src: '/img/banner.gif' } },
-        { tag: 'div.header-project', innerHTML: 'NEW PROJECT',
+        { tag: 'div.header-project.button', innerHTML: 'NEW PROJECT',
           events: {
             click: function() {
               this.fire('newProject:click');

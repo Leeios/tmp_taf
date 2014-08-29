@@ -16,8 +16,9 @@ var FileContainer = Seed.extend({
           ['.container-info', [
             {tag: 'div.container-name.name', as: 'name'},
             this.create(r.VersionPicker, {
-              el: this.create(r.UploadFile).el,
-              onPick: this.setVersion.bind(this)}, 'infoFile').el,
+              addEl: this.create(r.UploadFile, { complete: this.setVersion.bind(this)}).el,
+              onPick: this.setVersion.bind(this)
+            }, 'versionPicker').el
           ]],
           ['.container-content', [
             this.create(r.ColComments, {}, 'colComments').el,
@@ -45,7 +46,7 @@ var FileContainer = Seed.extend({
   '+init': function() {
     ['add', 'edit', 'delete'].each(function(e) {
       this.colComments.on(e, function(data) {
-        this.fire(e, {data: data, uidFile: this.uid, model: 'Comment'});
+        this.fire(e, {data: data, uidFile: this.id, model: 'Comment'});
       }.bind(this))
     }.bind(this));
 
@@ -54,10 +55,11 @@ var FileContainer = Seed.extend({
     this.observer.observe(this.content, config);
 
     if (typeof this.data.id == "undefined")
-      this.uid = this.guid()();
+      this.id = this.guid()();
     else
-      this.uid = this.data.uid;
+      this.id = this.data.id;
 
+    this.name.setAttribute('id', this.id);
     this.name.innerHTML = this.data.name;
 
     this.content.innerHTML = this.data.content;
@@ -77,17 +79,14 @@ var FileContainer = Seed.extend({
   },
 
   setVersion: function(file) {
-    this.colComments.reset();
-    this.content.innerHTML = file.content;
-    this.name.innerHTML = name;
-    this.mutations();
+    this.fire('newVersion', {file: file, prevFile: this.el});
   },
 
   formate: function() {
     var formateFile = {};
     formateFile.model = "File";
     formateFile.name = this.name;
-    formateFile.uid = this.uid;
+    formateFile.id = this.id;
     formateFile.content = this.txt;
     // formateFile.comments = this.colComments.formate();
     return formateFile;

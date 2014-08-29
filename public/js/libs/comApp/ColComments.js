@@ -37,7 +37,8 @@ var ColComments = r.CommentsGroup.extend({
     }.bind(this));
   },
 
-  reset: function() {
+  resetCol: function() {
+    this.el = '';
     this.sub = [];
   },
 

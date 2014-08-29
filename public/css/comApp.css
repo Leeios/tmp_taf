@@ -6,22 +6,25 @@
   padding: 0.2em;
   height: 3em;
   width: 6em;
-  color: #FFFFFF;
+  color: white;
   font-weight: bold;
   text-align: center;
-  background-color: #1E90FF; }
+  background-color: dodgerblue;
+  font-size: large; }
 
 .addVersion {
   width: 2em; }
 
 .button {
   display: inline;
-  color: #3F3F65;
-  font-weight: bold;
+  font-weight: bold; }
+
+.comButton {
   font-size: x-small; }
 
 .button:hover {
-  background-color: #0465AA; }
+  background-color: #aabbcc;
+  cursor: pointer; }
 
 .commentsGroup {
   position: relative;
@@ -33,13 +36,13 @@
 
 .comment {
   position: absolute;
-  right: 0px;
+  float: right;
   width: 100%;
   padding: 0.3em;
   z-index: 4;
   font-family: "Open Sans", sans-serif;
   transition: top 0.5s;
-  border-left: 5px groove; }
+  border-left: 5px solid; }
 
 .container {
   position: relative; }
@@ -71,7 +74,11 @@ body {
 
 pre {
   margin: 0;
-  border: 1px groove black; }
+  border: 1px solid black; }
+
+a {
+  color: white;
+  text-decoration: none; }
 
 .project {
   float: left;
@@ -94,7 +101,7 @@ pre {
 .header {
   float: left;
   width: 100%;
-  margin-top: 3em;
+  margin-top: 2em;
   font-family: "Lato", sans-serif; }
 
 .container-content {
@@ -125,9 +132,11 @@ pre {
   position: fixed;
   top: 0px;
   z-index: 10;
-  color: #FFFFFF;
-  background-color: #4F4F4F;
-  height: 3em; }
+  color: white;
+  font-family: "Lato", sans-serif;
+  background-color: #4f4f4f;
+  height: 2em;
+  border-bottom: 2px groove black; }
 
 .file {
   display: inline; }
@@ -141,8 +150,11 @@ pre {
 .container-info {
   float: left;
   width: 100%;
-  color: #1E90FF;
+  color: dodgerblue;
   font-weight: bold;
   font-family: "Lato", sans-serif;
   margin-top: 1em;
   margin-bottom: 1em; }
+
+.upload-file {
+  float: right; }
