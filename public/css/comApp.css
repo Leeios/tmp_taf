@@ -52,6 +52,7 @@
   font-family: "Open Sans", sans-serif;
   font-size: small;
   padding: 0.2em;
+  background-image: url("../img/42back.gif");
   white-space: pre; }
 
 .txtComment {
@@ -140,6 +141,8 @@ pre {
 .container-info {
   float: left;
   width: 100%;
+  color: #1E90FF;
+  font-weight: bold;
   font-family: "Lato", sans-serif;
   margin-top: 1em;
   margin-bottom: 1em; }
