@@ -9,7 +9,7 @@ var Header = r.Seed.extend({
     return {
       tag: 'div.header',
       children: [
-        { tag: 'img.banner', attr: { src: '/img/banner.gif' } },
+        { tag: 'img.banner', attr: { src: '/img/banner.jpg' } },
         { tag: 'div.header-project.button', innerHTML: 'NEW PROJECT',
           events: {
             click: function() {

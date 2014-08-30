@@ -1,10 +1,7 @@
 sand.define('ComApp', [
-  'Seed',
-  'ServerInterface',
-  'ProjectViewer',
   'Header',
-  'UserName',
-  'UploadFile'
+  'ProjectViewer',
+  'Seed'
 ], function(r) {
 
 /*
@@ -20,8 +17,6 @@ var appComments = r.Seed.extend({
   },
 
   '+init': function() {
-
-    this.create(r.ServerInterface, {server: socket, protocol: "socket"}, 'servInterface');
 
     this.projectViewer = this.create(r.ProjectViewer, {data : this.data}, 'projview');
 

@@ -6,10 +6,10 @@
   padding: 0.2em;
   height: 3em;
   width: 6em;
-  color: white;
+  color: #FFFFFF;
   font-weight: bold;
   text-align: center;
-  background-color: dodgerblue;
+  background-color: #1E90FF;
   font-size: large; }
 
 .addVersion {
@@ -23,7 +23,7 @@
   font-size: x-small; }
 
 .button:hover {
-  background-color: #aabbcc;
+  background-color: #AABBCC;
   cursor: pointer; }
 
 .commentsGroup {
@@ -43,8 +43,8 @@
   z-index: 4;
   font-family: "Open Sans", sans-serif;
   transition: top 0.5s;
-  background-color: white;
-  border: 1px solid #4f4f4f; }
+  background-color: #FFFFFF;
+  border: 1px solid #4F4F4F; }
 
 .comment-wrapper {
   border-left: 5px solid;
@@ -89,8 +89,12 @@ a {
   width: 100%; }
 
 .project-name {
-  font-size: large;
-  font-weight: bold; }
+  margin: 1em;
+  padding: 1em;
+  font-size: x-large;
+  font-weight: bold;
+  border-right: 1px solid black;
+  border-bottom: 1px solid black; }
 
 .name {
   float: left; }
@@ -107,6 +111,9 @@ a {
   width: 100%;
   margin-top: 2em;
   font-family: "Lato", sans-serif; }
+
+.banner {
+  float: left; }
 
 .container-content {
   float: left;
@@ -135,10 +142,11 @@ a {
 .file-nav-row {
   position: fixed;
   top: 0px;
+  left: 0px;
   z-index: 10;
-  color: white;
+  color: #FFFFFF;
   font-family: "Lato", sans-serif;
-  background-color: #4f4f4f;
+  background-color: #1F1F1F;
   height: 2em;
   border-bottom: 2px groove black; }
 
@@ -157,7 +165,7 @@ a {
 .container-info {
   float: left;
   width: 100%;
-  color: dodgerblue;
+  color: #1E90FF;
   font-weight: bold;
   font-family: "Lato", sans-serif;
   margin-top: 1em;
