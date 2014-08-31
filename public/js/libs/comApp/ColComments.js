@@ -19,14 +19,8 @@ var ColComments = r.CommentsGroup.extend({
 
   addArea: function(canArea) {
     this.addTmpComment();
-    this.tmp.addArea(canArea);
+    this.tmpComment.addArea(canArea);
     this.displaySub();
-  },
-
-  addReplies: function(data) {
-    for (var i = 0, len = this.sub.length; i < len; i++) {
-      this.sub[i].addReplies(data);
-    }
   },
 
   resetCol: function() {

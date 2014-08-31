@@ -28,10 +28,8 @@ var Comment = r.Seed.extend({
 
   options: function() {
     return {
-      txt: "",
+      txt: '',
       edit_token: 1,
-      id: -1,
-      idParent: -1,
       actualTop: 0,
       resolved: false,
       color: '#B3B3F9'
@@ -43,10 +41,6 @@ var Comment = r.Seed.extend({
     this.areas = [];/*Ne pas mettre dans options!*/
     this.wrap.style['border-left-color'] = this.color;
 
-    /*Define div*/
-    if (this.id == -1) {
-      this.id = this.guid()();
-    }
     this.switchEdit();
 
     /*Create or Edit_token*/
@@ -69,7 +63,7 @@ var Comment = r.Seed.extend({
     this.delete.addEventListener("click", this.removeEl.bind(this));
 
     /*Resize*/
-    this.elTxt.addEventListener("keypress", this.adjustHeight.bind(this));
+    this.elTxt.addEventListener("keypress", this.setHeight.bind(this));
 
     /*Highlight*/
     this.el.addEventListener("mouseover", this.highStyle.bind(this));
@@ -93,7 +87,6 @@ var Comment = r.Seed.extend({
   },
 
   removeEl: function() {
-    this.fire("deleteEl", this);
     this.el.remove();
   },
 
@@ -102,9 +95,17 @@ var Comment = r.Seed.extend({
   },
 
   /*Style functions*/
-  adjustHeight: function () {
-    this.elTxt.style.height = "1px";
+  setHeight: function () {
+    this.elTxt.style.height = "0px";
     this.elTxt.style.height = this.elTxt.scrollHeight + 10 + "px";
+  },
+
+  getHeight: function() {
+    var tmpHeight = 0;
+    for (var i = 0, len = this.sub.length; i < len; i++) {
+      tmpHeight += this.sub[i].el.offsetHeight;
+    }
+    return (tmpHeight + this.el.offsetHeight);
   },
 
   switchEdit: function() {
@@ -121,12 +122,12 @@ var Comment = r.Seed.extend({
         this.wrap.appendChild(this.reply);
       }
     } else {
-      this.el.style["z-index"] = 1;
+      this.el.style["z-index"] = 4;
       this.elTxt.placeholder = this.txt;
       this.wrap.appendChild(this.elTxt);
       this.wrap.appendChild(this.create);
     }
-    this.adjustHeight();
+    this.setHeight();
   },
 
   highStyle: function() {
@@ -143,20 +144,12 @@ var Comment = r.Seed.extend({
     this.fire('redraw');
   },
 
-  getHeight: function() {
-    var tmpHeight = 0;
-    for (var i = 0, len = this.sub.length; i < len; i++) {
-      tmpHeight += this.sub[i].el.offsetHeight;
-    }
-    return (tmpHeight + this.el.offsetHeight);
-  },
-
   /*Areas functions*/
   addArea: function(canArea) {
     this.areas.push(canArea);
     this.actualTop = canArea.pos[1];
     this.el.style.top = this.actualTop + "px";
-    this.adjustHeight();
+    this.setHeight();
     this.elTxt.focus();
   },
 
@@ -175,30 +168,6 @@ var Comment = r.Seed.extend({
       this.areas.push(current_area);
     }
   },
-
-  /*Use for export dataserv*/
-  formateEl: function() {
-    var parseCom = {};
-
-    var parseAreas = [];
-    for (var i = 0, len = this.areas.length; i < len; i++) {
-      parseAreas[i] = this.areas[i].formateArea();
-    }
-    parseCom = {txt: this.txt, actualTop: this.actualTop, areas: parseAreas, id: this.id, idParent: this.idParent};
-    return (parseCom);
-  },
-
-  guid: function() {
-    function s4() {
-      return Math.floor((1 + Math.random()) * 0x10000)
-                 .toString(16)
-                 .substring(1);
-    }
-    return function() {
-      return s4() + s4() + '-' + s4() + '-' + s4() + '-' +
-             s4() + '-' + s4() + s4() + s4();
-    };
-  }
 
 });
 return Comment;

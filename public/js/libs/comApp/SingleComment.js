@@ -21,23 +21,23 @@ var Inheritance = function() {
 var SingleComment = Inheritance.extend({
 
   '+init': function() {
-    this.sub = [];
+    this.comments = [];
     this.Schema = r.Comment;
     this.reply.addEventListener("click", this.replyEl.bind(this));
   },
 
   replyEl: function() {
-    this.addTmpComment();
+    this.preInsertComment();
     this.displaySub();
   },
 
-  '+addTmpComment': function() {
-    this.tmp.uidParent = this.uid;
-    this.tmp.elTxt.focus();
-    this.tmp.reply.remove();
-    this.tmp.reply = null;
-    this.tmp.actualTop = this.el.offsetHeight - 5;
-    this.tmp.switchEdit();
+  '+preInsertComment': function() {
+    this.tmpComment.uidParent = this.uid;
+    this.tmpComment.elTxt.focus();
+    this.tmpComment.reply.remove();
+    this.tmpComment.reply = null;
+    this.tmpComment.actualTop = this.el.offsetHeight - 5;
+    this.tmpComment.switchEdit();
   },
 
   addReplies: function(data) {
@@ -45,24 +45,14 @@ var SingleComment = Inheritance.extend({
       return ;
     for (var i = 0, len = data.length; i < len; i++) {
       if (data[i].uidParent == this.uid) {
-        this.tmp = new this.Schema(data[i]);
-        this.tmp.preValide();
-        this.tmp.on("redraw", function() {
+        this.tmpComment = new this.Schema(data[i]);
+        this.tmpComment.preValide();
+        this.tmpComment.on("redraw", function() {
           this.displaySub();
         }.bind(this));
-        this.addTmpComment();
-        this.addComment();
+        this.preInsertComment();
       }
     }
-  },
-
-  '-formate': function() {
-    var formateSinCom = {};
-
-    formateSinCom.comment = this.formateEl();
-    formateSinCom.replies = this.formateAll();
-
-    return formateSinCom;
   }
 
 });
