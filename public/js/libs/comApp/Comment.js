@@ -30,8 +30,8 @@ var Comment = r.Seed.extend({
     return {
       txt: "",
       edit_token: 1,
-      uid: -1,
-      uidParent: -1,
+      id: -1,
+      idParent: -1,
       actualTop: 0,
       resolved: false,
       color: '#B3B3F9'
@@ -44,8 +44,8 @@ var Comment = r.Seed.extend({
     this.wrap.style['border-left-color'] = this.color;
 
     /*Define div*/
-    if (this.uid == -1) {
-      this.uid = this.guid()();
+    if (this.id == -1) {
+      this.id = this.guid()();
     }
     this.switchEdit();
 
@@ -148,7 +148,6 @@ var Comment = r.Seed.extend({
     for (var i = 0, len = this.sub.length; i < len; i++) {
       tmpHeight += this.sub[i].el.offsetHeight;
     }
-    console.log(tmpHeight);
     return (tmpHeight + this.el.offsetHeight);
   },
 
@@ -185,7 +184,7 @@ var Comment = r.Seed.extend({
     for (var i = 0, len = this.areas.length; i < len; i++) {
       parseAreas[i] = this.areas[i].formateArea();
     }
-    parseCom = {txt: this.txt, actualTop: this.actualTop, areas: parseAreas, uid: this.uid, uidParent: this.uidParent};
+    parseCom = {txt: this.txt, actualTop: this.actualTop, areas: parseAreas, id: this.id, idParent: this.idParent};
     return (parseCom);
   },
 

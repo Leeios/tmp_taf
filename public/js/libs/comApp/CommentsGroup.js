@@ -13,17 +13,16 @@ var CommentsGroup = r.Seed.extend({
     sub: []
   },
 
-  /*Add/Edit/Remove*/
   addComment: function() {
     /*Ici le tmp comment est le commentaire en cours de validation
     on lui add les listeners et le prepare à etre un vrai com*/
     this.tmp.valid();
-    this.fire("add", this.tmp.formateEl());
+    this.fire('insert', this.tmp.formateEl());
     this.el.appendChild(this.tmp.el);
-    this.tmp.create.value = "Edit";
+    this.tmp.create.value = 'Edit';
     this.sub.push(this.tmp);
-    this.tmp.on("editEl", this.edit.bind(this));
-    this.tmp.on("deleteEl", this.remove.bind(this));
+    this.tmp.on('editEl', this.edit.bind(this));
+    this.tmp.on('deleteEl', this.remove.bind(this));
     this.sub.sort(function (a, b) {
       return a.actualTop - b.actualTop;
     });
@@ -33,9 +32,9 @@ var CommentsGroup = r.Seed.extend({
 
   addTmpComment: function() {
     if (!this.tmp && this.Schema) {
-      this.tmp = new this.Schema({ txt: "Enter a comment ..."});
-      this.tmp.on("createEl", this.addComment.bind(this));
-      this.tmp.on("redraw", function() {
+      this.tmp = new this.Schema({ txt: 'Enter a comment ...'});
+      this.tmp.on('createEl', this.addComment.bind(this));
+      this.tmp.on('redraw', function() {
         this.displaySub();
       }.bind(this));
       this.el.appendChild(this.tmp.el);
@@ -45,7 +44,7 @@ var CommentsGroup = r.Seed.extend({
   edit: function(editSub) {
     for (var i = 0, len = this.sub.length; i < len; i++) {
       if (editSub == this.sub[i]) {
-        this.fire("edit", this.sub[i].formateEl());
+        this.fire('edit', this.sub[i].formateEl());
         this.displaySub();
         return ;
       }
@@ -55,7 +54,7 @@ var CommentsGroup = r.Seed.extend({
   remove: function(rmSub) {
     for (var i = 0, len = this.sub.length; i < len; i++) {
       if (rmSub == this.sub[i]) {
-        this.fire("delete", this.sub[i].formateEl());
+        this.fire('remove', this.sub[i].formateEl());
         this.sub.splice(i, 1);
         this.displaySub();
         return ;
@@ -77,24 +76,24 @@ var CommentsGroup = r.Seed.extend({
     var previous_down;
     this.tmp && this.tmp.displayArea();
     for (var i = 0, len = this.sub.length; i < len; i++) {
-      this.sub[i].el.style.top = this.sub[i].actualTop + "px";
+      this.sub[i].el.style.top = this.sub[i].actualTop + 'px';
       i > 0 && (previous_down = parseInt(this.sub[i - 1].el.style.top) + this.sub[i - 1].getHeight())
       && (previous_down >= parseInt(this.sub[i].el.style.top))
-      && (this.sub[i].el.style.top = previous_down + "px");
+      && (this.sub[i].el.style.top = previous_down + 'px');
       this.sub[i].displayArea();
     }
   },
 
   /*Use for import dataserv*/
   setComGroup: function(data, ctx) {
-    if (typeof data == "undefined")
+    if (typeof data == 'undefined')
       return ;
     for (var i = 0, len = data.length; i < len; i++) {
-      if (data[i].uidParent == -1) {
+      if (data[i].idParent == -1) {
         this.tmp = new this.Schema(data[i]);
         this.tmp.setAreas(data[i].areas, ctx);
         this.tmp.preValide();
-        this.tmp.on("redraw", function() {
+        this.tmp.on('redraw', function() {
           this.displaySub();
         }.bind(this));
         this.addComment(data);

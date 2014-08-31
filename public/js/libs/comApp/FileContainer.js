@@ -45,6 +45,8 @@ var FileContainer = r.Seed.extend({
 
   '+init': function() {
 
+    console.log(this.query('dp'));
+
     /*On attend le load du content pour set la canvas size*/
     this.observer = new MutationObserver(this.setCanvas.bind(this));
     var config = { childList: true };
@@ -67,12 +69,24 @@ var FileContainer = r.Seed.extend({
     /*Echanges entre canvas et colcom*/
     this.canvasTrack.on('valid', this.colComments.addArea.bind(this.colComments));
     this.colComments.on('clearCanvas', this.canvasTrack.clearCanvas.bind(this.canvasTrack));
+
+    /*Listen comments*/
+    this.commentsBridge();
   },
 
   setCanvas: function(mutations) {
     this.canvasTrack.setSize(this.content.clientHeight, this.content.clientWidth);
     this.content.appendChild(this.canvasTrack.el);
     this.observer.disconnect();
+  },
+
+  commentsBridge: function() {
+    ['insert', 'edit', 'remove'].each(function(e) {
+      this.colComments.on(e, function(data) {
+        data.idFile = this.id;
+        this.fire(e, data);
+      }.bind(this));
+    }.bind(this))
   },
 
   setVersion: function(file) {

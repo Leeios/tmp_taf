@@ -29,14 +29,6 @@ var ColComments = r.CommentsGroup.extend({
     }
   },
 
-  '-addComment': function(data) {
-    ['add', 'edit', 'delete'].each(function(e) {
-      this.tmp.on(e, function(data) {
-        this.fire(e, data);
-      }.bind(this))
-    }.bind(this));
-  },
-
   resetCol: function() {
     this.el = '';
     this.sub = [];
@@ -44,10 +36,6 @@ var ColComments = r.CommentsGroup.extend({
 
   '-displaySub': function() {
     this.fire('clearCanvas');
-  },
-
-  formate: function() {
-    this.formateAll();
   }
 
 });

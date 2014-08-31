@@ -9,6 +9,10 @@ sand.define('ProjectViewer', [
 
 var ProjectViewer = r.Seed.extend({
 
+  isMediator: true,
+
+  respondsTo: { dp: function() {return this.dp;} },
+
   options: function() {
     return {
       data : null,
@@ -57,17 +61,20 @@ var ProjectViewer = r.Seed.extend({
     this.filesList.innerHTML = '';
     this.files.innerHTML = '';
 
-    /*Search file in data and print*/
+    /*Search file in data*/
 
-    this.dp.files.where(function(e) {return this.current.id === e.idProject;}.bind(this))
-                  .each(this.addFile.bind(this))
+    this.dp.files.where(function(e) { return this.current.id === e.idProject; }.bind(this))
+                  .each( function (file) {
+                    file.comments = this.dp.comments.where( function(e) { return file.id === e.idFile; }.bind(this));
+                    this.addFile(file);
+                  }.bind(this));
   },
 
   addFile : function(file) {
 
     this.dp.files.insert(file);
     this.files.appendChild(this.create(r.FileContainer, { data : file }, 'lastFile').el);
-    this.lastFile.on('newVersion', this.replaceFile.bind(this), this);
+    this.listenFile();
 
     if (this.filesList.innerHTML != '') {
       this.filesList.innerHTML += ' • ';
@@ -82,14 +89,13 @@ var ProjectViewer = r.Seed.extend({
   replaceFile: function(data) {
     this.dp.files.where('id', data.prevFile.id)[0].remove();
     this.dp.files.insert(data.file);
-
+    /*Replace in fileslist*/
     this.files.replaceChild(this.create(r.FileContainer, { data : data.file }, 'lastFile').el,
       data.prevFile.el);
-    this.lastFile.on('newVersion', this.replaceFile.bind(this), this);
+    this.listenFile();
   },
 
   createProject : function() {
-
     var newProject = this.dp.projects.insert({
       name : 'Default Project Name',
       idProject: this.current.id
@@ -107,12 +113,17 @@ var ProjectViewer = r.Seed.extend({
     })
   },
 
-  listenComments: function() {
+  listenFile: function() {
+    this.lastFile.on('newVersion', this.replaceFile.bind(this), this);
+
     ['insert', 'edit', 'remove'].each(function(e) {
-      this.dp.comments.on(e, function(models, c, o) {
-        console.log(e, models);
-      }.bind(this));
-    }.bind(this))
+      this.lastFile.on(e, function(data) {
+        console.log('Send data', e, data);
+      })
+      // this.dp.comments.on(e, function(models, c, o) {
+      //   console.log(e, models);
+      // }.bind(this));
+    }.bind(this));
   }
 
 });
