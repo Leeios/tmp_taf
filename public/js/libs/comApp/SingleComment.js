@@ -23,36 +23,29 @@ var SingleComment = Inheritance.extend({
   '+init': function() {
     this.comments = [];
     this.Schema = r.Comment;
-    this.reply.addEventListener("click", this.replyEl.bind(this));
+    this.replyEl.onclick = this.addTmpComment.bind(this);
   },
 
-  replyEl: function() {
-    this.preInsertComment();
-    this.displaySub();
+  '+addTmpComment': function() {
+    this.tmpComment.idParent = this.id;
+    this.tmpComment.replyEl = '';
+    this.tmpComment.actualTop = this.getHeight() - 5;
   },
 
-  '+preInsertComment': function() {
-    this.tmpComment.uidParent = this.uid;
-    this.tmpComment.elTxt.focus();
-    this.tmpComment.reply.remove();
-    this.tmpComment.reply = null;
-    this.tmpComment.actualTop = this.el.offsetHeight - 5;
-    this.tmpComment.switchEdit();
-  },
-
-  addReplies: function(data) {
-    if (typeof data == "undefined")
-      return ;
-    for (var i = 0, len = data.length; i < len; i++) {
-      if (data[i].uidParent == this.uid) {
-        this.tmpComment = new this.Schema(data[i]);
-        this.tmpComment.preValide();
-        this.tmpComment.on("redraw", function() {
-          this.displaySub();
-        }.bind(this));
-        this.preInsertComment();
-      }
+  addReplies: function() {
+    this.replies = this.query('dp').comments.where( function(e) { return this.id === e.idParent; }.bind(this));
+    for (var i = 0, len = replies.length; i < len; i++) {
+      this.tmpComment = new this.Schema(replies[i]);
+      this.tmpComment.preValide();
+      this.tmpComment.on("redraw", function() {
+        this.displaySub();
+      }.bind(this));
+      this.preInsertComment();
     }
+  },
+
+  '-displaySub': function() {
+    this.fire('displayCol');
   }
 
 });

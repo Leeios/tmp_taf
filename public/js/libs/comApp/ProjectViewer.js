@@ -10,12 +10,12 @@ sand.define('ProjectViewer', [
 var ProjectViewer = r.Seed.extend({
 
   isMediator: true,
-
   respondsTo: { dp: function() {return this.dp;} },
 
   options: function() {
     return {
       data : null,
+      server: null,
       dp: new r.DP({
         data: {
           projects: [{id: -1, idParent: -1, name: 'No project yet'}],
@@ -47,6 +47,7 @@ var ProjectViewer = r.Seed.extend({
   },
 
   '+init' : function() {
+    this.sendToServer();
     this.setDataToDP();
     this.setCurrent(this.dp.projects.last());
   },
@@ -72,8 +73,7 @@ var ProjectViewer = r.Seed.extend({
   insertFile : function(file) {
 
     this.dp.files.insert(file);
-    this.files.appendChild(this.create(r.FileContainer, { data : file }, 'lastFile').el);
-    this.lastFile.on('newVersion', this.editFile.bind(this), this);
+    this.files.appendChild(this.create(r.FileContainer, { data : file, newVersion: this.editFile.bind(this) }, 'lastFile').el);
 
     if (this.filesList.innerHTML != '') {
       this.filesList.innerHTML += ' • ';
@@ -85,13 +85,12 @@ var ProjectViewer = r.Seed.extend({
     }));
   },
 
-  editFile: function(data) {
-    this.dp.files.where('id', data.prevFile.id)[0].remove();
-    this.dp.files.insert(data.file);
+  editFile: function(file, prevFile) {
+    this.dp.files.where('id', prevFile.id)[0].remove();
+    this.dp.files.insert(file);
     /*Replace in fileslist*/
-    this.files.replaceChild(this.create(r.FileContainer, { data : data.file }, 'lastFile').el,
-      data.prevFile.el);
-    this.lastFile.on('newVersion', this.editFile.bind(this), this);
+    this.files.replaceChild(this.create(r.FileContainer, { data : file, newVersion: this.editFile.bind(this) }, 'lastFile').el,
+      prevFile.el);
   },
 
   createProject : function() {
@@ -110,6 +109,15 @@ var ProjectViewer = r.Seed.extend({
         this.dp[e].insert(this.data[e][i]);
       }
     })
+  },
+
+  sendToServer: function() {
+    ['insert', 'edit', 'remove'].each(function(e) {
+      var data = {};
+      this.dp.projects.on(e, function(models, changes) {this.server.emit(e, {models: models, changes: changes, type: 'project'})}.bind(this));
+      this.dp.files.on(e, function(models, changes) {this.server.emit(e, {models: models, changes: changes, type: 'file'})}.bind(this));
+      this.dp.comments.on(e, function(models, changes) {this.server.emit(e, {models: models, changes: changes, type: 'comment'})}.bind(this));
+    }.bind(this));
   }
 
 });

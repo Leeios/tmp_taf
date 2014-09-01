@@ -15,23 +15,39 @@ var Comment = r.Seed.extend({
       tag: "div.comment",
       children: [
         {tag: 'div.comment-wrapper', as: 'wrap', children: [
-          { tag:"div.comButton.button", as: 'create', innerHTML: ' Create ' },
-          { tag:"div.comButton.button", as: 'delete', innerHTML: ' Delete ' },
-          { tag:"div.comButton.button", as: 'reply', innerHTML: ' Reply ' },
-          { tag:"div.comButton.button", as: 'editEl', innerHTML: ' Edit ' },
+          { tag:"div.comButton.button", as: 'createEl', innerHTML: 'Create', events: {
+            click: function(){ this.onCreate(); }.bind(this)
+          }},
+          { tag:"div.comButton.button", as: 'removeEl', innerHTML: 'Delete', events: {
+            click: function(){ this.onRemove(this); }.bind(this)
+          }},
+          { tag:"div.comButton.button", as: 'editEl', innerHTML: 'Edit', events: {
+            click: function(){
+              if (this.edit_token == 1) { this.valid() }
+              else { this.edit_token = 1; this.switchEdit(); }
+            }.bind(this)
+          }},
+          { tag:"div.comButton.button", as: 'replyEl', innerHTML: 'Reply'},
           { tag:"div.divComment", as: 'elDiv' },
-          { tag:"textarea.txtComment", as: 'elTxt' }
+          { tag:"textarea.txtComment", as: 'elTxt',
+            attr: {placeholder: this.txt}, events: {
+            keypress: this.setHeight.bind(this)
+          }}
         ]}
-      ]
+      ], events: {
+        mouseover: this.highStyle.bind(this),
+        mouseout: this.usualStyle.bind(this)
+      }
     }
   },
 
   options: function() {
     return {
       txt: '',
+      onCreate: function() { console.log('Create is not available on this element'); },
+      onRemove: function() { console.log('remove is not available on this element'); },
       edit_token: 1,
       actualTop: 0,
-      resolved: false,
       color: '#B3B3F9'
     }
   },
@@ -40,41 +56,23 @@ var Comment = r.Seed.extend({
 
     this.areas = [];/*Ne pas mettre dans options!*/
     this.wrap.style['border-left-color'] = this.color;
-
-    this.switchEdit();
-
-    /*Create or Edit_token*/
-    this.create.addEventListener("click", function(e) {
-      if (this.elDiv.innerHTML == "") {
-        this.fire("createEl");
-      } else {
-        this.valid();
-        this.fire("editEl", this);
-      }
-    }.bind(this));
-
-    /*Edit mode*/
-    this.editEl.addEventListener("click", function() {
-      this.edit_token = 1;
-      this.switchEdit();
-    }.bind(this));
-
-    /*Delete*/
-    this.delete.addEventListener("click", this.removeEl.bind(this));
-
-    /*Resize*/
-    this.elTxt.addEventListener("keypress", this.setHeight.bind(this));
-
-    /*Highlight*/
-    this.el.addEventListener("mouseover", this.highStyle.bind(this));
-    this.el.addEventListener("mouseout", this.usualStyle.bind(this));
+    this.wrap.innerHTML = '';
+    this.wrap.appendChild(this.elTxt);
+    this.wrap.appendChild(this.createEl);
   },
 
   /*Add/remove*/
-  valid: function() {
+  valid: function(events) {
+
+    var search = this.query('dp').comments.one(function(e) { return this.id === e.id }.bind(this));
+
     this.edit_token = 0;
     this.txt = this.elTxt.value;
+    if (search != null) {
+      search.edit({'txt': this.txt});
+    }
     this.switchEdit();
+
     this.elDiv.innerHTML = this.txt.replace(/\[/g, '<pre>').replace(/\]/g, '</pre>');
     for (var i = 0, len = this.elDiv.childNodes.length; i < len; i++) {
       if (this.elDiv.childNodes[i].tagName == "PRE") {
@@ -84,10 +82,6 @@ var Comment = r.Seed.extend({
       }
     }
     this.usualStyle();
-  },
-
-  removeEl: function() {
-    this.el.remove();
   },
 
   preValide: function() {
@@ -101,9 +95,13 @@ var Comment = r.Seed.extend({
   },
 
   getHeight: function() {
+    if (typeof this.comments == 'undefined') {
+      return this.el.offsetHeight;
+    }
+
     var tmpHeight = 0;
-    for (var i = 0, len = this.sub.length; i < len; i++) {
-      tmpHeight += this.sub[i].el.offsetHeight;
+    for (var i = 0, len = this.comments.length; i < len; i++) {
+      tmpHeight += this.comments[i].el.offsetHeight;
     }
     return (tmpHeight + this.el.offsetHeight);
   },
@@ -113,19 +111,20 @@ var Comment = r.Seed.extend({
     if (this.edit_token == 0) {
       this.el.style["z-index"] = 0;
       this.elDiv.innerHTML = this.txt;
+/*      this.query('dp', )*/
       this.wrap.appendChild(this.elDiv);
-      this.wrap.appendChild(this.delete);
-      this.wrap.appendChild(document.createTextNode('•'))
+      this.wrap.appendChild(this.removeEl);
+      this.wrap.appendChild(document.createTextNode(' • '))
       this.wrap.appendChild(this.editEl);
-      if (this.reply) {
-        this.wrap.appendChild(document.createTextNode('•'))
-        this.wrap.appendChild(this.reply);
+      if (this.replyEl) {
+        this.wrap.appendChild(document.createTextNode(' • '))
+        this.wrap.appendChild(this.replyEl);
       }
     } else {
-      this.el.style["z-index"] = 4;
+      this.el.style["z-index"] = 10;
       this.elTxt.placeholder = this.txt;
       this.wrap.appendChild(this.elTxt);
-      this.wrap.appendChild(this.create);
+      this.wrap.appendChild(this.editEl);
     }
     this.setHeight();
   },
@@ -142,6 +141,7 @@ var Comment = r.Seed.extend({
   usualStyle: function() {
     this.el.style["background-color"] = "#FFFFFF";
     this.fire('redraw');
+    this.displayArea();
   },
 
   /*Areas functions*/
@@ -168,6 +168,11 @@ var Comment = r.Seed.extend({
       this.areas.push(current_area);
     }
   },
+
+  getData: function() {
+    return { id: this.id, idParent: this.idParent, idFile: this.idFile, txt: this.txt,
+      author: this.author, actualTop: this.actualTop, color: this.color};
+  }
 
 });
 return Comment;

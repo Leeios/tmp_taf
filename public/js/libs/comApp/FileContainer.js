@@ -16,8 +16,12 @@ var FileContainer = r.Seed.extend({
           ['.container-info', [
             {tag: 'div.container-name.name', as: 'name'},
             this.create(r.VersionPicker, {
-              addEl: this.create(r.UploadFile, { complete: this.setVersion.bind(this)}).el,
-              onPick: this.setVersion.bind(this)//CHANGE!
+              addEl: this.create(r.UploadFile, {
+                complete: function(file) {
+                  this.newVersion(file, this);
+                }.bind(this)
+              }).el,
+              onPick: this.newVersion.bind(this)//CHANGE!
             }, 'versionPicker').el
           ]],
           ['.container-content', [
@@ -38,6 +42,7 @@ var FileContainer = r.Seed.extend({
   options : function() {
     return {
       data: null,
+      newVersion: function() { console.log('Versioning not available on this element'); },
       txt: "",
       canvasTrack: this.create(r.CanvasTrack, {form: "points"})
     };
@@ -75,10 +80,6 @@ var FileContainer = r.Seed.extend({
     this.content.appendChild(this.canvasTrack.el);
     this.observer.disconnect();
   },
-
-  setVersion: function(file) {
-    this.fire('newVersion', {file: file, prevFile: this});//Create new version here, get back oninsert in pjview
-  }
 
 });
 return FileContainer;

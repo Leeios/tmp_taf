@@ -6,10 +6,10 @@
   padding: 0.2em;
   height: 3em;
   width: 6em;
-  color: #FFFFFF;
+  color: white;
   font-weight: bold;
   text-align: center;
-  background-color: #1E90FF;
+  background-color: dodgerblue;
   font-size: large; }
 
 .addVersion {
@@ -23,7 +23,7 @@
   font-size: x-small; }
 
 .button:hover {
-  background-color: #AABBCC;
+  background-color: #aabbcc;
   cursor: pointer; }
 
 .commentsGroup {
@@ -41,11 +41,10 @@
   clear: right;
   width: 98%;
   padding: 0.3em;
-  z-index: 4;
   font-family: "Open Sans", sans-serif;
   transition: top 0.5s;
-  background-color: #FFFFFF;
-  border: 1px solid #4F4F4F; }
+  background-color: white;
+  border: 1px solid #4f4f4f; }
 
 .comment-wrapper {
   border-left: 5px solid;
@@ -70,7 +69,6 @@
   float: left;
   width: 100%;
   padding: 0.2em;
-  margin-right: 2em;
   font-family: "Open Sans", sans-serif;
   font-size: small; }
 
@@ -146,10 +144,10 @@ a {
   position: fixed;
   top: 0px;
   left: 0px;
-  z-index: 10;
-  color: #FFFFFF;
+  z-index: 100;
+  color: white;
   font-family: "Lato", sans-serif;
-  background-color: #1F1F1F;
+  background-color: #1f1f1f;
   height: 2em;
   border-bottom: 2px groove black; }
 
@@ -168,7 +166,7 @@ a {
 .container-info {
   float: left;
   width: 100%;
-  color: #1E90FF;
+  color: dodgerblue;
   font-weight: bold;
   font-family: "Lato", sans-serif;
   margin-top: 1em;

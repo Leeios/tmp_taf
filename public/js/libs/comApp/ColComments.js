@@ -18,7 +18,10 @@ var ColComments = r.CommentsGroup.extend({
   },
 
   addArea: function(canArea) {
-    this.addTmpComment();
+    if (!this.tmpComment && this.Schema) {
+      this.addTmpComment();
+      this.tmpComment.on('displayCol', this.displaySub.bind(this));
+    }
     this.tmpComment.addArea(canArea);
     this.displaySub();
   },

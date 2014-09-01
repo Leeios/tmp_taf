@@ -9,6 +9,7 @@ sand.define('CommentsGroup', [
 var CommentsGroup = r.Seed.extend({
 
   '+options': {
+    idFile: -1,
     tmpComment: null,
     comments: []
   },
@@ -16,6 +17,7 @@ var CommentsGroup = r.Seed.extend({
   insertComment: function() {
     this.tmpComment.valid();
     this.comments.push(this.tmpComment);
+    this.query('dp').comments.insert(this.tmpComment.getData());
 
     this.comments.sort(function (a, b) {
       return a.actualTop - b.actualTop;
@@ -25,24 +27,24 @@ var CommentsGroup = r.Seed.extend({
   },
 
   addTmpComment: function() {
-    if (!this.tmpComment && this.Schema) {
-      this.tmpComment = new this.Schema({ txt: 'Enter a comment ...'});
-      this.el.appendChild(this.tmpComment.el);
-    }
-  },
-
-  edit: function(editSub) {
-    for (var i = 0, len = this.comments.length; i < len; i++) {
-      if (editSub == this.comments[i]) {
-        this.displaySub();
-        return ;
+    this.tmpComment = this.create(this.Schema, { txt: 'Enter a comment ...',
+      onCreate: this.insertComment.bind(this),
+      onRemove: this.deleteComment.bind(this),
+    });
+    this.tmpComment.on('redraw', function() {
+      this.fire('clearCanvas');
+      for (var i = 0, len = this.comments.length; i < len; i++) {
+        this.comments[i].displayArea();
       }
-    }
+    }.bind(this));
+    this.el.appendChild(this.tmpComment.el);
   },
 
-  remove: function(rmSub) {
+  deleteComment: function(rmSub) {
     for (var i = 0, len = this.comments.length; i < len; i++) {
       if (rmSub == this.comments[i]) {
+        // this.query('dp').comments.one(function(e){ return this.comments[i].id == e.id }).remove();
+        this.comments[i].el.remove();
         this.comments.splice(i, 1);
         this.displaySub();
         return ;
@@ -64,11 +66,11 @@ var CommentsGroup = r.Seed.extend({
 
   /*Use for import dataserv*/
   setComGroup: function(id, ctx) {
-    this.id = id;
+    this.idFile = id;
     this.comments = this.query('dp').comments.where( function(e) { return this.id === e.idFile; }.bind(this));
     for (var i = 0, len = this.comments.length; i < len; i++) {
       if (this.comments[i].idParent == -1) {
-        this.tmpComment = new this.Schema(this.comments[i]);
+        this.tmpComment = this.create(this.Schema, this.comments[i]);
         this.tmpComment.setAreas(this.comments[i].areas, ctx);
         this.tmpComment.preValide();
         this.insertComment(this.comments);
