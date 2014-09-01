@@ -169,8 +169,8 @@ var Comment = r.Seed.extend({
     }
   },
 
-  getData: function() {
-    return { id: this.id, idParent: this.idParent, idFile: this.idFile, txt: this.txt,
+  getData: function(idFile) {
+    return { id: this.id, idParent: this.idParent, idFile: idFile, txt: this.txt,
       author: this.author, actualTop: this.actualTop, color: this.color};
   }
 

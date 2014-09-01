@@ -47,8 +47,8 @@ var ProjectViewer = r.Seed.extend({
   },
 
   '+init' : function() {
-    this.sendToServer();
     this.setDataToDP();
+    this.sendToServer();
     this.setCurrent(this.dp.projects.last());
   },
 
@@ -72,6 +72,7 @@ var ProjectViewer = r.Seed.extend({
 
   insertFile : function(file) {
 
+    file.idProject = this.id;
     this.dp.files.insert(file);
     this.files.appendChild(this.create(r.FileContainer, { data : file, newVersion: this.editFile.bind(this) }, 'lastFile').el);
 
@@ -96,7 +97,7 @@ var ProjectViewer = r.Seed.extend({
   createProject : function() {
     var newProject = this.dp.projects.insert({
       name : 'Default Project Name',
-      idProject: this.current.id
+      idParent: this.current.idParent
     });
 
     this.setCurrent(newProject);
@@ -114,10 +115,35 @@ var ProjectViewer = r.Seed.extend({
   sendToServer: function() {
     ['insert', 'edit', 'remove'].each(function(e) {
       var data = {};
-      this.dp.projects.on(e, function(models, changes) {this.server.emit(e, {models: models, changes: changes, type: 'project'})}.bind(this));
-      this.dp.files.on(e, function(models, changes) {this.server.emit(e, {models: models, changes: changes, type: 'file'})}.bind(this));
-      this.dp.comments.on(e, function(models, changes) {this.server.emit(e, {models: models, changes: changes, type: 'comment'})}.bind(this));
+      this.dp.projects.on(e, function(models, changes) {
+        this._emitServer(e, 'projects', models, changes);
+      }.bind(this));
+      this.dp.files.on(e, function(models, changes) {
+        this._emitServer(e, 'files', models, changes);
+      }.bind(this));
+      this.dp.comments.on(e, function(models, changes) {
+        this._emitServer(e, 'comments', models, changes);
+      }.bind(this));
     }.bind(this));
+  },
+
+  getData: function(type, data) {
+    if (type == 'projects') {
+      return { id: data.id, idParent: data.idParent, name: data.name };
+    } else if (type == 'files') {
+      return { id: data.id, idParent: data.idParent, idProject: data.idProject, name: data.name };
+    } else if (type == 'comments') {
+      return { id: data.id, idParent: data.idParent, idFile: data.idFile, txt: data.txt,
+        author: data.author, actualTop: data.actualTop, color: data.color };
+    } else {
+      console.log('Data not valid');
+      return null;
+    }
+  },
+
+  _emitServer: function(e, type, models, changes) {
+    console.log(this.getData(type, models[0]), changes, type);
+    this.server.emit(e, {models: this.getData(type, models[0]), changes: changes, type: type});
   }
 
 });
