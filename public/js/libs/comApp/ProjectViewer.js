@@ -62,6 +62,25 @@ var ProjectViewer = r.Seed.extend({
     this.setCurrent(this.dp.projects.last());
   },
 
+  createProject : function() {
+    var newProject = this.dp.projects.insert({
+      name : 'Default Project Name',
+      idParent: 0
+    });
+    this.name.innerHTML = newProject.name;
+    this.current = newProject;
+    this.addVersion('v.0');
+  },
+
+  addVersion: function(versionName) {
+    var projV0 = this.dp.projects.insert({
+      name : versionName,
+      idParent: this.current.idParent || this.current.id
+    });
+    this.versionPicker.addVersion(projV0);
+    this.setCurrent(projV0);
+  },
+
   setCurrent : function(project) {
     this.current = project;
 
@@ -115,25 +134,6 @@ var ProjectViewer = r.Seed.extend({
     var version = this.dp.files.one(function(e) { return e.id == idVersion}.bind(this));
     var comments = this.dp.comments.where(function(e) { return e.idFile == file.id}.bind(this));
     file.setContent(version.content);
-  },
-
-  createProject : function() {
-    var newProject = this.dp.projects.insert({
-      name : 'Default Project Name',
-      idParent: 0
-    });
-    this.name.innerHTML = newProject.name;
-    this.current = newProject;
-    this.addVersion('v.0');
-  },
-
-  addVersion: function(versionName) {
-    var projV0 = this.dp.projects.insert({
-      name : versionName,
-      idParent: this.current.idParent || this.current.id
-    });
-    this.versionPicker.addVersion(projV0);
-    this.setCurrent(projV0);
   },
 
   setDataToDP: function() {
