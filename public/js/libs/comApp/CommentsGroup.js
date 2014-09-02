@@ -43,7 +43,7 @@ var CommentsGroup = r.Seed.extend({
   deleteComment: function(rmSub) {
     for (var i = 0, len = this.comments.length; i < len; i++) {
       if (rmSub == this.comments[i]) {
-        this.query('dp').comments.one(function(e){ return this.comments[i].id == e.id }).remove();
+        // this.query('dp').comments.one(function(e){ return this.comments[i].id == e.id }).remove();
         this.comments[i].el.remove();
         this.comments.splice(i, 1);
         this.displaySub();

@@ -66,41 +66,56 @@ var ProjectViewer = r.Seed.extend({
 
     this.dp.files.where(function(e) { return this.current.id === e.idProject; }.bind(this))
                   .each( function (file) {
-                    this.insertFile(file);
+                    this.appendFile(file);
                   }.bind(this));
   },
 
-  insertFile : function(file) {
-
+  insertFile: function(file) {
     file.idProject = this.id;
+    file.idParent = -1;
     this.dp.files.insert(file);
-    this.files.appendChild(this.create(r.FileContainer, { data : file, newVersion: this.editFile.bind(this) }, 'lastFile').el);
+    tmpFile = this.appendFile(file);
+    tmpFile.idParent = tmpFile.id;
+    this.versionFile({name: 'v.0', content: file.content}, tmpFile);
+  },
 
+  appendFile : function(file) {
+    var elem = this.create(r.FileContainer, { data : file, newVersion: this.versionFile.bind(this) });
+    this.files.appendChild(elem.el);
     if (this.filesList.innerHTML != '') {
       this.filesList.innerHTML += ' • ';
     }
     this.filesList.appendChild(r.toDOM({
       tag : 'a.file',
-      innerHTML: this.lastFile.name.innerHTML,
-      attr : { href: '#' + this.lastFile.id }
+      innerHTML: elem.name.innerHTML,
+      attr : { href: '#' + elem.id }
     }));
+    return (elem);
   },
 
-  editFile: function(file, prevFile) {
-    this.dp.files.where('id', prevFile.id)[0].remove();
+  versionFile: function(file, prevFile) {
+    file.idParent = prevFile.idParent;
+    file.idProject = prevFile.idProject;
     this.dp.files.insert(file);
+    prevFile.versionPicker.addVersion(file.name);
+    this.replaceFile(file, prevFile);
+  },
+
+  replaceFile: function(file, prevFile) {
     /*Replace in fileslist*/
-    this.files.replaceChild(this.create(r.FileContainer, { data : file, newVersion: this.editFile.bind(this) }, 'lastFile').el,
-      prevFile.el);
+    prevFile.setContent(file.content);
   },
 
   createProject : function() {
     var newProject = this.dp.projects.insert({
       name : 'Default Project Name',
-      idParent: this.current.idParent
+      idParent: -1
     });
-
-    this.setCurrent(newProject);
+    var projV0 = this.dp.projects.insert({
+      name : 'Default Project Name',
+      idParent: newProject.id
+    });
+    this.setCurrent(projV0);
   },
 
   setDataToDP: function() {
@@ -142,7 +157,7 @@ var ProjectViewer = r.Seed.extend({
   },
 
   _emitServer: function(e, type, models, changes) {
-    console.log(this.getData(type, models[0]), changes, type);
+    console.log(e, this.getData(type, models[0]), changes, type);
     this.server.emit(e, {models: this.getData(type, models[0]), changes: changes, type: type});
   }
 

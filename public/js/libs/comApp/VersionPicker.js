@@ -30,7 +30,7 @@ var VersionPicker = r.Seed.extend({
   addVersion: function(id) {
     var newVersion = r.toDOM({
       tag: 'div.versionProject',
-      innerHTML: 'id Version',
+      innerHTML: '&nbsp&nbsp&nbsp&nbsp-&nbsp&nbsp&nbsp&nbsp' + id,
       events: {
         click: function() { this.onPick(id); }.bind(this)
       }

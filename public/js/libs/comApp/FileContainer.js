@@ -34,10 +34,11 @@ var FileContainer = r.Seed.extend({
                 onmousedown: 'return false;'
               }
             }
-          ]]
+          ]
         ]
-      }
-    },
+      ]
+    }
+  },
 
   options : function() {
     return {
@@ -57,15 +58,13 @@ var FileContainer = r.Seed.extend({
 
     /*set attributes*/
     this.id = this.data.id;
+    this.idProject = this.data.idProject;
+    this.idParent = this.data.idParent;
     this.name.setAttribute('id', this.id);
     this.name.innerHTML = this.data.name;
 
     /*set & decore content*/
-    this.content.innerHTML = this.data.content;
-    this.txt = this.data.content;
-    hljs.highlightBlock(this.content);
-
-    /*Get comments link to file*/
+    this.setContent(this.data.content);
 
     /*set commentaires & replies*/
     this.colComments.setComGroup(this.id, this.canvasTrack.getCtx());
@@ -73,6 +72,12 @@ var FileContainer = r.Seed.extend({
     /*Echanges entre canvas et colcom*/
     this.canvasTrack.on('valid', this.colComments.addArea.bind(this.colComments));
     this.colComments.on('clearCanvas', this.canvasTrack.clearCanvas.bind(this.canvasTrack));
+  },
+
+  setContent: function(newContent) {
+    this.content.innerHTML = newContent;
+    this.txt = newContent;
+    hljs.highlightBlock(this.content);
   },
 
   setCanvas: function(mutations) {
