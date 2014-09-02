@@ -76,11 +76,12 @@ var ProjectViewer = r.Seed.extend({
     this.dp.files.insert(file);
     tmpFile = this.appendFile(file);
     tmpFile.idParent = tmpFile.id;
-    this.versionFile({name: 'v.0', content: file.content}, tmpFile);
+    this.addVersionFile({name: 'v.0', content: file.content}, tmpFile);
   },
 
   appendFile : function(file) {
-    var elem = this.create(r.FileContainer, { data : file, newVersion: this.versionFile.bind(this) });
+    var elem = this.create(r.FileContainer, { data : file,
+      newVersion: this.addVersionFile.bind(this), setVersion: this.setVersionFile.bind(this) });
     this.files.appendChild(elem.el);
     if (this.filesList.innerHTML != '') {
       this.filesList.innerHTML += ' • ';
@@ -93,17 +94,18 @@ var ProjectViewer = r.Seed.extend({
     return (elem);
   },
 
-  versionFile: function(file, prevFile) {
+  addVersionFile: function(file, prevFile) {
     file.idParent = prevFile.idParent;
     file.idProject = prevFile.idProject;
     this.dp.files.insert(file);
-    prevFile.versionPicker.addVersion(file.name);
-    this.replaceFile(file, prevFile);
+
+    prevFile.versionPicker.addVersion(file);
+    prevFile.setContent(file.content);/*Equivalent à setVersionfile mais on s'evite une seach inutile*/
   },
 
-  replaceFile: function(file, prevFile) {
-    /*Replace in fileslist*/
-    prevFile.setContent(file.content);
+  setVersionFile: function(file, idVersion) {
+    var version = this.dp.files.one(function(e) { return e.id == idVersion}.bind(this));
+    file.setContent(version.content);
   },
 
   createProject : function() {

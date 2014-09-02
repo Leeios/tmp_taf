@@ -21,7 +21,7 @@ var FileContainer = r.Seed.extend({
                   this.newVersion(file, this);
                 }.bind(this)
               }).el,
-              onPick: this.newVersion.bind(this)//CHANGE!
+              onPick: function(id) { this.setVersion.bind(this)(this, id); }.bind(this)
             }, 'versionPicker').el
           ]],
           ['.container-content', [
@@ -44,6 +44,7 @@ var FileContainer = r.Seed.extend({
     return {
       data: null,
       newVersion: function() { console.log('Versioning not available on this element'); },
+      setVersion: function() { console.log('Cannot set version for this element'); },
       txt: "",
       canvasTrack: this.create(r.CanvasTrack, {form: "points"})
     };
@@ -78,9 +79,11 @@ var FileContainer = r.Seed.extend({
     this.content.innerHTML = newContent;
     this.txt = newContent;
     hljs.highlightBlock(this.content);
+    this.setCanvas();
+    this.colComments.resetCol();
   },
 
-  setCanvas: function(mutations) {
+  setCanvas: function() {
     this.canvasTrack.setSize(this.content.clientHeight, this.content.clientWidth);
     this.content.appendChild(this.canvasTrack.el);
     this.observer.disconnect();

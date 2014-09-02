@@ -29,7 +29,7 @@ var SingleComment = Inheritance.extend({
   '+addTmpComment': function() {
     this.tmpComment.idParent = this.id;
     this.tmpComment.replyEl = '';
-    this.tmpComment.actualTop = this.getHeight() - 5;
+    this.tmpComment.actualTop = this.el.offsetHeight - 5;
   },
 
   addReplies: function() {
@@ -44,7 +44,7 @@ var SingleComment = Inheritance.extend({
     }
   },
 
-  '-displaySub': function() {
+  '+displaySub': function() {
     this.fire('displayCol');
   }
 

@@ -17,7 +17,8 @@
 
 .button {
   display: inline;
-  font-weight: bold; }
+  font-weight: bold;
+  transition: color 0.5s; }
 
 .comButton {
   font-size: x-small; }
@@ -180,4 +181,9 @@ a {
 
 .versionProject {
   font-size: small;
-  color: #4F4F4F; }
+  color: #4F4F4F;
+  display: inline;
+  -webkit-border-radius: 0.5em;
+  -moz-border-radius: 0.5em;
+  -ms-border-radius: 0.5em;
+  border-radius: 0.5em; }

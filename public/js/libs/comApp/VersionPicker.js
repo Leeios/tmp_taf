@@ -27,14 +27,15 @@ var VersionPicker = r.Seed.extend({
     }
   },
 
-  addVersion: function(id) {
+  addVersion: function(file) {
     var newVersion = r.toDOM({
-      tag: 'div.versionProject',
-      innerHTML: '&nbsp&nbsp&nbsp&nbsp-&nbsp&nbsp&nbsp&nbsp' + id,
+      tag: 'div.versionProject.button',
+      innerHTML: file.name,
       events: {
-        click: function() { this.onPick(id); }.bind(this)
+        click: function() { this.onPick(file.id); }.bind(this)
       }
     });
+    this.el.appendChild(document.createTextNode('   •   '))
     this.el.appendChild(newVersion);
   }
 

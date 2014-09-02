@@ -53,14 +53,22 @@ var CommentsGroup = r.Seed.extend({
   },
 
   displaySub: function() {
+    console.log('display', this.comments);
     var previous_down;
     this.tmpComment && this.tmpComment.displayArea();
     for (var i = 0, len = this.comments.length; i < len; i++) {
       this.comments[i].el.style.top = this.comments[i].actualTop + 'px';
-      i > 0 && (previous_down = parseInt(this.comments[i - 1].el.style.top) + this.comments[i - 1].getHeight())
-      && (previous_down >= parseInt(this.comments[i].el.style.top))
-      && (this.comments[i].el.style.top = previous_down + 'px');
-      this.comments[i].displayArea();
+
+//      console.log(this.comments);
+//      console.log((previous_down = parseInt(this.comments[i - 1].el.style.top) + this.comments[i - 1].getHeight())
+//        , parseInt(this.comments[i].el.style.top));
+
+      if (i > 0 && (previous_down = parseInt(this.comments[i - 1].el.style.top) + this.comments[i - 1].getHeight())
+        >= parseInt(this.comments[i].el.style.top)) {
+        console.log(previous_down)
+        this.comments[i].el.style.top = previous_down + 'px';
+        this.comments[i].displayArea();
+      }
     }
   },
 

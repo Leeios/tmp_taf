@@ -27,8 +27,9 @@ var ColComments = r.CommentsGroup.extend({
   },
 
   resetCol: function() {
-    this.el = '';
-    this.sub = [];
+    this.el.innerHTML = '';
+    this.tmpComment = null;
+    this.comments = [];
   },
 
   '-displaySub': function() {
