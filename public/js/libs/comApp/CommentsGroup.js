@@ -53,7 +53,6 @@ var CommentsGroup = r.Seed.extend({
   },
 
   displaySub: function() {
-    console.log('display', this.comments);
     var previous_down;
     this.tmpComment && this.tmpComment.displayArea();
     for (var i = 0, len = this.comments.length; i < len; i++) {

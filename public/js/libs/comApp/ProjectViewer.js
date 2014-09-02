@@ -34,19 +34,29 @@ var ProjectViewer = r.Seed.extend({
           {tag: 'div.project-name.name', as: 'name'},
           this.create(r.VersionPicker, {
             onPick: this.setCurrent.bind(this),
-            onAdd: this.createProject.bind(this) }, 'versionPicker').el,
+            onAdd: this.addVersion.bind(this) }, 'versionPicker').el,
         ]],
-        ['.file-nav-row.row', [
+        {tag: '.file-nav-row.row', as: 'projectNav', children: [
           this.create(r.UploadFile, { complete : this.insertFile.bind(this) }, 'upload').el,
           { tag : '.files-list', as : 'filesList' }
-        ]],
-
+        ]},
         ['.files-block', ['.files']]
-      ]
+      ],
     }
   },
 
   '+init' : function() {
+
+    /*Listen scroll*/
+    window.addEventListener('scroll', function(e) {
+      console.log(document.body.scrollTop, this.projectNav.offsetTop);
+      if (document.body.scrollTop > this.projectNav.offsetTop) {
+        this.projectNav.setAttribute('class', 'fixed-top');
+      } else {
+        this.projectNav.setAttribute('class', 'file-nav-row');
+      }
+    }.bind(this));
+
     this.setDataToDP();
     this.sendToServer();
     this.setCurrent(this.dp.projects.last());
@@ -57,7 +67,6 @@ var ProjectViewer = r.Seed.extend({
 
     this.id = project.id;
     this.idParent = project.idParent;
-    this.name.innerHTML = project.name;
 
     this.filesList.innerHTML = '';
     this.files.innerHTML = '';
@@ -105,6 +114,7 @@ var ProjectViewer = r.Seed.extend({
 
   setVersionFile: function(file, idVersion) {
     var version = this.dp.files.one(function(e) { return e.id == idVersion}.bind(this));
+    var comments = this.dp.comments.where(function(e) { return e.idFile == file.id}.bind(this));
     file.setContent(version.content);
   },
 
@@ -113,10 +123,18 @@ var ProjectViewer = r.Seed.extend({
       name : 'Default Project Name',
       idParent: -1
     });
+    newProject.idParent = newProject.id;
+    this.name.innerHTML = newProject.name;
+    this.current = newProject;
+    this.addVersion('v.0');
+  },
+
+  addVersion: function(versionName) {
     var projV0 = this.dp.projects.insert({
-      name : 'Default Project Name',
-      idParent: newProject.id
+      name : versionName,
+      idParent: this.current.idParent
     });
+    this.versionPicker.addVersion(projV0);
     this.setCurrent(projV0);
   },
 
@@ -159,7 +177,7 @@ var ProjectViewer = r.Seed.extend({
   },
 
   _emitServer: function(e, type, models, changes) {
-    console.log(e, this.getData(type, models[0]), changes, type);
+    console.log('Send Server: ', e, this.getData(type, models[0]), changes, type);
     this.server.emit(e, {models: this.getData(type, models[0]), changes: changes, type: type});
   }
 
