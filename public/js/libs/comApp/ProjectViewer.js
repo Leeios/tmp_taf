@@ -18,7 +18,7 @@ var ProjectViewer = r.Seed.extend({
       server: null,
       dp: new r.DP({
         data: {
-          projects: [{id: -1, idParent: -1, name: 'No project yet'}],
+          projects: [{id: 0, idParent: 0, name: 'No project yet'}],
           files: [],
           comments: []
         }
@@ -49,8 +49,8 @@ var ProjectViewer = r.Seed.extend({
 
     /*Listen scroll*/
     window.addEventListener('scroll', function(e) {
-      console.log(document.body.scrollTop, this.projectNav.offsetTop);
-      if (document.body.scrollTop > this.projectNav.offsetTop) {
+      this.actualTop = this.projectNav.offsetTop || this.actualTop;
+      if (document.body.scrollTop > this.actualTop) {
         this.projectNav.setAttribute('class', 'fixed-top');
       } else {
         this.projectNav.setAttribute('class', 'file-nav-row');
@@ -81,10 +81,9 @@ var ProjectViewer = r.Seed.extend({
 
   insertFile: function(file) {
     file.idProject = this.id;
-    file.idParent = -1;
+    file.idParent = 0;
     this.dp.files.insert(file);
     tmpFile = this.appendFile(file);
-    tmpFile.idParent = tmpFile.id;
     this.addVersionFile({name: 'v.0', content: file.content}, tmpFile);
   },
 
@@ -104,7 +103,7 @@ var ProjectViewer = r.Seed.extend({
   },
 
   addVersionFile: function(file, prevFile) {
-    file.idParent = prevFile.idParent;
+    file.idParent = prevFile.idParent || prevFile.id;
     file.idProject = prevFile.idProject;
     this.dp.files.insert(file);
 
@@ -121,9 +120,8 @@ var ProjectViewer = r.Seed.extend({
   createProject : function() {
     var newProject = this.dp.projects.insert({
       name : 'Default Project Name',
-      idParent: -1
+      idParent: 0
     });
-    newProject.idParent = newProject.id;
     this.name.innerHTML = newProject.name;
     this.current = newProject;
     this.addVersion('v.0');
@@ -132,7 +130,7 @@ var ProjectViewer = r.Seed.extend({
   addVersion: function(versionName) {
     var projV0 = this.dp.projects.insert({
       name : versionName,
-      idParent: this.current.idParent
+      idParent: this.current.idParent || this.current.id
     });
     this.versionPicker.addVersion(projV0);
     this.setCurrent(projV0);
