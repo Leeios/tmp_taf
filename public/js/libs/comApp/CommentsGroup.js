@@ -14,10 +14,12 @@ var CommentsGroup = r.Seed.extend({
     comments: []
   },
 
-  insertComment: function() {
+  insertComment: function(bool_dp) {
     this.tmpComment.valid();
     this.comments.push(this.tmpComment);
-    this.tmpComment.id = this.query('dp').comments.insert(this.tmpComment.getData()).id;
+    if (bool_dp != false) {
+      this.tmpComment.id = this.query('dp').comments.insert(this.tmpComment.getData()).id;
+    }
 
     this.comments.sort(function (a, b) {
       return a.actualTop - b.actualTop;
@@ -71,13 +73,13 @@ var CommentsGroup = r.Seed.extend({
   /*Use for import dataserv*/
   setComGroup: function(id, ctx) {
     this.idFile = id;
-    this.comments = this.query('dp').comments.where( function(e) { return this.id === e.idFile; }.bind(this));
-    for (var i = 0, len = this.comments.length; i < len; i++) {
-      if (this.comments[i].idParent == -1) {
-        this.tmpComment = this.create(this.Schema, this.comments[i]);
-        this.tmpComment.setAreas(this.comments[i].areas, ctx);
+    var dpComments = this.query('dp').comments.where( function(e) { return this.idFile === e.idFile; }.bind(this));
+    for (var i = 0, len = dpComments.length; i < len; i++) {
+      if (dpComments[i].idParent == 0) {
+        this.tmpComment = this.create(this.Schema, dpComments[i]);
+        this.tmpComment.setAreas(dpComments[i].areas, ctx);
         this.tmpComment.preValide();
-        this.insertComment(this.comments);
+        this.insertComment(false);
       }
     }
   }

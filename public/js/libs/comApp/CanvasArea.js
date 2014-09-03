@@ -55,7 +55,7 @@ var CanvasArea = r.Seed.extend({
     this.ctx.stroke();
   },
 
-  formateArea: function() {
+  getArea: function() {
     var parseArea = {};
     parseArea.points = this.points;
     return (parseArea);

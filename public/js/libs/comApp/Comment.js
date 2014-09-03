@@ -56,7 +56,7 @@ var Comment = r.Seed.extend({
 
   '+init': function () {
 
-    this.areas = [];/*Ne pas mettre dans options!*/
+    this.areas = [];
     this.wrap.style['border-left-color'] = this.color;
     this.wrap.innerHTML = '';
     this.wrap.appendChild(this.elTxt);
@@ -66,10 +66,10 @@ var Comment = r.Seed.extend({
   /*Add/remove*/
   valid: function(events) {
 
-    var search = this.query('dp').comments.one(function(e) { return this.id === e.id }.bind(this));
-
     this.edit_token = 0;
     this.txt = this.elTxt.value;
+
+    var search = this.query('dp').comments.one(function(e) { return this.id === e.id }.bind(this));
     if (search != null) {
       search.edit({'txt': this.txt});
     }
@@ -166,14 +166,18 @@ var Comment = r.Seed.extend({
     var current_area;
     for (var i = 0, len = data.length; i < len; i++) {
       data[i].ctx = ctx;
-      current_area = new r.CanvasArea(data[i]);
+      current_area = this.create(r.CanvasArea, data[i]);
       this.areas.push(current_area);
     }
   },
 
   getData: function() {
+    var tmpAreas = [];
+    for (var i = 0, len = this.areas.length; i < len; i++) {
+      tmpAreas.push(this.areas[i].getArea());
+    }
     return { id: this.id, idParent: this.idParent, idFile: this.idFile, txt: this.txt,
-      author: this.author, actualTop: this.actualTop, color: this.color};
+      author: this.author, actualTop: this.actualTop, color: this.color, areas: tmpAreas};
   }
 
 });

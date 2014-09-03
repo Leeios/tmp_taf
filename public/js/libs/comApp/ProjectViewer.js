@@ -116,22 +116,23 @@ var ProjectViewer = r.Seed.extend({
     this.filesList.innerHTML = '';
     this.files.innerHTML = '';
 
-    /*Search file in data*/
-
+    var versionsFile = [];
     this.dp.files.where(function(e) { return this.current.id === e.idProject; }.bind(this))
-                  .each( function (file) {
-                    console.log(file)
-                    if (file.idParent == 0) {
-                      this.appendFile(file);
-                    }
-                    else {
-                    }
-                  }.bind(this));
+          .each( function (file) {
+            if (file.idParent == 0) {
+              versionsFile.push(this.appendFile(file));
+            }
+            else {
+              var parentElem = versionsFile.one(function(e) { return e.id == file.idParent }.bind(this));
+              parentElem.versionPicker.addVersion(file);
+              parentElem.setContent(file);
+            }
+          }.bind(this));
   },
 
   insertFile: function(file) {
     var tmpcontent = file.content;
-    file.content = 'Master file: No content available';
+    file.content.innerHTML = 'Master file: No content available';
     file.idProject = this.id;
     file.idParent = 0;
     this.dp.files.insert(file);
@@ -165,7 +166,6 @@ var ProjectViewer = r.Seed.extend({
 
   setVersionFile: function(file, idVersion) {
     var version = this.dp.files.one(function(e) { return e.id == idVersion}.bind(this));
-    var comments = this.dp.comments.where(function(e) { return e.idFile == file.id}.bind(this));
     file.setContent(version);
   },
 
@@ -190,7 +190,7 @@ var ProjectViewer = r.Seed.extend({
     } else if (type == 'files') {
       return { id: data.id, idParent: data.idParent, idProject: data.idProject, name: data.name, content: data.content };
     } else if (type == 'comments') {
-      return { id: data.id, idParent: data.idParent, idFile: data.idFile, txt: data.txt,
+      return { id: data.id, idParent: data.idParent, idFile: data.idFile, txt: data.txt, areas: data.areas,
         author: data.author, actualTop: data.actualTop, color: data.color };
     } else {
       console.log('Data not valid');
