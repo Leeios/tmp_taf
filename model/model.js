@@ -2,15 +2,15 @@ var mongoose = require('mongoose'),
   cfg = require('config').Default;
 
 var projSchema = new mongoose.Schema({
-  uid: String,
-  uidParent: String,
+  id: String,
+  idParent: String,
   name: String
 });
 
 var fileSchema = new mongoose.Schema({
-  uid: String,
-  uidParent: String,
-  uidProject: String,
+  id: String,
+  idParent: String,
+  idProject: String,
   name: String,
   size: Number,
   type: String,
@@ -18,14 +18,14 @@ var fileSchema = new mongoose.Schema({
 });
 
 var comSchema = new mongoose.Schema({
-  uid: String,
+  id: String,
   txt: String,
-  uidFile: String,
-  uidParent: String,
+  idFile: String,
+  idParent: String,
   resolved: Boolean,
   author: String,
   actualTop: Number,
-  replies: { type : Array , "default" : [] },
+  color: Number,
   areas: { type : Array , "default" : [] }
 });
 

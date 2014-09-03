@@ -65,7 +65,7 @@ var FileContainer = r.Seed.extend({
     this.name.innerHTML = this.data.name;
 
     /*set & decore content*/
-    this.setContent(this.data.content);
+    this.setContent(this.data);
 
     /*set commentaires & replies*/
     this.colComments.setComGroup(this.id, this.canvasTrack.getCtx());
@@ -75,12 +75,13 @@ var FileContainer = r.Seed.extend({
     this.colComments.on('clearCanvas', this.canvasTrack.clearCanvas.bind(this.canvasTrack));
   },
 
-  setContent: function(newContent) {
-    this.content.innerHTML = newContent;
-    this.txt = newContent;
+  setContent: function(file) {
+    this.content.innerHTML = file.content;
+    this.txt = file.content;
     hljs.highlightBlock(this.content);
     this.setCanvas();
     this.colComments.resetCol();
+    this.colComments.setComGroup(file.id, this.canvasTrack.getCtx());
   },
 
   setCanvas: function() {

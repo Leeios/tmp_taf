@@ -5,37 +5,38 @@ var com_method = require('../model/comment');
 
 exports.socket = function(socket) {
 
+  /*Basic enter and msg*/
   socket.username = idUser.toString();
-  console.log('User ' + idUser++ + ' connected');
+  console.log('User ' + idUser + ' connected');
   var address = socket.handshake.address;
   console.log("New connection from " + address.address + ":" + address.port);
   socket.on('msg', function (message) {
     console.log('Client ' + socket.username + ' send :', message);
   });
 
-  socket.on('add', function (data) {
-    if (data.model == 'Project') {
-      proj_method.insertProj(data);
-    } else if (data.model == 'File') {
-      file_method.insertFile(data);
-    } else if (data.model == 'Comment') {
-      com_method.insertCom(data);
+  socket.on('insert', function (data) {
+    if (data.type == 'projects') {
+      proj_method.insertProj(data.models);
+    } else if (data.type == 'files') {
+      file_method.insertFile(data.models);
+    } else if (data.type == 'comments') {
+      com_method.insertCom(data.models);
     } else {
       console.log('Data model is not recognized');
     }
   });
 
   socket.on('edit', function (data) {
-    if (data.model == 'Comment') {
-      com_method.editCom(data);
+    if (data.type == 'comments') {
+      com_method.editCom(data.models);
     } else {
       console.log('Data model is not recognized');
     }
   });
 
-  socket.on('delete', function (data) {
-    if (data.model == 'Comment') {
-      com_method.deleteCom(data);
+  socket.on('remove', function (data) {
+    if (data.type == 'comments') {
+      com_method.deleteCom(data.models);
     } else {
       console.log('Data model is not recognized');
     }

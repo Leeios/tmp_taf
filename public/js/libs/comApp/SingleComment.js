@@ -20,6 +20,7 @@ var Inheritance = function() {
 
 var SingleComment = Inheritance.extend({
 
+
   '+init': function() {
     this.comments = [];
     this.Schema = r.Comment;

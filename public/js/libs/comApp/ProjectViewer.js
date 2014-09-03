@@ -16,6 +16,7 @@ var ProjectViewer = r.Seed.extend({
     return {
       data : null,
       server: null,
+      idParent: 0,
       dp: new r.DP({
         data: {
           projects: [{id: 0, idParent: 0, name: 'No project yet'}],
@@ -59,7 +60,6 @@ var ProjectViewer = r.Seed.extend({
 
     this.setDataToDP();
     this.sendToServer();
-    this.setCurrent(this.dp.projects.last());
   },
 
   createProject : function() {
@@ -70,18 +70,44 @@ var ProjectViewer = r.Seed.extend({
     this.name.innerHTML = newProject.name;
     this.current = newProject;
     this.addVersion('v.0');
+    window.location.replace(window.location.origin + '/' + newProject.id);
   },
 
-  addVersion: function(versionName) {
-    var projV0 = this.dp.projects.insert({
-      name : versionName,
-      idParent: this.current.idParent || this.current.id
-    });
-    this.versionPicker.addVersion(projV0);
-    this.setCurrent(projV0);
+  setDataToDP: function() {
+    if (this.data === null) { return ; }
+    ['projects', 'files', 'comments'].each(function(e) {
+      for (var i = 0, len = this.data[e].length; i < len; i++) {
+        if (e == 'projects') { this._setProjectFromData(this.data[e][i]); }
+        else { this.dp[e].insert(this.data[e][i]); }
+      }
+    }.bind(this))
+  },
+
+  _setProjectFromData: function(proj) {
+    if (proj.idParent == 0) {
+      var saveIdParent = proj.id;
+      this.dp.projects.insert(proj);
+      this.name.innerHTML = proj.name;
+      this.setCurrent(proj);
+    } else if (proj.idParent == (this.current.idParent != 0 ? this.current.idParent : this.current.id)){
+      this.addVersion(proj);
+    }
+  },
+
+  addVersion: function(projVersion) {
+    if (typeof projVersion != 'object') {
+      projVersion = { name : 'newVersion' };
+    }
+    projVersion.idParent = this.current.idParent != 0 ? this.current.idParent : this.current.id;
+    projVersion.id = this.dp.projects.insert(projVersion).id;
+    this.versionPicker.addVersion(projVersion);
+    this.setCurrent(projVersion);
   },
 
   setCurrent : function(project) {
+    if (typeof project == 'string') {
+      project = this.dp.projects.one(function(e) { return e.id == project }.bind(this));
+    }
     this.current = project;
 
     this.id = project.id;
@@ -94,16 +120,23 @@ var ProjectViewer = r.Seed.extend({
 
     this.dp.files.where(function(e) { return this.current.id === e.idProject; }.bind(this))
                   .each( function (file) {
-                    this.appendFile(file);
+                    console.log(file)
+                    if (file.idParent == 0) {
+                      this.appendFile(file);
+                    }
+                    else {
+                    }
                   }.bind(this));
   },
 
   insertFile: function(file) {
+    var tmpcontent = file.content;
+    file.content = 'Master file: No content available';
     file.idProject = this.id;
     file.idParent = 0;
     this.dp.files.insert(file);
     tmpFile = this.appendFile(file);
-    this.addVersionFile({name: 'v.0', content: file.content}, tmpFile);
+    this.addVersionFile({name: 'v.0', content: tmpcontent}, tmpFile);
   },
 
   appendFile : function(file) {
@@ -122,27 +155,18 @@ var ProjectViewer = r.Seed.extend({
   },
 
   addVersionFile: function(file, prevFile) {
-    file.idParent = prevFile.idParent || prevFile.id;
+    file.idParent = prevFile.idParent != 0 ? prevFile.idParent : prevFile.id;
     file.idProject = prevFile.idProject;
     this.dp.files.insert(file);
 
     prevFile.versionPicker.addVersion(file);
-    prevFile.setContent(file.content);/*Equivalent à setVersionfile mais on s'evite une seach inutile*/
+    prevFile.setContent(file);/*Equivalent à setVersionfile mais on s'evite une seach inutile*/
   },
 
   setVersionFile: function(file, idVersion) {
     var version = this.dp.files.one(function(e) { return e.id == idVersion}.bind(this));
     var comments = this.dp.comments.where(function(e) { return e.idFile == file.id}.bind(this));
-    file.setContent(version.content);
-  },
-
-  setDataToDP: function() {
-    if (this.data === null) { return ; }
-    ['projects', 'files', 'comments'].each(function(e) {
-      for (var i = 0, len = this.data[e].length; i < len; i++) {
-        this.dp[e].insert(this.data[e][i]);
-      }
-    })
+    file.setContent(version);
   },
 
   sendToServer: function() {
@@ -164,7 +188,7 @@ var ProjectViewer = r.Seed.extend({
     if (type == 'projects') {
       return { id: data.id, idParent: data.idParent, name: data.name };
     } else if (type == 'files') {
-      return { id: data.id, idParent: data.idParent, idProject: data.idProject, name: data.name };
+      return { id: data.id, idParent: data.idParent, idProject: data.idProject, name: data.name, content: data.content };
     } else if (type == 'comments') {
       return { id: data.id, idParent: data.idParent, idFile: data.idFile, txt: data.txt,
         author: data.author, actualTop: data.actualTop, color: data.color };

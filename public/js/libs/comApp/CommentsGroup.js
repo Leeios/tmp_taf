@@ -17,7 +17,7 @@ var CommentsGroup = r.Seed.extend({
   insertComment: function() {
     this.tmpComment.valid();
     this.comments.push(this.tmpComment);
-    this.query('dp').comments.insert(this.tmpComment.getData(this.idFile));
+    this.tmpComment.id = this.query('dp').comments.insert(this.tmpComment.getData()).id;
 
     this.comments.sort(function (a, b) {
       return a.actualTop - b.actualTop;
@@ -27,7 +27,9 @@ var CommentsGroup = r.Seed.extend({
   },
 
   addTmpComment: function() {
-    this.tmpComment = this.create(this.Schema, { txt: 'Enter a comment ...',
+    this.tmpComment = this.create(this.Schema, {
+      idFile: this.idFile,
+      txt: 'Enter a comment ...',
       onCreate: this.insertComment.bind(this),
       onRemove: this.deleteComment.bind(this),
     });
@@ -43,7 +45,7 @@ var CommentsGroup = r.Seed.extend({
   deleteComment: function(rmSub) {
     for (var i = 0, len = this.comments.length; i < len; i++) {
       if (rmSub == this.comments[i]) {
-        // this.query('dp').comments.one(function(e){ return this.comments[i].id == e.id }).remove();
+        this.query('dp').comments.one(function(e){ return this.comments[i].id == e.id }.bind(this)).remove();
         this.comments[i].el.remove();
         this.comments.splice(i, 1);
         this.displaySub();
@@ -58,13 +60,8 @@ var CommentsGroup = r.Seed.extend({
     for (var i = 0, len = this.comments.length; i < len; i++) {
       this.comments[i].el.style.top = this.comments[i].actualTop + 'px';
 
-//      console.log(this.comments);
-//      console.log((previous_down = parseInt(this.comments[i - 1].el.style.top) + this.comments[i - 1].getHeight())
-//        , parseInt(this.comments[i].el.style.top));
-
       if (i > 0 && (previous_down = parseInt(this.comments[i - 1].el.style.top) + this.comments[i - 1].getHeight())
         >= parseInt(this.comments[i].el.style.top)) {
-        console.log(previous_down)
         this.comments[i].el.style.top = previous_down + 'px';
         this.comments[i].displayArea();
       }
