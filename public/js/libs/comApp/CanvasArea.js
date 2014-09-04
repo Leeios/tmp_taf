@@ -56,9 +56,7 @@ var CanvasArea = r.Seed.extend({
   },
 
   getArea: function() {
-    var parseArea = {};
-    parseArea.points = this.points;
-    return (parseArea);
+    return (this.points);
   }
 
 });

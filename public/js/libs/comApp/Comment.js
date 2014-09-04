@@ -23,7 +23,7 @@ var Comment = r.Seed.extend({
           }},
           { tag:"div.comButton.button", as: 'editEl', innerHTML: 'Edit', events: {
             click: function(){
-              if (this.edit_token == 1) { this.valid() }
+              if (this.edit_token == 1) { this.valid(); }
               else { this.edit_token = 1; this.switchEdit(); }
             }.bind(this)
           }},
@@ -43,6 +43,7 @@ var Comment = r.Seed.extend({
 
   options: function() {
     return {
+      id: 0,
       idFile: 0,
       idParent: 0,
       txt: '',
@@ -165,8 +166,7 @@ var Comment = r.Seed.extend({
   setAreas: function(data, ctx) {
     var current_area;
     for (var i = 0, len = data.length; i < len; i++) {
-      data[i].ctx = ctx;
-      current_area = this.create(r.CanvasArea, data[i]);
+      current_area = this.create(r.CanvasArea, {points: data[i], ctx: ctx});
       this.areas.push(current_area);
     }
   },

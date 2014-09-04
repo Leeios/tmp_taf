@@ -26,7 +26,7 @@ var comSchema = new mongoose.Schema({
   author: String,
   actualTop: Number,
   color: Number,
-  areas: { type : Array , "default" : [] }
+  areas: Array
 });
 
 mongoose.model('Com', comSchema);

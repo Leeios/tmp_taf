@@ -63,14 +63,15 @@ var ProjectViewer = r.Seed.extend({
   },
 
   createProject : function() {
-    var newProject = this.dp.projects.insert({
+    var newProject = [this.dp.projects.insert({
       name : 'Default Project Name',
       idParent: 0
-    });
-    this.name.innerHTML = newProject.name;
-    this.current = newProject;
-    this.addVersion('v.0');
-    window.location.replace(window.location.origin + '/' + newProject.id);
+    })];
+    var projv0 = [this.dp.projects.insert({
+      name : 'v.0',
+      idParent: newProject[0].id
+    })];
+    window.location.replace(window.location.origin + '/' + newProject[0].id);
   },
 
   setDataToDP: function() {
@@ -124,6 +125,7 @@ var ProjectViewer = r.Seed.extend({
             }
             else {
               var parentElem = versionsFile.one(function(e) { return e.id == file.idParent }.bind(this));
+              if (parentElem == null) { return ; }
               parentElem.versionPicker.addVersion(file);
               parentElem.setContent(file);
             }

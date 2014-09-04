@@ -28,21 +28,10 @@ var SingleComment = Inheritance.extend({
   },
 
   '+addTmpComment': function() {
+    this.tmpComment.idFile = this.idFile;
     this.tmpComment.idParent = this.id;
     this.tmpComment.replyEl = '';
     this.tmpComment.actualTop = this.el.offsetHeight - 5;
-  },
-
-  addReplies: function() {
-    this.replies = this.query('dp').comments.where( function(e) { return this.id === e.idParent; }.bind(this));
-    for (var i = 0, len = replies.length; i < len; i++) {
-      this.tmpComment = new this.Schema(replies[i]);
-      this.tmpComment.preValide();
-      this.tmpComment.on("redraw", function() {
-        this.displaySub();
-      }.bind(this));
-      this.preInsertComment();
-    }
   },
 
   '+displaySub': function() {
