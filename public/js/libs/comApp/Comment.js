@@ -58,7 +58,6 @@ var Comment = r.Seed.extend({
   '+init': function () {
 
     this.areas = [];
-    this.wrap.style['border-left-color'] = this.color;
     this.wrap.innerHTML = '';
     this.wrap.appendChild(this.elTxt);
     this.wrap.appendChild(this.createEl);
@@ -117,14 +116,14 @@ var Comment = r.Seed.extend({
 /*      this.query('dp', )*/
       this.wrap.appendChild(this.elDiv);
       this.wrap.appendChild(this.removeEl);
-      this.wrap.appendChild(document.createTextNode(' • '))
+      this.wrap.appendChild(document.createTextNode(' - '))
       this.wrap.appendChild(this.editEl);
       if (this.replyEl) {
-        this.wrap.appendChild(document.createTextNode(' • '))
+        this.wrap.appendChild(document.createTextNode(' - '))
         this.wrap.appendChild(this.replyEl);
       }
     } else {
-      this.el.style["z-index"] = 10;
+      this.el.style["z-index"] = 90;
       this.elTxt.placeholder = this.txt;
       this.wrap.appendChild(this.elTxt);
       this.wrap.appendChild(this.editEl);
@@ -133,16 +132,17 @@ var Comment = r.Seed.extend({
   },
 
   highStyle: function() {
-    this.el.style["background-color"] = "#F3F3F4";
-    this.fire('redraw');
+    // this.el.style["background-color"] = "#F3F3F4";
+    // this.fire('redraw');
+
     //Then redraw on select area with other stroke
-    this.areas[0] && (this.areas[0].ctx.strokeStyle =  "rgba(23, 101, 125, 0.2)");
+    this.areas[0] && ((this.areas[0].ctx.strokeStyle =  this.color) && (this.areas[0].ctx.globalAlpha = 0.3));
     this.displayArea();
     this.areas[0] && (this.areas[0].ctx.strokeStyle = "rgba(200, 200, 200, 0.3)");
   },
 
   usualStyle: function() {
-    this.el.style["background-color"] = "#FFFFFF";
+    this.el.style["background-color"] = "#fefefe";
     this.fire('redraw');
     this.displayArea();
   },

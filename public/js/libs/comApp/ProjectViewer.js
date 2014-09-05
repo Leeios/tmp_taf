@@ -146,9 +146,6 @@ var ProjectViewer = r.Seed.extend({
     var elem = this.create(r.FileContainer, { data : file,
       newVersion: this.addVersionFile.bind(this), setVersion: this.setVersionFile.bind(this) });
     this.files.appendChild(elem.el);
-    if (this.filesList.innerHTML != '') {
-      this.filesList.innerHTML += ' • ';
-    }
     this.filesList.appendChild(r.toDOM({
       tag : 'a.file',
       innerHTML: elem.name.innerHTML,

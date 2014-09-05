@@ -35,7 +35,6 @@ var VersionPicker = r.Seed.extend({
         click: function() { this.onPick(file.id); }.bind(this)
       }
     });
-    this.el.appendChild(document.createTextNode('   •   '))
     this.el.appendChild(newVersion);
   }
 
