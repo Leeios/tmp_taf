@@ -21,6 +21,13 @@ exports.insertFile = function(data) {
   });
 }
 
+exports.editFile = function(models, changes) {
+  File.update({id: models.id}, {name: changes.name}, function(err, data) {
+    if (err) {console.log('Error editing File name');}
+    else {console.log('File has been edited as', changes.name)}
+    })
+}
+
 exports.getFile = function(id, callback) {
   File.find({id: id}, {}, function (err, doc) {
       if (err || doc == null) {

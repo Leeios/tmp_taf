@@ -14,6 +14,7 @@ var VersionPicker = r.Seed.extend({
 
   options: function() {
     return {
+      currentVersion: null,
       onPick: function(id) {
         console.log('Version ' + id + ' is not available');
       },
@@ -27,12 +28,29 @@ var VersionPicker = r.Seed.extend({
     }
   },
 
-  addVersion: function(file) {
+  addVersion: function(data) {
     var newVersion = r.toDOM({
       tag: 'div.versionProject.button',
-      innerHTML: file.name,
+      innerHTML: data.name,
       events: {
-        click: function() { this.onPick(file.id); }.bind(this)
+        click: function(e) {
+          if (data.id === this.currentVersion) {
+            e.target.setAttribute('contenteditable', true);
+            e.target.focus();
+            e.target.onkeypress = function(k) {
+              if (k.charCode === 13) {
+                e.target.setAttribute('contenteditable', false);
+                var editTmp = this.query('dp').projects.one(function(p) { return p.id === this.currentVersion }.bind(this))
+                || this.query('dp').files.one(function(p) { return p.id === this.currentVersion }.bind(this));
+                editTmp.edit({'name': e.target.innerHTML})
+              }
+            }.bind(this)
+          } else {
+            this.onPick(data.id);
+            this.currentVersion = data.id;
+            console.log(this);/*Add surline current*/
+          }
+        }.bind(this)
       }
     });
     this.el.appendChild(newVersion);

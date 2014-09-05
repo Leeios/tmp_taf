@@ -32,7 +32,7 @@ var ProjectViewer = r.Seed.extend({
       tag: 'div.project',
       children : [
         ['.project-info.row', [
-          {tag: 'div.project-name.name', as: 'name'},
+          {tag: 'div.project-name.name', as: 'name', events: {click: this.editName.bind(this)}},
           this.create(r.VersionPicker, {
             onPick: this.setCurrent.bind(this),
             onAdd: this.addVersion.bind(this) }, 'versionPicker').el,
@@ -72,6 +72,17 @@ var ProjectViewer = r.Seed.extend({
       idParent: newProject[0].id
     })];
     window.location.replace(window.location.origin + '/' + newProject[0].id);
+  },
+
+  editName: function() {
+    this.name.setAttribute('contenteditable', true);
+    this.name.focus();
+    this.name.onkeypress = function(e) {
+      if (e.charCode === 13) {
+        this.name.setAttribute('contenteditable', false);
+        this.dp.projects.one(function(e) { return e.id === this.current.idParent }.bind(this)).edit({'name': this.name.innerHTML})
+      }
+    }.bind(this)
   },
 
   setDataToDP: function() {

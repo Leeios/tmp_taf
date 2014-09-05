@@ -23,16 +23,12 @@ var Comment = r.Seed.extend({
           }},
           { tag:"div.comButton.button", as: 'editEl', innerHTML: 'Edit', events: {
             click: function(){
-              if (this.edit_token == 1) { this.valid(); }
-              else { this.edit_token = 1; this.switchEdit(); }
+              if (this.elDiv.isContentEditable) { this.valid(); }
+              else { this.elDiv.setAttribute('contenteditable', true); this.switchEdit(); }
             }.bind(this)
           }},
           { tag:"div.comButton.button", as: 'replyEl', innerHTML: 'Reply'},
           { tag:"div.divComment", as: 'elDiv' },
-          { tag:"textarea.txtComment", as: 'elTxt',
-            attr: {placeholder: this.txt}, events: {
-            keypress: this.setHeight.bind(this)
-          }}
         ]}
       ], events: {
         mouseover: this.highStyle.bind(this),
@@ -49,7 +45,6 @@ var Comment = r.Seed.extend({
       txt: '',
       onCreate: function() { console.log('Create is not available on this element'); },
       onRemove: function() { console.log('remove is not available on this element'); },
-      edit_token: 1,
       actualTop: 0,
       color: '#B3B3F9'
     }
@@ -59,15 +54,15 @@ var Comment = r.Seed.extend({
 
     this.areas = [];
     this.wrap.innerHTML = '';
-    this.wrap.appendChild(this.elTxt);
+    this.wrap.appendChild(this.elDiv);
     this.wrap.appendChild(this.createEl);
   },
 
   /*Add/remove*/
   valid: function(events) {
 
-    this.edit_token = 0;
-    this.txt = this.elTxt.value;
+    this.elDiv.setAttribute('contenteditable', false);
+    this.txt = this.elDiv.innerHTML;
 
     var search = this.query('dp').comments.one(function(e) { return this.id === e.id }.bind(this));
     if (search != null) {
@@ -87,14 +82,14 @@ var Comment = r.Seed.extend({
   },
 
   preValide: function() {
-    this.elTxt.value = this.txt;
+    this.elDiv.innerHTML = this.txt;
   },
 
   /*Style functions*/
-  setHeight: function () {
-    this.elTxt.style.height = "0px";
-    this.elTxt.style.height = this.elTxt.scrollHeight + 10 + "px";
-  },
+  // setHeight: function () {
+  //   this.elDiv.style.height = "0px";
+  //   this.elDiv.style.height = this.elDiv.scrollHeight + 10 + "px";
+  // },
 
   getHeight: function() {
     if (typeof this.comments == 'undefined') {
@@ -110,10 +105,13 @@ var Comment = r.Seed.extend({
 
   switchEdit: function() {
     this.wrap.innerHTML = '';
-    if (this.edit_token == 0) {
+    if (this.elDiv.isContentEditable) {
+      this.el.style["z-index"] = 90;
+      this.elDiv.placeholder = this.txt;
+      this.wrap.appendChild(this.elDiv);
+      this.wrap.appendChild(this.editEl);
+    } else {
       this.el.style["z-index"] = 0;
-      this.elDiv.innerHTML = this.txt;
-/*      this.query('dp', )*/
       this.wrap.appendChild(this.elDiv);
       this.wrap.appendChild(this.removeEl);
       this.wrap.appendChild(document.createTextNode(' - '))
@@ -122,13 +120,8 @@ var Comment = r.Seed.extend({
         this.wrap.appendChild(document.createTextNode(' - '))
         this.wrap.appendChild(this.replyEl);
       }
-    } else {
-      this.el.style["z-index"] = 90;
-      this.elTxt.placeholder = this.txt;
-      this.wrap.appendChild(this.elTxt);
-      this.wrap.appendChild(this.editEl);
     }
-    this.setHeight();
+    // this.setHeight();
   },
 
   highStyle: function() {
@@ -152,8 +145,7 @@ var Comment = r.Seed.extend({
     this.areas.push(canArea);
     this.actualTop = canArea.pos[1];
     this.el.style.top = this.actualTop + "px";
-    this.setHeight();
-    this.elTxt.focus();
+    // this.setHeight();
   },
 
   displayArea: function() {

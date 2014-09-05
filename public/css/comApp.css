@@ -17,6 +17,7 @@
   width: 5%; }
 
 .button {
+  transition: color 0.2s;
   display: inline;
   font-weight: bold; }
 
@@ -66,16 +67,6 @@
   padding: 0.2em;
   white-space: pre; }
 
-.txtComment {
-  display: block;
-  resize: none;
-  border: none;
-  float: left;
-  width: 100%;
-  padding: 5px;
-  font-family: "Open Sans", sans-serif;
-  font-size: 14px; }
-
 body {
   margin: 0px; }
 
@@ -98,9 +89,10 @@ a {
   display: inline; }
 
 .project-name {
-  height: 72px
+  height: 72px;
   font-size: 24px;
   font-weight: bold;
+  margin-left: 24px;
   color: #525252; }
 
 .name {
@@ -110,7 +102,6 @@ a {
   width: 100%;
   height: 72px;
   line-height: 72px;
-  text-align: center;
   background-color: #fafafa;
   font-family: "Lato", sans-serif;
   margin-top: 12px;
@@ -173,14 +164,13 @@ a {
   background-color: #333333;
 }
 
-.files-list {
-  margin-left: 1em; }
-
 .file {
+  float: left;
   font-weight: bold;
   font-size: 14px;
   padding: 5px;
   margin-left: 24px;
+  transition: background-color 0.5s;
   display: inline; }
 .file:hover {
     background-color: #68b2f8;

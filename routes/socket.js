@@ -29,6 +29,10 @@ exports.socket = function(socket) {
   socket.on('edit', function (data) {
     if (data.type == 'comments') {
       com_method.editCom(data.models);
+    } else if (data.type == 'projects') {
+      proj_method.editProj(data.models, data.changes);
+    } else if (data.type == 'files') {
+      file_method.editFile(data.models, data.changes);
     } else {
       console.log('Data model is not recognized');
     }

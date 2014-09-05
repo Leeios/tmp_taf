@@ -20,6 +20,13 @@ exports.insertProj = function(data) {
   });
 };
 
+exports.editProj = function(models, changes) {
+  Project.update({id: models.id}, {name: changes.name}, function(err, data) {
+    if (err) {console.log('Error editing Project name');}
+    else {console.log('Project has been edited as', changes.name)}
+    })
+}
+
 /*Attention les yeux, callbacks de la mort*/
 exports.getProj = function(id, callback) {
   var result = {};

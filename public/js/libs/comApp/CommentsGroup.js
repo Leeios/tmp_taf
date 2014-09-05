@@ -45,6 +45,8 @@ var CommentsGroup = r.Seed.extend({
         this.comments[i].displayArea();
       }
     }.bind(this));
+    this.tmpComment.elDiv.setAttribute('contenteditable', true);
+    this.tmpComment.elDiv.focus();
     this.el.appendChild(this.tmpComment.el);
   },
 
@@ -79,7 +81,6 @@ var CommentsGroup = r.Seed.extend({
     this.idFile = id;
     var dpComments = this.query('dp').comments.where( function(e) { return this.idFile == e.idFile; }.bind(this));
 
-      console.log(dpComments);
     for (var i = 0, len = dpComments.length; i < len; i++) {
       if (dpComments[i].idParent != 0) { continue ; }
       this.addTmpComment(dpComments[i]);
