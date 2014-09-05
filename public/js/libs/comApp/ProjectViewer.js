@@ -108,7 +108,7 @@ var ProjectViewer = r.Seed.extend({
 
   addVersion: function(projVersion) {
     if (typeof projVersion != 'object') {
-      projVersion = { name : 'newVersion' };
+      projVersion = { name : 'New Version' };
     }
     projVersion.idParent = this.current.idParent != 0 ? this.current.idParent : this.current.id;
     projVersion.id = this.dp.projects.insert(projVersion).id;

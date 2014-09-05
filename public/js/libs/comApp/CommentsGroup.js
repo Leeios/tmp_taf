@@ -97,6 +97,7 @@ var CommentsGroup = r.Seed.extend({
       comParent.tmpComment.preValide();
       comParent.insertComment(false);
     }
+    this.displaySub();
   }
 
 });

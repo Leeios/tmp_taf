@@ -10,10 +10,12 @@ sand.define('UploadFile', [
 var UploadFile = r.Seed.extend({
 
   tpl: function() {
-    return {
-      tag: "input.upload-file.button",
-      attr: { type: "file", multiple: "multiple" }
-    }
+    return [
+      '.upload-wrapper', [
+        {tag: "input.upload-file.button", as: 'uploadButton',
+        attr: { type: "file", multiple: "multiple" }},
+        {tag: '.upload-fakebutton', innerHTML: 'Add'}
+      ]]
   },
 
   options: function() {
@@ -25,7 +27,7 @@ var UploadFile = r.Seed.extend({
   },
 
   '+init': function () {
-    this.el.addEventListener("change", this.uploadFile.bind(this));
+    this.uploadButton.addEventListener("change", this.uploadFile.bind(this));
   },
 
   parseFile: function(fRead, end) {
@@ -46,8 +48,8 @@ var UploadFile = r.Seed.extend({
   },
 
   uploadFile: function(e) {
-    for (var i = 0, len = this.el.files.length; i < len; i++) {
-      this.parseFile(this.el.files[i], (i == len - 1));
+    for (var i = 0, len = this.uploadButton.files.length; i < len; i++) {
+      this.parseFile(this.uploadButton.files[i], (i == len - 1));
     }
   }
 
