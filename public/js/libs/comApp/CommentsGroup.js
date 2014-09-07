@@ -73,6 +73,8 @@ var CommentsGroup = r.Seed.extend({
         this.comments[i].el.style.top = previous_down + 'px';
         this.comments[i].displayArea();
       }
+      console.log()
+
     }
   },
 

@@ -52,11 +52,6 @@ var FileContainer = r.Seed.extend({
 
   '+init': function() {
 
-    /*On attend le load du content pour set la canvas size*/
-    this.observer = new MutationObserver(this.setCanvas.bind(this));
-    var config = { childList: true };
-    this.observer.observe(this.content, config);
-
     /*set attributes*/
     this.id = this.data.id;
     this.idProject = this.data.idProject;
@@ -77,18 +72,16 @@ var FileContainer = r.Seed.extend({
 
   setContent: function(file) {
     this.content.innerHTML = file.content;
-    this.txt = file.content;
-    hljs.highlightBlock(this.content);
-    this.setCanvas();
-    this.colComments.resetCol();
-    this.colComments.setComGroup(file.id, this.canvasTrack.getCtx());
-  },
 
-  setCanvas: function() {
+    hljs.highlightBlock(this.content);
+    this.txt = file.content;
+
     this.canvasTrack.setSize(this.content.clientHeight, this.content.clientWidth);
     this.content.appendChild(this.canvasTrack.el);
-    this.observer.disconnect();
-  },
+
+    this.colComments.resetCol();
+    this.colComments.setComGroup(file.id, this.canvasTrack.getCtx());
+  }
 
 });
 return FileContainer;
