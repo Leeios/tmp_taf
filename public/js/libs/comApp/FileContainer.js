@@ -11,10 +11,9 @@ var FileContainer = r.Seed.extend({
 
   tpl: function() {
     return {
-        tag: 'div.container',
-        children: [
+        tag: '.container', children: [
           ['.container-info', [
-            {tag: 'div.container-name.name', as: 'name'},
+            {tag: '.container-name.name', as: 'name'},
             this.create(r.VersionPicker, {
               addEl: this.create(r.UploadFile, {
                 complete: function(file) {
@@ -24,18 +23,20 @@ var FileContainer = r.Seed.extend({
               onPick: function(id) { this.setVersion.bind(this)(this, id); }.bind(this)
             }, 'versionPicker').el
           ]],
-          ['.container-content', [
+          ['.container-file', [
             this.create(r.ColComments, {}, 'colComments').el,
-            { tag: 'pre.content',
-              as: 'content',
-              attr: {
-                unselectable: 'on',
-                onselectstart: 'return false;',
-                onmousedown: 'return false;'
+            {tag: '.wrap-content', as: 'wrapContent', children: [
+              this.create(r.CanvasTrack, {form: "points"}, 'canvasTrack').el,
+              { tag: 'pre.content',
+                as: 'content',
+                attr: {
+                  unselectable: 'on',
+                  onselectstart: 'return false;',
+                  onmousedown: 'return false;'
+                }
               }
-            }
-          ]
-        ]
+            ]}
+          ]]
       ]
     }
   },
@@ -46,14 +47,12 @@ var FileContainer = r.Seed.extend({
       newVersion: function() { console.log('Versioning not available on this element'); },
       setVersion: function() { console.log('Cannot set version for this element'); },
       txt: "",
-      canvasTrack: this.create(r.CanvasTrack, {form: "points"})
     };
   },
 
   '+init': function() {
 
     /*set attributes*/
-    this.content.setAttribute('class', 'brush: js');
     this.id = this.data.id;
     this.idProject = this.data.idProject;
     this.idParent = this.data.idParent;
@@ -72,13 +71,24 @@ var FileContainer = r.Seed.extend({
   },
 
   setContent: function(file) {
-    this.content.innerHTML = file.content;
-
-    // hljs.highlightBlock(this.content);
     this.txt = file.content;
+    this.wrapContent.innerHTML = '';
+    var tmp = r.toDOM({
+      tag: 'pre',
+      innerHTML: file.content,
+      attr: {
+        unselectable: 'on',
+        onselectstart: 'return false;',
+        onmousedown: 'return false;'
+      }
+    });
+    tmp.setAttribute('class', 'brush: js');
+    this.wrapContent.appendChild(tmp);
+    SyntaxHighlighter.highlight();
 
-    this.canvasTrack.setSize(this.content.clientHeight, this.content.clientWidth);
-    this.content.appendChild(this.canvasTrack.el);
+    console.log(this.wrapContent.clientHeight, this.wrapContent.clientWidth);
+    this.canvasTrack.setSize(this.wrapContent.clientHeight, this.wrapContent.clientWidth);
+    this.wrapContent.appendChild(this.canvasTrack.el);
 
     this.colComments.resetCol();
     this.colComments.setComGroup(file.id, this.canvasTrack.getCtx());

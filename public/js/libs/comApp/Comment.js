@@ -73,12 +73,11 @@ var Comment = r.Seed.extend({
     this.elDiv.innerHTML = this.txt.replace(/\[/g, '<pre>').replace(/\]/g, '</pre>')
                                                   .replace(/<div>/g, '').replace(/<\/div>/g, '<br/>');
     for (var i = 0, len = this.elDiv.childNodes.length; i < len; i++) {
-      if (this.elDiv.childNodes[i].tagName == "PRE") {
-        hljs.highlightBlock(this.elDiv.childNodes[i]);
-      } else {
+      if (this.elDiv.childNodes[i].tagName != "PRE") {
         this.elDiv.childNodes[i] = this.elDiv.childNodes[i].toString().replace(/\ /g, "&nbsp").replace(/\n/g, "<br/>");
       }
     }
+    SyntaxHighlighter.highlight();
     this.usualStyle();
     this.fire('displayCol');
   },

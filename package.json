@@ -13,7 +13,6 @@
 		"socket.io": "latest",
 		"mongoose": "latest",
 		"config": "latest",
-		"jade": "latest",
-		"SyntaxHighlighter": "latest"
+		"jade": "latest"
 	}
 }
