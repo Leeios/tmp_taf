@@ -48,7 +48,7 @@ var VersionPicker = r.Seed.extend({
           } else {
             this.onPick(data.id);
             this.currentVersion = data.id;
-            console.log(this);/*Add surline current*/
+            /*Add surline current*/
           }
         }.bind(this)
       }

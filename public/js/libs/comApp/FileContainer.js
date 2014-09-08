@@ -53,6 +53,7 @@ var FileContainer = r.Seed.extend({
   '+init': function() {
 
     /*set attributes*/
+    this.content.setAttribute('class', 'brush: js');
     this.id = this.data.id;
     this.idProject = this.data.idProject;
     this.idParent = this.data.idParent;
@@ -73,7 +74,7 @@ var FileContainer = r.Seed.extend({
   setContent: function(file) {
     this.content.innerHTML = file.content;
 
-    hljs.highlightBlock(this.content);
+    // hljs.highlightBlock(this.content);
     this.txt = file.content;
 
     this.canvasTrack.setSize(this.content.clientHeight, this.content.clientWidth);

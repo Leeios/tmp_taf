@@ -70,7 +70,8 @@ var Comment = r.Seed.extend({
     }
     this.switchEdit();
 
-    this.elDiv.innerHTML = this.txt.replace(/\[/g, '<pre>').replace(/\]/g, '</pre>');
+    this.elDiv.innerHTML = this.txt.replace(/\[/g, '<pre>').replace(/\]/g, '</pre>')
+                                                  .replace(/<div>/g, '').replace(/<\/div>/g, '<br/>');
     for (var i = 0, len = this.elDiv.childNodes.length; i < len; i++) {
       if (this.elDiv.childNodes[i].tagName == "PRE") {
         hljs.highlightBlock(this.elDiv.childNodes[i]);
@@ -79,6 +80,7 @@ var Comment = r.Seed.extend({
       }
     }
     this.usualStyle();
+    this.fire('displayCol');
   },
 
   preValide: function() {
@@ -106,7 +108,7 @@ var Comment = r.Seed.extend({
   switchEdit: function() {
     this.wrap.innerHTML = '';
     if (this.elDiv.isContentEditable) {
-      this.el.style["z-index"] = 90;
+      this.el.style["z-index"] = 100;
       this.elDiv.placeholder = this.txt;
       this.wrap.appendChild(this.elDiv);
       this.wrap.appendChild(this.editEl);
@@ -125,10 +127,6 @@ var Comment = r.Seed.extend({
   },
 
   highStyle: function() {
-    // this.el.style["background-color"] = "#F3F3F4";
-    // this.fire('redraw');
-
-    //Then redraw on select area with other stroke
     this.areas[0] && ((this.areas[0].ctx.strokeStyle =  this.color) && (this.areas[0].ctx.globalAlpha = 0.3));
     this.displayArea();
     this.areas[0] && (this.areas[0].ctx.strokeStyle = "rgba(200, 200, 200, 0.3)");

@@ -64,28 +64,36 @@ var CommentsGroup = r.Seed.extend({
 
   displaySub: function() {
     var previous_down;
+
     this.tmpComment && this.tmpComment.displayArea();
     for (var i = 0, len = this.comments.length; i < len; i++) {
       this.comments[i].el.style.top = this.comments[i].actualTop + 'px';
 
       if (i > 0 && (previous_down = parseInt(this.comments[i - 1].el.style.top) + this.comments[i - 1].getHeight())
         >= parseInt(this.comments[i].el.style.top)) {
+        // this.comments[i].show();/*test*/
         this.comments[i].el.style.top = previous_down + 'px';
         this.comments[i].displayArea();
-      }
-      console.log()
 
+        // this.ctx && console.log(this.ctx.canvas.clientHeight, parseInt(this.comments[i].el.style.top));
+        if (this.ctx && this.ctx.canvas.clientHeight < parseInt(this.comments[i].el.style.top)) {
+          // console.log( '|||| depasse', this)
+          this.comments[i].hide();
+        }
+      }
     }
   },
 
   /*Use for import dataserv*/
   setComGroup: function(id, ctx) {
+    this.ctx = ctx;
     this.idFile = id;
     var dpComments = this.query('dp').comments.where( function(e) { return this.idFile == e.idFile; }.bind(this));
 
     for (var i = 0, len = dpComments.length; i < len; i++) {
       if (dpComments[i].idParent != 0) { continue ; }
       this.addTmpComment(dpComments[i]);
+      this.tmpComment.on('displayCol', this.displaySub.bind(this));
       this.tmpComment.setAreas(dpComments[i].areas, ctx);
       this.tmpComment.preValide();
       this.insertComment(false);
