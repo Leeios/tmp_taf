@@ -70,7 +70,7 @@ var Comment = r.Seed.extend({
     }
     this.switchEdit();
 
-    this.elDiv.innerHTML = this.txt.replace(/\[/g, '<pre>').replace(/\]/g, '</pre>')
+    this.elDiv.innerHTML = this.txt.replace(/\[/g, '<pre class = "brush: js">').replace(/\]/g, '</pre>')
                                                   .replace(/<div>/g, '').replace(/<\/div>/g, '<br/>');
     for (var i = 0, len = this.elDiv.childNodes.length; i < len; i++) {
       if (this.elDiv.childNodes[i].tagName != "PRE") {
@@ -122,7 +122,7 @@ var Comment = r.Seed.extend({
         this.wrap.appendChild(this.replyEl);
       }
     }
-    // this.setHeight();
+    this.preValide();
   },
 
   highStyle: function() {
