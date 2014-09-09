@@ -1,6 +1,6 @@
 sand.define('ColComments', [
   'CommentsGroup',
-  'SingleComment',
+  'MainComment',
   'DOM/toDOM'
 ], function(r) {
 
@@ -8,32 +8,36 @@ sand.define('ColComments', [
 **Fire: 1
 **On:   0
 */
-var ColComments = r.CommentsGroup.extend({
+var ColComments = r.Seed.extend({
   tpl: {
-    tag: "div.commentsGroup"
+    tag: ".col-comments"
   },
 
-  '+init': function() {
-    this.Schema = r.SingleComment;
+  '-options': {
+    dp: null,
+    commentList: [],
+    tmpGroup: null
   },
 
-  addArea: function(canArea) {
-    if (!this.tmpComment && this.Schema) {
-      this.addTmpComment();
-      this.tmpComment.on('displayCol', this.displaySub.bind(this));
+  addArea: function(canArea) {/*INTERFACE*/
+    if (!this.tmpGroup) {
+      this.tmpGroup = this.create(r.CommentsGroup, {idFile: this.idFile});
     }
-    this.tmpComment.addArea(canArea);
-    this.displaySub();
+    this.tmpGroup.addArea(canArea);
   },
 
-  resetCol: function() {
+  drawAreas: function() {
+    this.fire('clearCanvas');
+    for (var i = 0, len = this.comments.length; i < len; i++) {
+      this.commentsList[i].drawAreas();
+    }
+  },
+
+  resetCol: function(h) {
     this.el.innerHTML = '';
     this.tmpComment = null;
-    this.comments = [];
-  },
-
-  '-displaySub': function() {
-    this.fire('clearCanvas');
+    this.commentsList = [];
+    this.el.style.height = h + 'px';
   }
 
 });

@@ -43,9 +43,9 @@
 
 .comment {
   box-sizing: border-box;
-  position: absolute;
-  float: right;
-  clear: right;
+  position: relative;
+  float: left;
+  clear: left;
   width: 100%;
   padding: 0.3em;
   font-family: "Open Sans", sans-serif;
@@ -140,6 +140,14 @@ a {
   left: 0px;
   z-index: 2; }
 
+.col-comments {
+  width: 40%;
+  height: 100%;
+  float: left;
+  position: relative;
+  border: 1px solid black;
+}
+
 .fixed-top {
   position: fixed;
   height: 36px;
@@ -201,6 +209,7 @@ a {
 
 .wrap-content {
   position: relative;
+  float: left;
   width: 50%;
 }
 

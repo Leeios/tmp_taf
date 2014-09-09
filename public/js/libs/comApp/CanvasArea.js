@@ -8,35 +8,19 @@ sand.define('CanvasArea', [
 */
 var CanvasArea = r.Seed.extend({
 
-  '+options': {
-    pos: [],
+  options: {
     points: [],
     form: "empty",
     ctx: null
   },
 
-  '+init': function() {
-    this.points = this.points.slice(0);
-  },
-
   refresh: function(pos) {
-    this.pos = pos.slice(0);
-    this.points.push(this.pos);
+    this.points.push(pos);
     this.drawCurrent();
-  },
-
-  clone: function() {
-    var copy = new CanvasArea({points: this.points, form: this.form, ctx: this.ctx});
-    return (copy);
   },
 
   /*Draw functions*/
   draw: function () {
-    if (!this.points[0]) { return ; }
-    this.runPath();
-  },
-
-  runPath: function() {
     if (!this.points[0]) { return ; }
     this.ctx.beginPath();
     this.ctx.moveTo(this.points[0][0], this.points[0][1]);

@@ -1,4 +1,5 @@
 sand.define('CommentsGroup', [
+  'Comment',
   'Seed'
 ], function(r) {
 
@@ -8,78 +9,80 @@ sand.define('CommentsGroup', [
 */
 var CommentsGroup = r.Seed.extend({
 
-  '+options': {
+  tpl: {
+    tag: '.main-comment'
+  },
+
+  options: {
     idFile: -1,
     tmpComment: null,
-    comments: []
+    comments: [],
+    areas: []
   },
 
-  insertComment: function(bool_dp) {
+  addArea: function(canArea) {/*INTERFACE*/
+    this.areas.push(canArea);
+    this.mainComment.actualTop = canArea.points[canArea.points.length - 1][0];
+    this.el.style.top = this.actualTop + "px";
+  },
+
+  displayArea: function() {
+    for (var i = 0, len = this.areas.length; i < len; i++) {
+      this.areas[i].draw();
+    }
+  },
+
+  highStyle: function() {
+    this.areas[0] && ((this.areas[0].ctx.strokeStyle =  this.color) && (this.areas[0].ctx.globalAlpha = 0.3));
+    this.displayArea();
+    this.areas[0] && (this.areas[0].ctx.strokeStyle = "rgba(200, 200, 200, 0.3)");
+  },
+
+  usualStyle: function() {
+    this.el.style["background-color"] = "#fefefe";
+    this.fire('redraw');
+    this.displayArea();
+  },
+
+  /*Use for import dataserv*/
+  setAreas: function(data, ctx) {
+    var current_area;
+    for (var i = 0, len = data.length; i < len; i++) {
+      current_area = this.create(r.CanvasArea, {points: data[i], ctx: ctx});
+      this.areas.push(current_area);
+    }
+  }
+
+  insertComment: function() {
     this.tmpComment.valid();
     this.comments.push(this.tmpComment);
-    if (bool_dp != false) {
-      delete this.tmpComment.id;
-      this.tmpComment.id = this.query('dp').comments.insert(this.tmpComment.getData()).id;
-    }
-    this.comments.sort(function (a, b) {
-      return a.actualTop - b.actualTop;
-    });
     this.tmpComment = null;
-    this.displaySub();
   },
 
-  addTmpComment: function(data) {
+  addComment: function(data) {/*INTERFACE*/
+    if (this.tmpComment !== null) {return ;}
 
-    this.tmpComment = this.create(this.Schema, {
-      id: typeof data == 'undefined' ? 0 : data.id,
-      idParent: typeof data == 'undefined' ? 0 : data.idParent,
-      idFile: typeof data == 'undefined' ? this.idFile : data.idFile,
-      txt: typeof data == 'undefined' ? 'Enter a comment ...' : data.txt,
-      actualTop: typeof data == 'undefined' ? 0 : data.actualTop,
-      onCreate: this.insertComment.bind(this),
-      onRemove: this.deleteComment.bind(this)
-    });
-    this.tmpComment.on('redraw', function() {
-      this.fire('clearCanvas');
-      for (var i = 0, len = this.comments.length; i < len; i++) {
-        this.comments[i].displayArea();
-      }
-    }.bind(this));
-    this.tmpComment.elDiv.setAttribute('contenteditable', true);
-    this.tmpComment.elDiv.focus();
+    /*Create or setting comment*/
+    if (this.data == 'undefined') {
+      this.tmpComment = this.create(r.Comment, {});
+      delete this.tmpComment.id;
+      this.tmpComment.id = this.query('dp').comments.insert(this.tmpComment.getData()).id;
+    } else {
+      this.tmpComment = this.create(r.Comment, data);
+    }
+    this.tmpComment.onCreate = this.insertComment.bind(this);
+    this.tmpComment.onRemove = this.deleteComment.bind(this);
+
     this.el.appendChild(this.tmpComment.el);
   },
 
-  deleteComment: function(rmSub) {
+  deleteComment: function(rmCom) {
+    this.query('dp').comments.one(function(e){ return this.rmCom.id == e.id }.bind(this)).remove();
     for (var i = 0, len = this.comments.length; i < len; i++) {
-      if (rmSub == this.comments[i]) {
-        this.query('dp').comments.one(function(e){ return this.comments[i].id == e.id }.bind(this)).remove();
+      if (rmCom.id == this.comments[i].id) {
         this.comments[i].el.remove();
         this.comments.splice(i, 1);
-        this.displaySub();
         return ;
-      }
-    }
-  },
-
-  displaySub: function() {
-    var previous_down;
-
-    this.tmpComment && this.tmpComment.displayArea();
-    for (var i = 0, len = this.comments.length; i < len; i++) {
-      this.comments[i].el.style.top = this.comments[i].actualTop + 'px';
-
-      if (i > 0 && (previous_down = parseInt(this.comments[i - 1].el.style.top) + this.comments[i - 1].getHeight())
-        >= parseInt(this.comments[i].el.style.top)) {
-        // this.comments[i].show();/*test*/
-        this.comments[i].el.style.top = previous_down + 'px';
-        this.comments[i].displayArea();
-
-        // this.ctx && console.log(this.ctx.canvas.clientHeight, parseInt(this.comments[i].el.style.top));
-        if (this.ctx && this.ctx.canvas.clientHeight < parseInt(this.comments[i].el.style.top)) {
-          // console.log( '|||| depasse', this)
-          this.comments[i].hide();
-        }
       }
     }
   },
@@ -92,22 +95,20 @@ var CommentsGroup = r.Seed.extend({
 
     for (var i = 0, len = dpComments.length; i < len; i++) {
       if (dpComments[i].idParent != 0) { continue ; }
-      this.addTmpComment(dpComments[i]);
-      this.tmpComment.on('displayCol', this.displaySub.bind(this));
+      this.addComment(dpComments[i]);
       this.tmpComment.setAreas(dpComments[i].areas, ctx);
       this.tmpComment.preValide();
-      this.insertComment(false);
+      this.insertComment();
     }
-    for (var i = 0, len = dpComments.length; i < len; i++) {/*idparent != 0 doesnt work ?*/
+    for (var i = 0, len = dpComments.length; i < len; i++) {
       var comParent = {};
       if (dpComments[i].idParent == 0 ||
         (comParent = this.comments.one(function(e) { return dpComments[i].idParent == e.id }.bind(this)))
           == null) { continue ; }
-      comParent.addTmpComment(dpComments[i]);
+      comParent.addComment(dpComments[i]);
       comParent.tmpComment.preValide();
       comParent.insertComment(false);
     }
-    this.displaySub();
   }
 
 });

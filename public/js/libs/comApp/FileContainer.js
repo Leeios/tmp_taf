@@ -2,6 +2,7 @@ sand.define('FileContainer', [
   'Seed',
   'CanvasTrack',
   'ColComments',
+  'ColComments',
   'VersionPicker',
   'UploadFile',
   'DOM/toDOM'
@@ -24,7 +25,6 @@ var FileContainer = r.Seed.extend({
             }, 'versionPicker').el
           ]],
           ['.container-file', [
-            this.create(r.ColComments, {}, 'colComments').el,
             {tag: '.wrap-content', as: 'wrapContent', children: [
               this.create(r.CanvasTrack, {form: "points"}, 'canvasTrack').el,
               { tag: 'pre.content',
@@ -35,7 +35,8 @@ var FileContainer = r.Seed.extend({
                   onmousedown: 'return false;'
                 }
               }
-            ]}
+            ]},
+            this.create(r.ColComments, {dp: this.query('dp')}, 'colComments').el
           ]]
       ]
     }
@@ -70,27 +71,31 @@ var FileContainer = r.Seed.extend({
     this.colComments.on('clearCanvas', this.canvasTrack.clearCanvas.bind(this.canvasTrack));
   },
 
+  setCanvas: function() {
+    this.canvasTrack.setSize(this.wrapContent.clientHeight, this.wrapContent.clientWidth);
+    this.complete.disconnect();
+    this.wrapContent.appendChild(this.canvasTrack.el);
+  },
+
   setContent: function(file) {
     this.txt = file.content;
     this.wrapContent.innerHTML = '';
-    var tmp = r.toDOM({
+
+    this.wrapContent.appendChild(r.toDOM({
       tag: 'pre',
       innerHTML: file.content,
       attr: {
+        class: 'brush: js',
         unselectable: 'on',
         onselectstart: 'return false;',
         onmousedown: 'return false;'
       }
-    });
-    tmp.setAttribute('class', 'brush: js');
-    this.wrapContent.appendChild(tmp);
+    }));
     SyntaxHighlighter.highlight();
 
-    console.log(this.wrapContent.clientHeight, this.wrapContent.clientWidth);
-    this.canvasTrack.setSize(this.wrapContent.clientHeight, this.wrapContent.clientWidth);
-    this.wrapContent.appendChild(this.canvasTrack.el);
-
-    this.colComments.resetCol();
+    this.complete = new MutationObserver(this.setCanvas.bind(this));
+    this.complete.observe(this.wrapContent, { childList: true });
+    this.colComments.resetCol(this.wrapContent.clientHeight);
     this.colComments.setComGroup(file.id, this.canvasTrack.getCtx());
   }
 

@@ -12,27 +12,27 @@ var Comment = r.Seed.extend({
 
   tpl: function() {
     return {
-      tag: "div.comment",
+      tag: ".comment",
       children: [
-        {tag: 'div.comment-wrapper', as: 'wrap', children: [
-          { tag:"div.comButton.button", as: 'createEl', innerHTML: 'Create', events: {
+        {tag: '.comment-wrapper', as: 'wrap', children: [
+          { tag:".comButton.button", as: 'createEl', innerHTML: 'Create', events: {
             click: function(){ this.onCreate(); }.bind(this)
           }},
-          { tag:"div.comButton.button", as: 'removeEl', innerHTML: 'Delete', events: {
+          { tag:".comButton.button", as: 'removeEl', innerHTML: 'Delete', events: {
             click: function(){ this.onRemove(this); }.bind(this)
           }},
-          { tag:"div.comButton.button", as: 'editEl', innerHTML: 'Edit', events: {
+          { tag:".comButton.button", as: 'editEl', innerHTML: 'Edit', events: {
             click: function(){
               if (this.elDiv.isContentEditable) { this.valid(); }
               else { this.elDiv.setAttribute('contenteditable', true); this.switchEdit(); }
             }.bind(this)
           }},
-          { tag:"div.comButton.button", as: 'replyEl', innerHTML: 'Reply'},
-          { tag:"div.divComment", as: 'elDiv' },
+          { tag:".comButton.button", as: 'replyEl', innerHTML: 'Reply'},
+          { tag:".divComment", as: 'elDiv' },
         ]}
       ], events: {
-        mouseover: this.highStyle.bind(this),
-        mouseout: this.usualStyle.bind(this)
+        mouseover: this.onMouseOver.bind(this),
+        mouseout: this.onMouseOut.bind(this)
       }
     }
   },
@@ -45,6 +45,8 @@ var Comment = r.Seed.extend({
       txt: '',
       onCreate: function() { console.log('Create is not available on this element'); },
       onRemove: function() { console.log('remove is not available on this element'); },
+      onMouseOver: function() { console.log('highStyle is not available on this element'); },
+      onMouseOut : function() { console.log('usualStyle is not available on this element'); },
       actualTop: 0,
       color: '#B3B3F9'
     }
@@ -52,10 +54,11 @@ var Comment = r.Seed.extend({
 
   '+init': function () {
 
-    this.areas = [];
     this.wrap.innerHTML = '';
     this.wrap.appendChild(this.elDiv);
     this.wrap.appendChild(this.createEl);
+    this.wrap.style['border-left-color'] = this.color;
+    this.elDiv.setAttribute('contenteditable', true);
   },
 
   /*Add/remove*/
@@ -64,11 +67,7 @@ var Comment = r.Seed.extend({
     this.elDiv.setAttribute('contenteditable', false);
     this.txt = this.elDiv.innerHTML;
 
-    var search = this.query('dp').comments.one(function(e) { return this.id === e.id }.bind(this));
-    if (search != null) {
-      search.edit({'txt': this.txt});
-    }
-    this.switchEdit();
+    this.query('dp').comments.one(function(e) { return this.id === e.id }.bind(this)).edit({'txt': this.txt});
 
     this.elDiv.innerHTML = this.txt.replace(/\[/g, '<pre class = "brush: js">').replace(/\]/g, '</pre>')
                                                   .replace(/<div>/g, '').replace(/<\/div>/g, '<br/>');
@@ -79,36 +78,16 @@ var Comment = r.Seed.extend({
     }
     SyntaxHighlighter.highlight();
     this.usualStyle();
-    this.fire('displayCol');
   },
 
   preValide: function() {
     this.elDiv.innerHTML = this.txt;
   },
 
-  /*Style functions*/
-  // setHeight: function () {
-  //   this.elDiv.style.height = "0px";
-  //   this.elDiv.style.height = this.elDiv.scrollHeight + 10 + "px";
-  // },
-
-  getHeight: function() {
-    if (typeof this.comments == 'undefined') {
-      return this.el.offsetHeight;
-    }
-
-    var tmpHeight = 0;
-    for (var i = 0, len = this.comments.length; i < len; i++) {
-      tmpHeight += this.comments[i].el.offsetHeight;
-    }
-    return (tmpHeight + this.el.offsetHeight);
-  },
-
   switchEdit: function() {
     this.wrap.innerHTML = '';
     if (this.elDiv.isContentEditable) {
       this.el.style["z-index"] = 100;
-      this.elDiv.placeholder = this.txt;
       this.wrap.appendChild(this.elDiv);
       this.wrap.appendChild(this.editEl);
     } else {
@@ -123,41 +102,6 @@ var Comment = r.Seed.extend({
       }
     }
     this.preValide();
-  },
-
-  highStyle: function() {
-    this.areas[0] && ((this.areas[0].ctx.strokeStyle =  this.color) && (this.areas[0].ctx.globalAlpha = 0.3));
-    this.displayArea();
-    this.areas[0] && (this.areas[0].ctx.strokeStyle = "rgba(200, 200, 200, 0.3)");
-  },
-
-  usualStyle: function() {
-    this.el.style["background-color"] = "#fefefe";
-    this.fire('redraw');
-    this.displayArea();
-  },
-
-  /*Areas functions*/
-  addArea: function(canArea) {
-    this.areas.push(canArea);
-    this.actualTop = canArea.pos[1];
-    this.el.style.top = this.actualTop + "px";
-    // this.setHeight();
-  },
-
-  displayArea: function() {
-    for (var i = 0, len = this.areas.length; i < len; i++) {
-      this.areas[i].draw();
-    }
-  },
-
-  /*Use for import dataserv*/
-  setAreas: function(data, ctx) {
-    var current_area;
-    for (var i = 0, len = data.length; i < len; i++) {
-      current_area = this.create(r.CanvasArea, {points: data[i], ctx: ctx});
-      this.areas.push(current_area);
-    }
   },
 
   getData: function() {
