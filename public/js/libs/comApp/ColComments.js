@@ -25,10 +25,10 @@ var ColComments = r.Seed.extend({
 
       this.tmpGroup = this.create(r.CommentsGroup, {
         idFile: this.idFile,
-        onDelete: this.deleteComGroup.bind(this),
+        onRemove: this.deleteComGroup.bind(this),
         onCreate: function() {this.commentsList.push(this.tmpGroup); this.tmpGroup = null;}.bind(this)
       });
-      this.tmpGroup.on('redraw', this.drawAreas(), this);
+      this.tmpGroup.on('redraw', this.drawAreas.bind(this), this);
       this.el.appendChild(this.tmpGroup.el);
     }
     this.tmpGroup.addArea(canArea);
@@ -37,7 +37,7 @@ var ColComments = r.Seed.extend({
 
   drawAreas: function() {
     this.fire('clearCanvas');
-    this.tmpGroup.drawAreas();
+    this.tmpGroup && this.tmpGroup.drawAreas();
     for (var i = 0, len = this.commentsList.length; i < len; i++) {
       this.commentsList[i].drawAreas();
     }
@@ -45,8 +45,9 @@ var ColComments = r.Seed.extend({
 
   deleteComGroup: function(id) {
     for (var i = 0, len = this.commentsList.length; i < len; i++) {
-      if (id == this.commentsList[i].id) {
+      if (id == this.commentsList[i].mainId) {
         this.commentsList.splice(i, 1);
+        this.drawAreas();
         return ;
       }
     }
@@ -69,15 +70,16 @@ var ColComments = r.Seed.extend({
       this.tmpGroup = this.create(r.CommentsGroup, {
         mainId: dpComments[i].id,
         idFile: this.idFile,
-        onDelete: this.deleteComGroup.bind(this),
+        onRemove: this.deleteComGroup.bind(this),
       });
       this.tmpGroup.setMain(dpComments[i], ctx);
-      this.tmpGroup.on('redraw', this.drawAreas());
+      this.tmpGroup.on('redraw', this.drawAreas.bind(this), this);
       // this.tmpGroup.addReplies();
       this.el.appendChild(this.tmpGroup.el);
       this.commentsList.push(this.tmpGroup);
       this.tmpGroup = null;
     }
+    this.drawAreas();
     // for (var i = 0, len = dpComments.length; i < len; i++) {
     //   var comParent = {};
     //   if (dpComments[i].idParent == 0 ||

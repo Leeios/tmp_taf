@@ -18,7 +18,9 @@ var CommentsGroup = r.Seed.extend({
             id: this.mainId,
             idFile: this.idFile,
             color: this.color,
-            onRemove: function() {this.onDelete(); this.removeGroup();}.bind(this)
+            onCreate: this.onCreate.bind(this),
+            onRemove: function() {this.onRemove(this.mainId); this.removeGroup();}.bind(this),
+            onReply: this.addReply.bind(this)
           }, 'main').el
         ]]
       ], events: {
@@ -36,7 +38,8 @@ var CommentsGroup = r.Seed.extend({
       actualTop: 0,
       replies: [],
       color: '#' + Math.floor(Math.random() * 16777215).toString(16),
-      onDelete: function() {console.log('delete not available on this element');}
+      onCreate: function() {console.log('create is not available on this element')},
+      onRemove: function() {console.log('remove not available on this element');}
     }
   },
 
@@ -46,7 +49,6 @@ var CommentsGroup = r.Seed.extend({
     this.query('dp').comments.one(function(e) { return this.main.id === e.id }.bind(this))
           .edit({'areas': this.main.getAreas(), 'actualTop': this.main.actualTop});
     this.el.style.top = this.actualTop + "px";
-    console.log(this.main.id, this.main.areas)
   },
 
   drawAreas: function() {
@@ -85,28 +87,33 @@ var CommentsGroup = r.Seed.extend({
     this.query('dp').comments.one(function(e){ return this.main.id == e.id }.bind(this)).remove();
   },
 
-  insertComment: function() {
+  addReply: function(data) {/*INTERFACE*/
+    if (this.tmpReply !== null) {return ;}
+
+    this.tmpReply = this.create(r.Comment, {
+            idFile: this.idFile,
+            color: this.color,
+            onCreate: this.createReply.bind(this),
+            onRemove: this.removeReply.bind(this),
+            onReply: this.addReply.bind(this)
+          });
+    this.el.appendChild(this.tmpReply.el);
+  },
+
+  createReply: function() {
     this.tmpReply.valid();
     this.replies.push(this.tmpReply);
     this.tmpReply = null;
   },
 
-  addComment: function(data) {/*INTERFACE*/
-    if (this.tmpReply !== null) {return ;}
-
-    /*Create or setting comment*/
-    if (this.data == 'undefined') {
-      this.tmpReply = this.create(r.Comment, {});
-      delete this.tmpReply.id;
-      this.tmpReply.id = this.query('dp').comments.insert(this.tmpReply.getData()).id;
-    } else {
-      this.tmpReply = this.create(r.Comment, data);
+  removeReply: function(id) {
+    for (var i = 0, len = this.replies.length; i < len; i++) {
+      if (id == this.replies.id) {
+        this.replies.splice(i, 1);
+        return ;
+      }
     }
-    this.tmpReply.onCreate = this.insertComment.bind(this);
-    this.tmpReply.onRemove = this.deleteComment.bind(this);
-
-    this.el.appendChild(this.tmpReply.el);
-  },
+  }
 
 });
 return CommentsGroup;

@@ -145,7 +145,6 @@ a {
   height: 100%;
   float: left;
   position: relative;
-  border: 1px solid black;
 }
 
 .fixed-top {
@@ -205,6 +204,10 @@ a {
   font-weight: bold;
   font-size: 18px;
   color: #68b2f8;
+}
+
+.main-comment {
+  transition: top 0.5s;
 }
 
 .wrap-content {

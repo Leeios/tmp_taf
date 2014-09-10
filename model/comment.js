@@ -30,11 +30,8 @@ exports.deleteCom = function(data) {
 }
 
 exports.editCom = function(data, changes) {
-  for (var c in changes) {
-    console.log(c, changes[c]);
-    Com.update({id: data.id}, {$set: changes}, function(err, doc) {
-      if (err) { console.log("Failed to edit com"); }
-      else { console.log("Comment edited"); }
-    });
-  }
+  Com.update({id: data.id}, {$set: changes}, function(err, doc) {
+    if (err) { console.log("Failed to edit com"); }
+    else { console.log("Comment edited"); }
+  });
 }

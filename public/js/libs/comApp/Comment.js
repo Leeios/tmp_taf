@@ -16,7 +16,7 @@ var Comment = r.Seed.extend({
       children: [
         {tag: '.comment-wrapper', as: 'wrap', children: [
           { tag:".comButton.button", as: 'createEl', innerHTML: 'Create', events: {
-            click: function(){ this.onCreate(); }.bind(this)
+            click: function(){ this.valid(); this.onCreate(); }.bind(this)
           }},
           { tag:".comButton.button", as: 'removeEl', innerHTML: 'Delete', events: {
             click: function(){ this.onRemove(this); }.bind(this)
@@ -27,7 +27,9 @@ var Comment = r.Seed.extend({
               else { this.elDiv.setAttribute('contenteditable', true); this.switchEdit(); }
             }.bind(this)
           }},
-          { tag:".comButton.button", as: 'replyEl', innerHTML: 'Reply'},
+          { tag:".comButton.button", as: 'replyEl', innerHTML: 'Reply', events: {
+            click: this.onReply.bind(this)
+          }},
           { tag:".divComment", as: 'elDiv' },
         ]}
       ]
@@ -40,8 +42,9 @@ var Comment = r.Seed.extend({
       idFile: 0,
       idParent: 0,
       txt: '',
-      onCreate: this.valid.bind(this),
+      onCreate: function() { console.log('create is not available on this element'); },
       onRemove: function() { console.log('remove is not available on this element'); },
+      onReply: function() { console.log('reply is not available on this element'); },
       actualTop: 0,
       areas: [],
       color: '#B3B3F9'
