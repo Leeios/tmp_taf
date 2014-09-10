@@ -14,7 +14,6 @@ var CanvasTrack = r.Seed.extend({
   },
 
   '+options': {
-    pos: [],
     form: "empty"
   },
 
@@ -43,11 +42,9 @@ var CanvasTrack = r.Seed.extend({
 
   /*Start/Save & Valid selection*/
   start: function (e) {
-    this.canvasArea = this.create(r.CanvasArea, {pos: this.getPosition(e), form: this.form, ctx: this.ctx});
-    this.mouseMoveHandler = this.draw.bind(this);
-    this.mouseUpHandler = this.valid.bind(this);
-    this.el.addEventListener('mousemove', this.mouseMoveHandler);
-    this.el.addEventListener('mouseup', this.mouseUpHandler);
+    this.canvasArea = this.create(r.CanvasArea, {form: this.form, ctx: this.ctx});
+    this.el.onmousemove = this.draw.bind(this);
+    this.el.onmouseup = this.valid.bind(this);
   },
 
   draw: function(e) {
@@ -60,16 +57,16 @@ var CanvasTrack = r.Seed.extend({
   },
 
   valid: function(e) {
-    this.el.removeEventListener('mousemove', this.mouseMoveHandler);
-    this.el.removeEventListener('mouseup', this.mouseUpHandler);
+    this.el.onmousemove = null;
+    this.el.onmouseup = null;
     this.fire('valid', this.canvasArea);
+    this.canvasArea = null;
   },
 
   /*When outmap*/
   reset: function() {
     this.el.removeEventListener('mousemove', this.mouseMoveHandler);
     this.el.removeEventListener('mouseup', this.mouseUpHandler);
-    this.pos = [];
   }
 
 });

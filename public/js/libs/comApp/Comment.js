@@ -30,10 +30,7 @@ var Comment = r.Seed.extend({
           { tag:".comButton.button", as: 'replyEl', innerHTML: 'Reply'},
           { tag:".divComment", as: 'elDiv' },
         ]}
-      ], events: {
-        mouseover: this.onMouseOver.bind(this),
-        mouseout: this.onMouseOut.bind(this)
-      }
+      ]
     }
   },
 
@@ -43,17 +40,19 @@ var Comment = r.Seed.extend({
       idFile: 0,
       idParent: 0,
       txt: '',
-      onCreate: function() { console.log('Create is not available on this element'); },
+      onCreate: this.valid.bind(this),
       onRemove: function() { console.log('remove is not available on this element'); },
-      onMouseOver: function() { console.log('highStyle is not available on this element'); },
-      onMouseOut : function() { console.log('usualStyle is not available on this element'); },
       actualTop: 0,
+      areas: [],
       color: '#B3B3F9'
     }
   },
 
   '+init': function () {
 
+    if (this.id === 0) {
+      this.id = this.query('dp').comments.insert(this.getData()).id;
+    }
     this.wrap.innerHTML = '';
     this.wrap.appendChild(this.elDiv);
     this.wrap.appendChild(this.createEl);
@@ -62,10 +61,11 @@ var Comment = r.Seed.extend({
   },
 
   /*Add/remove*/
-  valid: function(events) {
+  valid: function() {
 
-    this.elDiv.setAttribute('contenteditable', false);
     this.txt = this.elDiv.innerHTML;
+    this.elDiv.setAttribute('contenteditable', false);
+    this.switchEdit();
 
     this.query('dp').comments.one(function(e) { return this.id === e.id }.bind(this)).edit({'txt': this.txt});
 
@@ -77,7 +77,6 @@ var Comment = r.Seed.extend({
       }
     }
     SyntaxHighlighter.highlight();
-    this.usualStyle();
   },
 
   preValide: function() {
@@ -105,12 +104,16 @@ var Comment = r.Seed.extend({
   },
 
   getData: function() {
+    return { id: this.id, idParent: this.idParent, idFile: this.idFile, txt: this.txt,
+      author: this.author, actualTop: this.actualTop, color: this.color, areas: this.getAreas()};
+  },
+
+  getAreas: function() {
     var tmpAreas = [];
     for (var i = 0, len = this.areas.length; i < len; i++) {
       tmpAreas.push(this.areas[i].getArea());
     }
-    return { id: this.id, idParent: this.idParent, idFile: this.idFile, txt: this.txt,
-      author: this.author, actualTop: this.actualTop, color: this.color, areas: tmpAreas};
+    return tmpAreas;
   }
 
 });

@@ -28,7 +28,7 @@ exports.socket = function(socket) {
 
   socket.on('edit', function (data) {
     if (data.type == 'comments') {
-      com_method.editCom(data.models);
+      com_method.editCom(data.models, data.changes);
     } else if (data.type == 'projects') {
       proj_method.editProj(data.models, data.changes);
     } else if (data.type == 'files') {

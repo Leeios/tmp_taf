@@ -8,10 +8,12 @@ sand.define('CanvasArea', [
 */
 var CanvasArea = r.Seed.extend({
 
-  options: {
-    points: [],
-    form: "empty",
-    ctx: null
+  options: function() {
+    return {
+      points: [],
+      form: "empty",
+      ctx: null
+    }
   },
 
   refresh: function(pos) {
@@ -28,6 +30,7 @@ var CanvasArea = r.Seed.extend({
       this.ctx.lineTo(this.points[i][0], this.points[i][1]);
     }
     this.ctx.stroke();
+    this.ctx.closePath();
   },
 
   drawCurrent: function() {
@@ -37,6 +40,7 @@ var CanvasArea = r.Seed.extend({
     this.ctx.lineTo(this.points[len - 1][0], this.points[len - 1][1]);
     this.ctx.lineTo(this.points[len][0], this.points[len][1]);
     this.ctx.stroke();
+    this.ctx.closePath();
   },
 
   getArea: function() {

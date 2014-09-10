@@ -67,8 +67,8 @@ var FileContainer = r.Seed.extend({
     this.colComments.setComGroup(this.id, this.canvasTrack.getCtx());
 
     /*Echanges entre canvas et colcom*/
-    this.canvasTrack.on('valid', this.colComments.addArea.bind(this.colComments));
-    this.colComments.on('clearCanvas', this.canvasTrack.clearCanvas.bind(this.canvasTrack));
+    this.canvasTrack.on('valid', this.colComments.addArea.bind(this.colComments), this);
+    this.colComments.on('clearCanvas', this.canvasTrack.clearCanvas.bind(this.canvasTrack), this);
   },
 
   setCanvas: function() {

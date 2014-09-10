@@ -1,5 +1,6 @@
 sand.define('CommentsGroup', [
   'Comment',
+  'CanvasArea',
   'Seed'
 ], function(r) {
 
@@ -9,107 +10,103 @@ sand.define('CommentsGroup', [
 */
 var CommentsGroup = r.Seed.extend({
 
-  tpl: {
-    tag: '.main-comment'
-  },
-
-  options: {
-    idFile: -1,
-    tmpComment: null,
-    comments: [],
-    areas: []
-  },
-
-  addArea: function(canArea) {/*INTERFACE*/
-    this.areas.push(canArea);
-    this.mainComment.actualTop = canArea.points[canArea.points.length - 1][0];
-    this.el.style.top = this.actualTop + "px";
-  },
-
-  displayArea: function() {
-    for (var i = 0, len = this.areas.length; i < len; i++) {
-      this.areas[i].draw();
-    }
-  },
-
-  highStyle: function() {
-    this.areas[0] && ((this.areas[0].ctx.strokeStyle =  this.color) && (this.areas[0].ctx.globalAlpha = 0.3));
-    this.displayArea();
-    this.areas[0] && (this.areas[0].ctx.strokeStyle = "rgba(200, 200, 200, 0.3)");
-  },
-
-  usualStyle: function() {
-    this.el.style["background-color"] = "#fefefe";
-    this.fire('redraw');
-    this.displayArea();
-  },
-
-  /*Use for import dataserv*/
-  setAreas: function(data, ctx) {
-    var current_area;
-    for (var i = 0, len = data.length; i < len; i++) {
-      current_area = this.create(r.CanvasArea, {points: data[i], ctx: ctx});
-      this.areas.push(current_area);
-    }
-  }
-
-  insertComment: function() {
-    this.tmpComment.valid();
-    this.comments.push(this.tmpComment);
-    this.tmpComment = null;
-  },
-
-  addComment: function(data) {/*INTERFACE*/
-    if (this.tmpComment !== null) {return ;}
-
-    /*Create or setting comment*/
-    if (this.data == 'undefined') {
-      this.tmpComment = this.create(r.Comment, {});
-      delete this.tmpComment.id;
-      this.tmpComment.id = this.query('dp').comments.insert(this.tmpComment.getData()).id;
-    } else {
-      this.tmpComment = this.create(r.Comment, data);
-    }
-    this.tmpComment.onCreate = this.insertComment.bind(this);
-    this.tmpComment.onRemove = this.deleteComment.bind(this);
-
-    this.el.appendChild(this.tmpComment.el);
-  },
-
-  deleteComment: function(rmCom) {
-    this.query('dp').comments.one(function(e){ return this.rmCom.id == e.id }.bind(this)).remove();
-    for (var i = 0, len = this.comments.length; i < len; i++) {
-      if (rmCom.id == this.comments[i].id) {
-        this.comments[i].el.remove();
-        this.comments.splice(i, 1);
-        return ;
+  tpl: function() {
+    return {
+      tag: '.main-comment', children: [
+        ['.wrap-comment', [
+          this.create(r.Comment, {
+            id: this.mainId,
+            idFile: this.idFile,
+            color: this.color,
+            onRemove: function() {this.onDelete(); this.removeGroup();}.bind(this)
+          }, 'main').el
+        ]]
+      ], events: {
+        mouseover: this.highStyle.bind(this),
+        mouseout: this.usualStyle.bind(this),
       }
     }
   },
 
-  /*Use for import dataserv*/
-  setComGroup: function(id, ctx) {
-    this.ctx = ctx;
-    this.idFile = id;
-    var dpComments = this.query('dp').comments.where( function(e) { return this.idFile == e.idFile; }.bind(this));
+  options: function() {
+    return {
+      mainId: 0,
+      idFile: 0,
+      tmpReply: null,
+      actualTop: 0,
+      replies: [],
+      color: '#' + Math.floor(Math.random() * 16777215).toString(16),
+      onDelete: function() {console.log('delete not available on this element');}
+    }
+  },
 
-    for (var i = 0, len = dpComments.length; i < len; i++) {
-      if (dpComments[i].idParent != 0) { continue ; }
-      this.addComment(dpComments[i]);
-      this.tmpComment.setAreas(dpComments[i].areas, ctx);
-      this.tmpComment.preValide();
-      this.insertComment();
+  addArea: function(canvasArea) {/*INTERFACE*/
+    this.main.areas.push(canvasArea);
+    this.actualTop = canvasArea.points[canvasArea.points.length - 1][0];
+    this.query('dp').comments.one(function(e) { return this.main.id === e.id }.bind(this))
+          .edit({'areas': this.main.getAreas(), 'actualTop': this.main.actualTop});
+    this.el.style.top = this.actualTop + "px";
+    console.log(this.main.id, this.main.areas)
+  },
+
+  drawAreas: function() {
+    for (var i = 0, len = this.main.areas.length; i < len; i++) {
+      this.main.areas[i].draw();
     }
-    for (var i = 0, len = dpComments.length; i < len; i++) {
-      var comParent = {};
-      if (dpComments[i].idParent == 0 ||
-        (comParent = this.comments.one(function(e) { return dpComments[i].idParent == e.id }.bind(this)))
-          == null) { continue ; }
-      comParent.addComment(dpComments[i]);
-      comParent.tmpComment.preValide();
-      comParent.insertComment(false);
+  },
+
+  highStyle: function() {
+    this.main.areas[0] && ((this.main.areas[0].ctx.strokeStyle =  this.color) && (this.main.areas[0].ctx.globalAlpha = 0.3));
+    this.drawAreas();
+    this.main.areas[0] && (this.main.areas[0].ctx.strokeStyle = "rgba(200, 200, 200, 0.3)");
+  },
+
+  usualStyle: function() {
+    this.fire('redraw');
+  },
+
+  setMain: function(data, ctx) {
+    var current_area;
+    for (var i = 0, len = data.areas.length; i < len; i++) {
+      current_area = this.create(r.CanvasArea, {form: 'points', points: data.areas[i], ctx: ctx});
+      this.main.areas.push(current_area);
     }
-  }
+    this.main.txt = data.txt;
+    this.main.preValide();
+    this.main.valid();
+  },
+
+  removeGroup: function() {
+    for (var i = 0, len = this.replies.length; i < len; i++) {
+      this.replies[i].el.remove();
+      this.query('dp').comments.one(function(e){ return this.replies[i].id == e.id }.bind(this)).remove();
+    }
+    this.main.el.remove();
+    this.query('dp').comments.one(function(e){ return this.main.id == e.id }.bind(this)).remove();
+  },
+
+  insertComment: function() {
+    this.tmpReply.valid();
+    this.replies.push(this.tmpReply);
+    this.tmpReply = null;
+  },
+
+  addComment: function(data) {/*INTERFACE*/
+    if (this.tmpReply !== null) {return ;}
+
+    /*Create or setting comment*/
+    if (this.data == 'undefined') {
+      this.tmpReply = this.create(r.Comment, {});
+      delete this.tmpReply.id;
+      this.tmpReply.id = this.query('dp').comments.insert(this.tmpReply.getData()).id;
+    } else {
+      this.tmpReply = this.create(r.Comment, data);
+    }
+    this.tmpReply.onCreate = this.insertComment.bind(this);
+    this.tmpReply.onRemove = this.deleteComment.bind(this);
+
+    this.el.appendChild(this.tmpReply.el);
+  },
 
 });
 return CommentsGroup;
