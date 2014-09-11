@@ -34,6 +34,7 @@ exports.getProj = function(id, callback) {
   result.files = [];
   result.comments = [];
 
+
   Project.findOne({id: id}, {}, function(err, motherOfProject) {/*Nom du projet*/
     if (err || motherOfProject === null) { console.log("Failed to find " + id + " in database"); }
     else {

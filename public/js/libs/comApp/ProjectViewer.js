@@ -144,6 +144,7 @@ var ProjectViewer = r.Seed.extend({
   },
 
   insertFile: function(file) {
+    console.log('insert file')
     var tmpcontent = file.content;
     file.content.innerHTML = 'Master file: No content available';
     file.idProject = this.id;

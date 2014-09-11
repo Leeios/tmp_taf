@@ -82,7 +82,6 @@ var FileContainer = r.Seed.extend({
     this.txt = file.content;
 
     if (file.name.match(/\.(jpg)|(jpeg)|(gif)|(png)$/i) || this.name.innerHTML.match(/\.(jpg)|(jpeg)|(gif)|(png)$/i)) {
-      console.log('print as img')
       var img = new Image();
       img.src = file.content;
       this.wrapContent.appendChild(img);

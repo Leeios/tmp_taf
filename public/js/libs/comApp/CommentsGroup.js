@@ -82,7 +82,6 @@ var CommentsGroup = r.Seed.extend({
     this.main.date = data.date;
     this.main.actualTop = data.actualTop;
     this.main.preValide();
-    console.log(data.date)
     this.main.valid(data.date);
   },
 
