@@ -22,17 +22,17 @@ var ColComments = r.Seed.extend({
 
   addArea: function(canArea) {/*INTERFACE*/
     if (!this.tmpGroup) {
-
       this.tmpGroup = this.create(r.CommentsGroup, {
         idFile: this.idFile,
         onRemove: this.deleteComGroup.bind(this),
-        onCreate: function() {this.commentsList.push(this.tmpGroup); this.tmpGroup = null;}.bind(this)
+        onCreate: function() {this.commentsList.push(this.tmpGroup); this.tmpGroup = null; this.displayComments();}.bind(this)
       });
       this.tmpGroup.on('redraw', this.drawAreas.bind(this), this);
       this.el.appendChild(this.tmpGroup.el);
     }
     this.tmpGroup.addArea(canArea);
     this.drawAreas();
+    this.displayComments();
   },
 
   drawAreas: function() {
@@ -41,6 +41,7 @@ var ColComments = r.Seed.extend({
     for (var i = 0, len = this.commentsList.length; i < len; i++) {
       this.commentsList[i].drawAreas();
     }
+    this.displayComments();
   },
 
   deleteComGroup: function(id) {
@@ -50,6 +51,21 @@ var ColComments = r.Seed.extend({
         this.drawAreas();
         return ;
       }
+    }
+  },
+
+  displayComments: function() {
+    this.commentsList.sort(function (a, b) {
+      return a.main.actualTop - b.main.actualTop;
+    });
+   var previous_down;
+   if (this.tmpGroup !== null) { this.tmpGroup.el.style.top = this.tmpGroup.main.actualTop + 'px'; }
+    for (var i = 0, len = this.commentsList.length; i < len; i++) {
+      this.commentsList[i].refreshDate();
+       this.commentsList[i].el.style.top = this.commentsList[i].main.actualTop + 'px';
+       i > 0 && (previous_down = parseInt(this.commentsList[i - 1].el.style.top) + this.commentsList[i - 1].el.offsetHeight)
+       && (previous_down >= parseInt(this.commentsList[i].el.style.top))
+       && (this.commentsList[i].el.style.top = previous_down + 'px');
     }
   },
 
@@ -74,21 +90,12 @@ var ColComments = r.Seed.extend({
       });
       this.tmpGroup.setMain(dpComments[i], ctx);
       this.tmpGroup.on('redraw', this.drawAreas.bind(this), this);
-      // this.tmpGroup.addReplies();
+      this.tmpGroup.setReplies(dpComments);
       this.el.appendChild(this.tmpGroup.el);
       this.commentsList.push(this.tmpGroup);
       this.tmpGroup = null;
     }
     this.drawAreas();
-    // for (var i = 0, len = dpComments.length; i < len; i++) {
-    //   var comParent = {};
-    //   if (dpComments[i].idParent == 0 ||
-    //     (comParent = this.comments.one(function(e) { return dpComments[i].idParent == e.id }.bind(this)))
-    //       == null) { continue ; }
-    //   comParent.addComment(dpComments[i]);
-    //   comParent.tmpComment.preValide();
-    //   comParent.insertComment(false);
-    // }
   }
 
 

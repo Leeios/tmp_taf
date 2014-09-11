@@ -38,7 +38,7 @@ var ProjectViewer = r.Seed.extend({
             onAdd: this.addVersion.bind(this) }, 'versionPicker').el,
         ]],
         {tag: '.file-nav-row.row', as: 'projectNav', children: [
-          this.create(r.UploadFile, { complete : this.insertFile.bind(this) }, 'upload').el,
+          this.create(r.UploadFile, { complete : this.insertFile.bind(this), txt: 'Add' }, 'upload').el,
           { tag : '.files-list', as : 'filesList' }
         ]},
         ['.files-block', ['.files']]
@@ -68,7 +68,7 @@ var ProjectViewer = r.Seed.extend({
       idParent: 0
     })];
     var projv0 = [this.dp.projects.insert({
-      name : 'v.0',
+      name : 'V0',
       idParent: newProject[0].id
     })];
     window.location.replace(window.location.origin + '/' + newProject[0].id);
@@ -201,7 +201,7 @@ var ProjectViewer = r.Seed.extend({
       return { id: data.id, idParent: data.idParent, idProject: data.idProject, name: data.name, content: data.content };
     } else if (type == 'comments') {
       return { id: data.id, idParent: data.idParent, idFile: data.idFile, txt: data.txt, areas: data.areas,
-        author: data.author, actualTop: data.actualTop, color: data.color };
+        author: data.author, actualTop: data.actualTop, color: data.color, date: data.date };
     } else {
       console.log('Data not valid');
       return null;

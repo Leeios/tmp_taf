@@ -14,12 +14,13 @@ var UploadFile = r.Seed.extend({
       '.upload-wrapper', [
         {tag: "input.upload-file.button", as: 'uploadButton',
         attr: { type: "file", multiple: "multiple" }},
-        {tag: '.upload-fakebutton', innerHTML: 'Add'}
+        {tag: '.upload-fakebutton', innerHTML: this.txt }
       ]]
   },
 
   options: function() {
     return {
+      txt: '+',
       complete: function() {
         console.log('FileView not defined');
       }
@@ -39,9 +40,18 @@ var UploadFile = r.Seed.extend({
     file.size = fRead.size;
     file.type = fRead.type;
 
-    reader.readAsText(fRead);
+    if (file.name.match(/\.(jpg)|(jpeg)|(gif)|(png)$/i)) {
+      reader.readAsDataURL(fRead);
+    } else {
+      reader.readAsText(fRead);
+    }
+
     reader.addEventListener("loadend", function (e) {
-      file.content = reader.result.replace(/</g, '&lt;').replace(/>/g, '&gt;');
+      if (file.name.match(/\.(jpg)|(jpeg)|(gif)|(png)$/i)) {
+        file.content = e.target.result;
+      } else {
+        file.content = reader.result.replace(/</g, '&lt;').replace(/>/g, '&gt;');
+      }
       this.complete(file);
       if (end) { this.fire('uploadEnd'); }
     }.bind(this));

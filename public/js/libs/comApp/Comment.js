@@ -1,5 +1,6 @@
 sand.define('Comment', [
   'CanvasArea',
+  'prettyDate',
   'DOM/toDOM',
   'Seed'
 ], function(r) {
@@ -14,24 +15,23 @@ var Comment = r.Seed.extend({
     return {
       tag: ".comment",
       children: [
-        {tag: '.comment-wrapper', as: 'wrap', children: [
-          { tag:".comButton.button", as: 'createEl', innerHTML: 'Create', events: {
-            click: function(){ this.valid(); this.onCreate(); }.bind(this)
-          }},
-          { tag:".comButton.button", as: 'removeEl', innerHTML: 'Delete', events: {
-            click: function(){ this.onRemove(this); }.bind(this)
-          }},
-          { tag:".comButton.button", as: 'editEl', innerHTML: 'Edit', events: {
-            click: function(){
-              if (this.elDiv.isContentEditable) { this.valid(); }
-              else { this.elDiv.setAttribute('contenteditable', true); this.switchEdit(); }
-            }.bind(this)
-          }},
-          { tag:".comButton.button", as: 'replyEl', innerHTML: 'Reply', events: {
-            click: this.onReply.bind(this)
-          }},
-          { tag:".divComment", as: 'elDiv' },
-        ]}
+        { tag:".comButton.button", as: 'createEl', innerHTML: 'Create', events: {
+          click: function(){ this.valid(); this.onCreate(); }.bind(this)
+        }},
+        { tag:".comButton.button", as: 'removeEl', innerHTML: 'Delete', events: {
+          click: function(){ this.el.remove(); this.onRemove(this.id); }.bind(this)
+        }},
+        { tag:".comButton.button", as: 'editEl', innerHTML: 'Edit', events: {
+          click: function(){
+            if (this.elDiv.isContentEditable) { this.valid(); }
+            else { this.elDiv.setAttribute('contenteditable', true); this.switchEdit(); }
+          }.bind(this)
+        }},
+        { tag:".comButton.button", as: 'replyEl', innerHTML: 'Reply', events: {
+          click: this.onReply.bind(this)
+        }},
+        { tag:".comment-txt", as: 'elDiv' },
+        { tag: '.comment-time', as: 'timeDiv'}
       ]
     }
   },
@@ -47,7 +47,8 @@ var Comment = r.Seed.extend({
       onReply: function() { console.log('reply is not available on this element'); },
       actualTop: 0,
       areas: [],
-      color: '#B3B3F9'
+      color: '#B3B3F9',
+      date: new Date().getTime()
     }
   },
 
@@ -56,21 +57,21 @@ var Comment = r.Seed.extend({
     if (this.id === 0) {
       this.id = this.query('dp').comments.insert(this.getData()).id;
     }
-    this.wrap.innerHTML = '';
-    this.wrap.appendChild(this.elDiv);
-    this.wrap.appendChild(this.createEl);
-    this.wrap.style['border-left-color'] = this.color;
+    this.el.innerHTML = '';
+    this.el.appendChild(this.elDiv);
+    this.el.appendChild(this.timeDiv);
+    this.el.appendChild(this.createEl);
     this.elDiv.setAttribute('contenteditable', true);
   },
 
   /*Add/remove*/
-  valid: function() {
+  valid: function(newDate) {
 
     this.txt = this.elDiv.innerHTML;
     this.elDiv.setAttribute('contenteditable', false);
     this.switchEdit();
-
-    this.query('dp').comments.one(function(e) { return this.id === e.id }.bind(this)).edit({'txt': this.txt});
+    this.date = newDate || new Date().getTime();
+    this.query('dp').comments.one(function(e) { return this.id === e.id }.bind(this)).edit({'txt': this.txt, date: this.date});
 
     this.elDiv.innerHTML = this.txt.replace(/\[/g, '<pre class = "brush: js">').replace(/\]/g, '</pre>')
                                                   .replace(/<div>/g, '').replace(/<\/div>/g, '<br/>');
@@ -87,28 +88,30 @@ var Comment = r.Seed.extend({
   },
 
   switchEdit: function() {
-    this.wrap.innerHTML = '';
+    this.el.innerHTML = '';
+    this.el.appendChild(this.elDiv);
+    this.el.appendChild(this.timeDiv);
     if (this.elDiv.isContentEditable) {
       this.el.style["z-index"] = 100;
-      this.wrap.appendChild(this.elDiv);
-      this.wrap.appendChild(this.editEl);
+      this.el.appendChild(this.editEl);
     } else {
-      this.el.style["z-index"] = 0;
-      this.wrap.appendChild(this.elDiv);
-      this.wrap.appendChild(this.removeEl);
-      this.wrap.appendChild(document.createTextNode(' - '))
-      this.wrap.appendChild(this.editEl);
+      this.el.appendChild(this.removeEl);
+      this.el.appendChild(document.createTextNode(' - '))
+      this.el.appendChild(this.editEl);
       if (this.replyEl) {
-        this.wrap.appendChild(document.createTextNode(' - '))
-        this.wrap.appendChild(this.replyEl);
+        this.el.appendChild(document.createTextNode(' - '))
+        this.el.appendChild(this.replyEl);
       }
     }
-    this.preValide();
+  },
+
+  refreshDate: function() {
+    this.timeDiv.innerHTML = r.prettyDate(this.date);
   },
 
   getData: function() {
     return { id: this.id, idParent: this.idParent, idFile: this.idFile, txt: this.txt,
-      author: this.author, actualTop: this.actualTop, color: this.color, areas: this.getAreas()};
+      author: this.author, actualTop: this.actualTop, color: this.color, areas: this.getAreas(), date: this.date};
   },
 
   getAreas: function() {

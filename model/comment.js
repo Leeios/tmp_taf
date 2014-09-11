@@ -8,6 +8,7 @@ exports.insertCom = function(data) {
     id: data.id,
     idFile: data.idFile,
     idParent: data.idParent,
+    date: data.date,
     txt: data.txt,
     actualTop: data.actualTop,
     areas: data.areas

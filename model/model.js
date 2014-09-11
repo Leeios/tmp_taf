@@ -22,6 +22,7 @@ var comSchema = new mongoose.Schema({
   txt: String,
   idFile: String,
   idParent: String,
+  date: Number,
   resolved: Boolean,
   author: String,
   actualTop: Number,

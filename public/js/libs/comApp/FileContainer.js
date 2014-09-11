@@ -78,20 +78,27 @@ var FileContainer = r.Seed.extend({
   },
 
   setContent: function(file) {
-    this.txt = file.content;
     this.wrapContent.innerHTML = '';
+    this.txt = file.content;
 
-    this.wrapContent.appendChild(r.toDOM({
-      tag: 'pre',
-      innerHTML: file.content,
-      attr: {
-        class: 'brush: js',
-        unselectable: 'on',
-        onselectstart: 'return false;',
-        onmousedown: 'return false;'
-      }
-    }));
-    SyntaxHighlighter.highlight();
+    if (file.name.match(/\.(jpg)|(jpeg)|(gif)|(png)$/i) || this.name.innerHTML.match(/\.(jpg)|(jpeg)|(gif)|(png)$/i)) {
+      console.log('print as img')
+      var img = new Image();
+      img.src = file.content;
+      this.wrapContent.appendChild(img);
+    } else {
+      this.wrapContent.appendChild(r.toDOM({
+        tag: 'pre',
+        innerHTML: file.content,
+        attr: {
+          class: 'brush: js',
+          unselectable: 'on',
+          onselectstart: 'return false;',
+          onmousedown: 'return false;'
+        }
+      }));
+      SyntaxHighlighter.highlight();
+    }
 
     this.complete = new MutationObserver(this.setCanvas.bind(this));
     this.complete.observe(this.wrapContent, { childList: true });
