@@ -23,7 +23,7 @@ var Comment = r.Seed.extend({
         }},
         { tag:".comButton.button", as: 'editEl', innerHTML: 'Edit', events: {
           click: function(){
-            if (this.elDiv.isContentEditable) { this.valid(); }
+            if (this.elDiv.isContentEditable) { this.valid(); this.edit();}
             else { this.elDiv.setAttribute('contenteditable', true); this.switchEdit(); }
           }.bind(this)
         }},
@@ -54,9 +54,6 @@ var Comment = r.Seed.extend({
 
   '+init': function () {
 
-    if (this.id === 0) {
-      this.id = this.query('dp').comments.insert(this.getData()).id;
-    }
     this.el.innerHTML = '';
     this.el.appendChild(this.elDiv);
     this.el.appendChild(this.timeDiv);
@@ -71,7 +68,6 @@ var Comment = r.Seed.extend({
     this.elDiv.setAttribute('contenteditable', false);
     this.switchEdit();
     this.date = newDate || new Date().getTime();
-    this.query('dp').comments.one(function(e) { return this.id === e.id }.bind(this)).edit({'txt': this.txt, date: this.date});
 
     this.elDiv.innerHTML = this.txt.replace(/\[/g, '<pre class = "brush: js">').replace(/\]/g, '</pre>')
                                                   .replace(/<div>/g, '').replace(/<\/div>/g, '<br/>');
@@ -85,6 +81,10 @@ var Comment = r.Seed.extend({
 
   preValide: function() {
     this.elDiv.innerHTML = this.txt;
+  },
+
+  edit: function() {
+    this.query('dp').comments.one(function(e) { return this.id === e.id }.bind(this)).edit({'txt': this.txt, date: this.date});
   },
 
   switchEdit: function() {

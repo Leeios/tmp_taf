@@ -42,18 +42,22 @@ var CommentsGroup = r.Seed.extend({
   },
 
   '+init': function() {
-    if (this.mainId == 0) {
-      this.mainId = this.main.id;
-    }
     this.wrap.style['border-color'] = this.color;
+    this.query('dp').comments.on('insert', this.setReply.bind(this));
+  },
+
+
+  insertMain: function() {
+    this.el.remove();
+    this.main.valid();
+    this.mainId = this.query('dp').comments.insert(this.main.getData()).id;
+    this.main.id = this.mainId;
   },
 
   addArea: function(canvasArea) {/*INTERFACE*/
     if (canvasArea.points.length == 0) { return ; }
     this.main.areas.push(canvasArea);
     this.main.actualTop = canvasArea.points[0][1];
-    this.query('dp').comments.one(function(e) { return this.main.id === e.id }.bind(this))
-          .edit({'areas': this.main.getAreas(), 'actualTop': this.main.actualTop});
   },
 
   drawAreas: function() {
@@ -87,7 +91,7 @@ var CommentsGroup = r.Seed.extend({
 
   removeGroup: function() {
     this.el.remove();
-    this.query('dp').comments.one(function(e){ return this.main.id == e.id }.bind(this)).remove();
+    this.query('dp').comments.one(function(e){ return this.mainId == e.id }.bind(this)).remove();
   },
 
   addReply: function(data) {/*INTERFACE*/
@@ -96,19 +100,15 @@ var CommentsGroup = r.Seed.extend({
     this.tmpReply = this.create(r.Comment, {
       idFile: this.idFile,
       idParent: this.mainId,
-      onCreate: this.createReply.bind(this),
-      onRemove: this.removeReply.bind(this),
-      onReply: this.addReply.bind(this)
+      onCreate: function() {
+        this.tmpReply.el.remove();
+        this.tmpReply.valid();
+        delete this.tmpReply.id;
+        this.query('dp').comments.insert(this.tmpReply.getData());
+        this.tmpReply = null;
+      }.bind(this)
     });
     this.wrap.appendChild(this.tmpReply.el);
-  },
-
-  createReply: function() {
-    this.replies.push(this.tmpReply);
-    this.tmpReply = null;
-    if (this.replies.length > 2) {
-      this.collapseCom();
-    }
   },
 
   removeReply: function(id) {
@@ -159,24 +159,24 @@ var CommentsGroup = r.Seed.extend({
     }
   },
 
-  setReplies: function(data) {
-    for(var i = 0, len = data.length; i < len; i++) {
-      if (data[i].idParent == this.mainId) {
-        this.tmpReply = this.create(r.Comment, {
-          id: data[i].id,
-          idFile: this.idFile,
-          idParent: this.mainId,
-          txt: data[i].txt,
-          onCreate: this.createReply.bind(this),
-          onRemove: this.removeReply.bind(this),
-          onReply: this.addReply.bind(this)
-        });
-        this.wrap.appendChild(this.tmpReply.el);
-        this.tmpReply.preValide();
-        this.tmpReply.valid(data[i].date);
-        this.createReply();
-      }
+  setReply: function(model, options) {
+    if (model[0].idParent !== this.mainId) { return ; }
+    this.tmpReply = this.create(r.Comment, {
+      id: model[0].id,
+      idFile: model[0].idFile,
+      idParent: model[0].idParent,
+      txt: model[0].txt,
+      onRemove: this.removeReply.bind(this),
+      onReply: this.addReply.bind(this)
+    });
+    this.wrap.appendChild(this.tmpReply.el);
+    this.tmpReply.preValide();
+    this.tmpReply.valid(model[0].date);
+    this.replies.push(this.tmpReply);
+    if (this.replies.length > 2) {
+      this.collapseCom();
     }
+    this.tmpReply = null;
   }
 
 });

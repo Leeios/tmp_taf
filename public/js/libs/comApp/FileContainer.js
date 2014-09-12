@@ -63,9 +63,6 @@ var FileContainer = r.Seed.extend({
     /*set & decore content*/
     this.setContent(this.data);
 
-    /*set commentaires & replies*/
-    this.colComments.setComGroup(this.id, this.canvasTrack.getCtx());
-
     /*Echanges entre canvas et colcom*/
     this.canvasTrack.on('valid', this.colComments.addArea.bind(this.colComments), this);
     this.colComments.on('clearCanvas', this.canvasTrack.clearCanvas.bind(this.canvasTrack), this);
@@ -101,8 +98,7 @@ var FileContainer = r.Seed.extend({
 
     this.complete = new MutationObserver(this.setCanvas.bind(this));
     this.complete.observe(this.wrapContent, { childList: true });
-    this.colComments.resetCol(this.wrapContent.clientHeight);
-    this.colComments.setComGroup(file.id, this.canvasTrack.getCtx());
+    this.colComments.resetCol(this.wrapContent.clientHeight, file.id, this.canvasTrack.getCtx());
   }
 
 });

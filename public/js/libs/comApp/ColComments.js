@@ -20,19 +20,23 @@ var ColComments = r.Seed.extend({
     tmpGroup: null
   },
 
+  '+init': function() {
+    this.dp.comments.on('insert', this.appendCom.bind(this));
+  },
+
   addArea: function(canArea) {/*INTERFACE*/
     if (!this.tmpGroup) {
       this.tmpGroup = this.create(r.CommentsGroup, {
         idFile: this.idFile,
-        onRemove: this.deleteComGroup.bind(this),
-        onCreate: function() {this.commentsList.push(this.tmpGroup); this.tmpGroup = null; this.displayComments();}.bind(this)
+        onCreate: function() {
+          this.tmpGroup.insertMain();
+        }.bind(this)
       });
       this.tmpGroup.on('redraw', this.drawAreas.bind(this), this);
       this.el.appendChild(this.tmpGroup.el);
     }
     this.tmpGroup.addArea(canArea);
     this.drawAreas();
-    this.displayComments();
   },
 
   drawAreas: function() {
@@ -69,32 +73,28 @@ var ColComments = r.Seed.extend({
     }
   },
 
-  resetCol: function(h) {
+  resetCol: function(h, fid, ctx) {
     this.el.innerHTML = '';
     this.tmpGroup = null;
     this.commentsList = [];
     this.el.style.height = h + 'px';
+    this.idFile = fid;
+    this.ctx = ctx;
   },
 
-  setComGroup: function(id, ctx) {
-    this.ctx = ctx;
-    this.idFile = id;
-    var dpComments = this.query('dp').comments.where( function(e) { return this.idFile == e.idFile; }.bind(this));
+  appendCom: function(model, options) {
+    if (model[0].idParent != 0 || model[0].idFile != this.idFile) { return ; }
+    this.tmpGroup = this.create(r.CommentsGroup, {
+      mainId: model[0].id,
+      idFile: model[0].idFile,
+      onRemove: this.deleteComGroup.bind(this),
+    });
+    this.tmpGroup.setMain(model[0], this.ctx);
+    this.tmpGroup.on('redraw', this.drawAreas.bind(this), this);
 
-    for (var i = 0, len = dpComments.length; i < len; i++) {
-      if (dpComments[i].idParent != 0) { continue ; }
-      this.tmpGroup = this.create(r.CommentsGroup, {
-        mainId: dpComments[i].id,
-        idFile: this.idFile,
-        onRemove: this.deleteComGroup.bind(this),
-      });
-      this.tmpGroup.setMain(dpComments[i], ctx);
-      this.tmpGroup.on('redraw', this.drawAreas.bind(this), this);
-      this.tmpGroup.setReplies(dpComments);
-      this.el.appendChild(this.tmpGroup.el);
-      this.commentsList.push(this.tmpGroup);
-      this.tmpGroup = null;
-    }
+    this.el.appendChild(this.tmpGroup.el);
+    this.commentsList.push(this.tmpGroup);
+    this.tmpGroup = null;
     this.drawAreas();
   }
 
