@@ -49,6 +49,7 @@ var CommentsGroup = r.Seed.extend({
 
   insertMain: function() {
     this.el.remove();
+    this.main.preValid();
     this.main.valid();
     this.mainId = this.query('dp').comments.insert(this.main.getData()).id;
     this.main.id = this.mainId;
@@ -85,8 +86,10 @@ var CommentsGroup = r.Seed.extend({
     this.main.txt = data.txt;
     this.main.date = data.date;
     this.main.actualTop = data.actualTop;
-    this.main.preValide();
+    this.main.preValid();
     this.main.valid(data.date);
+    this.query('dp').comments.where(function(e) { return e.idParent === this.mainId;
+    }.bind(this)).each(function(c) { this.setReply([c]); }.bind(this));
   },
 
   removeGroup: function() {
@@ -170,7 +173,7 @@ var CommentsGroup = r.Seed.extend({
       onReply: this.addReply.bind(this)
     });
     this.wrap.appendChild(this.tmpReply.el);
-    this.tmpReply.preValide();
+    this.tmpReply.preValid();
     this.tmpReply.valid(model[0].date);
     this.replies.push(this.tmpReply);
     if (this.replies.length > 2) {

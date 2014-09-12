@@ -80,6 +80,11 @@ var ColComments = r.Seed.extend({
     this.el.style.height = h + 'px';
     this.idFile = fid;
     this.ctx = ctx;
+    this.dp.comments.where(function(e) {
+      return e.idFile === this.idFile
+    }.bind(this)).each(function(c) {
+      this.appendCom([c]);
+    }.bind(this));
   },
 
   appendCom: function(model, options) {
