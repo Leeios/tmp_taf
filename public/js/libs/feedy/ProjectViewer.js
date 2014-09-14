@@ -1,10 +1,10 @@
 sand.define('ProjectViewer', [
-  'DataPackage/Controller->DP',
-  'DOM/toDOM',
-  'FileContainer',
   'Seed',
+  'DataPackage/Controller->DP',
+  'FileContainer',
   'UploadFile',
-  'VersionPicker'
+  'VersionPicker',
+  'DOM/toDOM'
 ], function(r) {
 
 var ProjectViewer = r.Seed.extend({
@@ -29,19 +29,19 @@ var ProjectViewer = r.Seed.extend({
 
   tpl : function() {
     return {
-      tag: 'div.project',
+      tag: '.project.usual',
       children : [
-        ['.project-info.row', [
+        ['.project-info', [
           {tag: 'div.project-name.name', as: 'name', events: {click: this.editName.bind(this)}},
           this.create(r.VersionPicker, {
             onPick: this.setCurrent.bind(this),
             onAdd: this.addVersion.bind(this) }, 'versionPicker').el,
         ]],
-        {tag: '.file-nav-row.row', as: 'projectNav', children: [
+        {tag: '.file-nav.usual', as: 'projectNav', children: [
           this.create(r.UploadFile, { complete : this.insertFile.bind(this), txt: 'Add' }, 'upload').el,
           { tag : '.files-list', as : 'filesList' }
         ]},
-        ['.files-block', ['.files']]
+        {tag: '.files-block', as: 'files'}
       ],
     }
   },
@@ -52,9 +52,9 @@ var ProjectViewer = r.Seed.extend({
     window.addEventListener('scroll', function(e) {
       this.actualTop = this.projectNav.offsetTop || this.actualTop;
       if (document.body.scrollTop > this.actualTop) {
-        this.projectNav.setAttribute('class', 'fixed-top');
+        this.projectNav.setAttribute('class', 'fixed-top file-nav');
       } else {
-        this.projectNav.setAttribute('class', 'file-nav-row');
+        this.projectNav.setAttribute('class', 'usual file-nav');
       }
     }.bind(this));
 
@@ -71,7 +71,9 @@ var ProjectViewer = r.Seed.extend({
       name : 'V0',
       idParent: newProject[0].id
     })];
-    window.location.replace(window.location.origin + '/' + newProject[0].id);
+    setTimeout(function() {
+      window.location.replace(window.location.origin + '/' + newProject[0].id)
+    }.bind(this), 2000);
   },
 
   editName: function() {
@@ -157,8 +159,8 @@ var ProjectViewer = r.Seed.extend({
     var elem = this.create(r.FileContainer, { data : file,
       newVersion: this.addVersionFile.bind(this), setVersion: this.setVersionFile.bind(this) });
     this.files.appendChild(elem.el);
-    this.filesList.appendChild(r.toDOM({
-      tag : 'a.file',
+    this.filesList.appendChild(this.create(r.toDOM, {
+      tag : 'a.file-anchor',
       innerHTML: elem.name.innerHTML,
       attr : { href: '#' + elem.id }
     }));

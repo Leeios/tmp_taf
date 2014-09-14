@@ -1,7 +1,7 @@
 sand.define('ComApp', [
-  'Header',
+  'Seed',
   'ProjectViewer',
-  'Seed'
+  'Header'
 ], function(r) {
 
 /*

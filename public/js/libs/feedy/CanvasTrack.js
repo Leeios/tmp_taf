@@ -1,5 +1,4 @@
 sand.define('CanvasTrack', [
-  'DOM/toDOM',
   'Seed',
   'CanvasArea'
 ], function(r) {
@@ -10,7 +9,7 @@ sand.define('CanvasTrack', [
 */
 var CanvasTrack = r.Seed.extend({
   tpl: {
-    tag: "canvas.canWindow",
+    tag: "canvas.file-canvas",
   },
 
   '+options': {

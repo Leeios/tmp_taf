@@ -1,8 +1,8 @@
 sand.define('CommentsGroup', [
+  'Seed',
   'Comment',
   'CanvasArea',
-  'DOM/toDOM',
-  'Seed'
+  'DOM/toDOM'
 ], function(r) {
 
 var CommentsGroup = r.Seed.extend({

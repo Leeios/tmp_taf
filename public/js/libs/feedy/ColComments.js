@@ -1,8 +1,6 @@
 sand.define('ColComments', [
-  'CommentsGroup',
-  'MainComment',
-  'DOM/toDOM',
-  'Seed'
+  'Seed',
+  'CommentsGroup'
 ], function(r) {
 
 /*

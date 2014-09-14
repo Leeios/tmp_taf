@@ -1,0 +1,189 @@
+body {
+  margin: 0px;
+  margin-bottom: 0px; }
+
+pre {
+  margin: 0;
+  border: 1px solid black; }
+
+img {
+  width: 100%; }
+
+a {
+  color: white;
+  text-decoration: none; }
+
+.name {
+  float: left; }
+
+.button {
+  cursor: pointer; }
+
+.header {
+  float: left;
+  width: 100%;
+  height: 36px;
+  font-family: "Lato", sans-serif; }
+  .header .banner {
+    float: left; }
+  .header .new-project {
+    float: right;
+    box-sizing: border-box;
+    height: 36px;
+    padding: 10px 10px 0px 10px;
+    color: #FAFAFA;
+    font-weight: bold;
+    font-size: 14px;
+    cursor: pointer;
+    text-align: center;
+    background-color: dodgerblue; }
+
+.project .usual {
+  position: relative;
+  float: left;
+  width: 100%; }
+.project .fixed-top {
+  position: fixed;
+  top: 0px;
+  width: 100%; }
+.project .nav-version {
+  float: left;
+  color: #cccccc;
+  font-size: 18px; }
+.project .add-version {
+  display: inline;
+  width: 48px;
+  margin-left: 24px;
+  font-size: 18px; }
+.project .version-name {
+  display: inline;
+  font-size: small;
+  color: #cccccc;
+  margin-left: 24px; }
+.project .upload-wrapper {
+  display: inline;
+  float: left;
+  width: 36px;
+  height: 24px;
+  margin-left: 12px;
+  position: relative; }
+  .project .upload-wrapper .upload-file {
+    position: relative;
+    overflow: hidden;
+    text-align: right;
+    width: 100%;
+    height: 100%;
+    -moz-opacity: 0;
+    opacity: 0;
+    z-index: 2; }
+  .project .upload-wrapper .upload-fakebutton {
+    position: absolute;
+    text-align: center;
+    top: 0px;
+    left: 0px;
+    height: 100%;
+    width: 100%;
+    z-index: 1; }
+.project .project-info {
+  width: 100%;
+  height: 72px;
+  line-height: 72px;
+  background-color: #fafafa;
+  font-family: "Lato", sans-serif;
+  margin-top: 12 0 12 0px; }
+  .project .project-info .project-name {
+    height: 72px;
+    font-size: 24px;
+    font-weight: bold;
+    margin-left: 24px;
+    color: #525252; }
+.project .file-nav {
+  height: 36px;
+  line-height: 36px;
+  text-align: center;
+  color: white;
+  font-family: "Lato", sans-serif;
+  background-color: #333333;
+  z-index: 100; }
+  .project .file-nav .files-list {
+    display: inline; }
+    .project .file-nav .files-list .file-anchor {
+      float: left;
+      font-weight: bold;
+      font-size: 14px;
+      padding: 0 5px;
+      margin-left: 24px;
+      transition: background-color 0.3s; }
+    .project .file-nav .files-list .file-anchor:hover {
+      background-color: #68b2f8; }
+.project .files-block .file-container {
+  position: relative; }
+  .project .files-block .file-container .file-info {
+    float: left;
+    width: 100%;
+    font-family: "Lato", sans-serif;
+    margin: 24px 0px 12px 24px;
+    font-weight: bold; }
+    .project .files-block .file-container .file-info .file-name {
+      font-size: 18px;
+      color: #68b2f8; }
+  .project .files-block .file-container .file-content {
+    float: left;
+    width: 100%; }
+    .project .files-block .file-container .file-content .wrap-content {
+      position: relative;
+      float: left;
+      width: 50%; }
+      .project .files-block .file-container .file-content .wrap-content .file-canvas {
+        position: absolute;
+        top: 0px;
+        left: 0px;
+        z-index: 2; }
+      .project .files-block .file-container .file-content .wrap-content .syntaxhighlighter {
+        z-index: 0; }
+    .project .files-block .file-container .file-content .col-comments {
+      position: relative;
+      float: left;
+      width: 40%;
+      height: 100%; }
+      .project .files-block .file-container .file-content .col-comments .group-comment {
+        position: absolute;
+        float: left;
+        width: 100%;
+        box-sizing: border-box;
+        border: 1px solid #eee;
+        background-color: white;
+        transition: top 0.5s; }
+        .project .files-block .file-container .file-content .col-comments .group-comment .wrap-comments {
+          margin: 6px;
+          border-left: 5px solid; }
+          .project .files-block .file-container .file-content .col-comments .group-comment .wrap-comments .comment {
+            width: 100%;
+            padding: 0px 8px;
+            background-color: #fefefe;
+            transition: visibility 0.5s linear;
+            font-family: "Open Sans", sans-serif; }
+            .project .files-block .file-container .file-content .col-comments .group-comment .wrap-comments .comment .comment-txt {
+              float: left;
+              width: 99%;
+              color: #525252;
+              font-size: 14px;
+              padding: 8px;
+              white-space: pre; }
+            .project .files-block .file-container .file-content .col-comments .group-comment .wrap-comments .comment .comment-date {
+              float: right;
+              font-size: 12px;
+              font-style: italic; }
+            .project .files-block .file-container .file-content .col-comments .group-comment .wrap-comments .comment .comment-button {
+              display: inline;
+              font-size: 12px;
+              color: #68b2f8;
+              font-weight: bold; }
+          .project .files-block .file-container .file-content .col-comments .group-comment .wrap-comments .collapse-com {
+            float: left;
+            background-color: white;
+            font-family: "Lato", sans-serif;
+            font-style: italic;
+            color: #68b2f8;
+            font-size: 12px;
+            cursor: pointer; }

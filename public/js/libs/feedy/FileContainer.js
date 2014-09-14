@@ -2,7 +2,6 @@ sand.define('FileContainer', [
   'Seed',
   'CanvasTrack',
   'ColComments',
-  'ColComments',
   'VersionPicker',
   'UploadFile',
   'DOM/toDOM'
@@ -12,9 +11,9 @@ var FileContainer = r.Seed.extend({
 
   tpl: function() {
     return {
-        tag: '.container', children: [
-          ['.container-info', [
-            {tag: '.container-name.name', as: 'name'},
+        tag: '.file-container', children: [
+          ['.file-info', [
+            {tag: '.file-name.name', as: 'name'},
             this.create(r.VersionPicker, {
               addEl: this.create(r.UploadFile, {
                 complete: function(file) {
@@ -24,17 +23,9 @@ var FileContainer = r.Seed.extend({
               onPick: function(id) { this.setVersion.bind(this)(this, id); }.bind(this)
             }, 'versionPicker').el
           ]],
-          ['.container-file', [
+          ['.file-content', [
             {tag: '.wrap-content', as: 'wrapContent', children: [
               this.create(r.CanvasTrack, {form: "points"}, 'canvasTrack').el,
-              { tag: 'pre.content',
-                as: 'content',
-                attr: {
-                  unselectable: 'on',
-                  onselectstart: 'return false;',
-                  onmousedown: 'return false;'
-                }
-              }
             ]},
             this.create(r.ColComments, {dp: this.query('dp')}, 'colComments').el
           ]]

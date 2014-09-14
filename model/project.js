@@ -47,20 +47,22 @@ exports.getProj = function(id, callback) {
           for (var i = 1, len = result.projects.length; i < len; i++) {
             File.find({idProject: result.projects[i].id}, {}, function(err, dataF) {/*Fichier associés aux versions*/
               if (err) { console.log("Failed to find in database"); }
-              else {
+              else {/*Com ruler*/
                 result.files = result.files.concat(dataF);
-                if (dataF.length ==0) { callback(result); }
-                for (var j = 0, len = dataF.length; j < len; j++) {
-                  Com.find({idFile: dataF[j].id}, {}, function(err, dataC) {
-                    if (err) { console.log("Failed to find com") }
-                    else {result.comments = result.comments.concat(dataC); }
-                    pending--;
-                    if (pending === 0) { callback(result); }
-                  });
-                  pending++;
+                if (dataF.length !== 0) {
+                  for (var j = 0, jen = dataF.length; j < jen; j++) {
+                    Com.find({idFile: dataF[j].id}, {}, function(err, dataC) {
+                      if (err) { console.log("Failed to find com") }
+                      else {result.comments = result.comments.concat(dataC); }
+                      pending--;
+                      if (pending === 0) { callback(result); pending = 100;}
+                    });
+                    pending++;
+                  }
                 }
                 pending--;
-              }
+                if (pending === 0) { callback(result); pending = 100;}
+              }/*Com ruler*/
             });
             pending++;
           }

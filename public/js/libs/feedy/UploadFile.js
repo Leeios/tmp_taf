@@ -1,5 +1,4 @@
 sand.define('UploadFile', [
-  'DOM/toDOM',
   'Seed'
 ], function(r) {
 

@@ -7,7 +7,7 @@ var VersionPicker = r.Seed.extend({
 
   tpl: function() {
     return {
-      tag: 'div.project-version',
+      tag: 'div.nav-version',
       children: [this.addEl]
     }
   },
@@ -22,15 +22,15 @@ var VersionPicker = r.Seed.extend({
         console.log('Versioning is not available for this element');
       },
       addEl: r.toDOM({
-        tag: 'div.addVersion.button', innerHTML: '+',
+        tag: '.add-version.button', innerHTML: '+',
         events: { click: function() { this.onAdd(); }.bind(this) }
       })
     }
   },
 
   addVersion: function(data) {
-    var newVersion = r.toDOM({
-      tag: 'div.versionProject.button',
+    var newVersion = this.create(r.toDOM, {
+      tag: '.version-name.button',
       innerHTML: data.name,
       events: {
         click: function(e) {

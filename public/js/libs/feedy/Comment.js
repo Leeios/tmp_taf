@@ -1,8 +1,7 @@
 sand.define('Comment', [
+  'Seed',
   'CanvasArea',
-  'prettyDate',
-  'DOM/toDOM',
-  'Seed'
+  'prettyDate'
 ], function(r) {
 
 /*
@@ -15,23 +14,23 @@ var Comment = r.Seed.extend({
     return {
       tag: ".comment",
       children: [
-        { tag:".comButton.button", as: 'createEl', innerHTML: 'Create', events: {
+        { tag:".comment-button.button", as: 'createEl', innerHTML: 'Create', events: {
           click: function(){ this.valid(); this.onCreate(); }.bind(this)
         }},
-        { tag:".comButton.button", as: 'removeEl', innerHTML: 'Delete', events: {
+        { tag:".comment-button.button", as: 'removeEl', innerHTML: 'Delete', events: {
           click: function(){ this.el.remove(); this.onRemove(this.id); }.bind(this)
         }},
-        { tag:".comButton.button", as: 'editEl', innerHTML: 'Edit', events: {
+        { tag:".comment-button.button", as: 'editEl', innerHTML: 'Edit', events: {
           click: function(){
             if (this.elDiv.isContentEditable) { this.valid(); this.edit();}
             else { this.elDiv.setAttribute('contenteditable', true); this.switchEdit(); }
           }.bind(this)
         }},
-        { tag:".comButton.button", as: 'replyEl', innerHTML: 'Reply', events: {
+        { tag:".comment-button.button", as: 'replyEl', innerHTML: 'Reply', events: {
           click: this.onReply.bind(this)
         }},
         { tag:".comment-txt", as: 'elDiv' },
-        { tag: '.comment-time', as: 'timeDiv'}
+        { tag: '.comment-date', as: 'timeDiv'}
       ]
     }
   },
