@@ -12,7 +12,7 @@ var FileContainer = r.Seed.extend({
   tpl: function() {
     return {
         tag: '.file-container', children: [
-          ['.file-info', [
+          ['.file-info.usual', [
             {tag: '.file-name.name', as: 'name'},
             this.create(r.VersionPicker, {
               addEl: this.create(r.UploadFile, {
@@ -23,7 +23,7 @@ var FileContainer = r.Seed.extend({
               onPick: function(id) { this.setVersion.bind(this)(this, id); }.bind(this)
             }, 'versionPicker').el
           ]],
-          ['.file-content', [
+          ['.file-content.usual', [
             {tag: '.wrap-content', as: 'wrapContent', children: [
               this.create(r.CanvasTrack, {form: "points"}, 'canvasTrack').el,
             ]},

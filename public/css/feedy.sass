@@ -59,11 +59,15 @@ a
     width: 48px
     margin-left: 24px
     font-size: 18px
+    font-weight: bold
   .version-name
     display: inline
-    font-size: small
+    font-weight: bold
     color: #cccccc
     margin-left: 24px
+    transition: 0.3s color
+  .version-name:hover
+    color: #333333
 
   .upload-wrapper
     display: inline
@@ -96,7 +100,7 @@ a
     line-height: 72px
     background-color: #fafafa
     font-family: "Lato", sans-serif
-    margin-top: 12 0 12 0px
+    margin: 12px 0px
     .project-name
       height: 72px
       font-size: 24px
@@ -128,17 +132,15 @@ a
     .file-container
       position: relative
       .file-info
-        float: left
-        width: 100%
         font-family: "Lato", sans-serif
         margin: 24px 0px 12px 24px
         font-weight: bold
         .file-name
           font-size: 18px
           color: #68b2f8
+        .version-name
+          font-size: 14px
       .file-content
-        float: left
-        width: 100%
         .wrap-content
           position: relative
           float: left
@@ -151,6 +153,17 @@ a
           .syntaxhighlighter
             z-index: 0
         .col-comments
+          .collapse-col
+            font-family: "Lato", sans-serif
+            font-style: italic
+            font-weight: bold
+            color: #68b2f8
+            font-size: 14px
+            cursor: pointer
+            border-radius: 14px
+            background-color: #eee
+            text-align: center
+            bottom: 0px
           position: relative
           float: left
           width: 40%
@@ -196,3 +209,4 @@ a
                 color: #68b2f8
                 font-size: 12px
                 cursor: pointer
+

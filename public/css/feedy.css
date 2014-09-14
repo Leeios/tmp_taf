@@ -54,12 +54,16 @@ a {
   display: inline;
   width: 48px;
   margin-left: 24px;
-  font-size: 18px; }
+  font-size: 18px;
+  font-weight: bold; }
 .project .version-name {
   display: inline;
-  font-size: small;
+  font-weight: bold;
   color: #cccccc;
-  margin-left: 24px; }
+  margin-left: 24px;
+  transition: 0.3s color; }
+.project .version-name:hover {
+  color: #333333; }
 .project .upload-wrapper {
   display: inline;
   float: left;
@@ -90,7 +94,7 @@ a {
   line-height: 72px;
   background-color: #fafafa;
   font-family: "Lato", sans-serif;
-  margin-top: 12 0 12 0px; }
+  margin: 12px 0px; }
   .project .project-info .project-name {
     height: 72px;
     font-size: 24px;
@@ -119,71 +123,79 @@ a {
 .project .files-block .file-container {
   position: relative; }
   .project .files-block .file-container .file-info {
-    float: left;
-    width: 100%;
     font-family: "Lato", sans-serif;
     margin: 24px 0px 12px 24px;
     font-weight: bold; }
     .project .files-block .file-container .file-info .file-name {
       font-size: 18px;
       color: #68b2f8; }
-  .project .files-block .file-container .file-content {
+    .project .files-block .file-container .file-info .version-name {
+      font-size: 14px; }
+  .project .files-block .file-container .file-content .wrap-content {
+    position: relative;
     float: left;
-    width: 100%; }
-    .project .files-block .file-container .file-content .wrap-content {
-      position: relative;
+    width: 50%; }
+    .project .files-block .file-container .file-content .wrap-content .file-canvas {
+      position: absolute;
+      top: 0px;
+      left: 0px;
+      z-index: 2; }
+    .project .files-block .file-container .file-content .wrap-content .syntaxhighlighter {
+      z-index: 0; }
+  .project .files-block .file-container .file-content .col-comments {
+    position: relative;
+    float: left;
+    width: 40%;
+    height: 100%; }
+    .project .files-block .file-container .file-content .col-comments .collapse-col {
+      font-family: "Lato", sans-serif;
+      font-style: italic;
+      font-weight: bold;
+      color: #68b2f8;
+      font-size: 14px;
+      cursor: pointer;
+      border-radius: 14px;
+      background-color: #eee;
+      text-align: center;
+      bottom: 0px; }
+    .project .files-block .file-container .file-content .col-comments .group-comment {
+      position: absolute;
       float: left;
-      width: 50%; }
-      .project .files-block .file-container .file-content .wrap-content .file-canvas {
-        position: absolute;
-        top: 0px;
-        left: 0px;
-        z-index: 2; }
-      .project .files-block .file-container .file-content .wrap-content .syntaxhighlighter {
-        z-index: 0; }
-    .project .files-block .file-container .file-content .col-comments {
-      position: relative;
-      float: left;
-      width: 40%;
-      height: 100%; }
-      .project .files-block .file-container .file-content .col-comments .group-comment {
-        position: absolute;
-        float: left;
-        width: 100%;
-        box-sizing: border-box;
-        border: 1px solid #eee;
-        background-color: white;
-        transition: top 0.5s; }
-        .project .files-block .file-container .file-content .col-comments .group-comment .wrap-comments {
-          margin: 6px;
-          border-left: 5px solid; }
-          .project .files-block .file-container .file-content .col-comments .group-comment .wrap-comments .comment {
-            width: 100%;
-            padding: 0px 8px;
-            background-color: #fefefe;
-            transition: visibility 0.5s linear;
-            font-family: "Open Sans", sans-serif; }
-            .project .files-block .file-container .file-content .col-comments .group-comment .wrap-comments .comment .comment-txt {
-              float: left;
-              width: 99%;
-              color: #525252;
-              font-size: 14px;
-              padding: 8px;
-              white-space: pre; }
-            .project .files-block .file-container .file-content .col-comments .group-comment .wrap-comments .comment .comment-date {
-              float: right;
-              font-size: 12px;
-              font-style: italic; }
-            .project .files-block .file-container .file-content .col-comments .group-comment .wrap-comments .comment .comment-button {
-              display: inline;
-              font-size: 12px;
-              color: #68b2f8;
-              font-weight: bold; }
-          .project .files-block .file-container .file-content .col-comments .group-comment .wrap-comments .collapse-com {
+      width: 100%;
+      box-sizing: border-box;
+      border: 1px solid #eee;
+      background-color: white;
+      transition: top 0.5s; }
+      .project .files-block .file-container .file-content .col-comments .group-comment .wrap-comments {
+        margin: 6px;
+        border-left: 5px solid; }
+        .project .files-block .file-container .file-content .col-comments .group-comment .wrap-comments .comment {
+          width: 100%;
+          padding: 0px 8px;
+          background-color: #fefefe;
+          transition: visibility 0.5s linear;
+          font-family: "Open Sans", sans-serif; }
+          .project .files-block .file-container .file-content .col-comments .group-comment .wrap-comments .comment .comment-txt {
             float: left;
-            background-color: white;
-            font-family: "Lato", sans-serif;
-            font-style: italic;
-            color: #68b2f8;
+            width: 99%;
+            color: #525252;
+            font-size: 14px;
+            padding: 8px;
+            white-space: pre; }
+          .project .files-block .file-container .file-content .col-comments .group-comment .wrap-comments .comment .comment-date {
+            float: right;
             font-size: 12px;
-            cursor: pointer; }
+            font-style: italic; }
+          .project .files-block .file-container .file-content .col-comments .group-comment .wrap-comments .comment .comment-button {
+            display: inline;
+            font-size: 12px;
+            color: #68b2f8;
+            font-weight: bold; }
+        .project .files-block .file-container .file-content .col-comments .group-comment .wrap-comments .collapse-com {
+          float: left;
+          background-color: white;
+          font-family: "Lato", sans-serif;
+          font-style: italic;
+          color: #68b2f8;
+          font-size: 12px;
+          cursor: pointer; }

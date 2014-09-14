@@ -1,5 +1,6 @@
 sand.define('ColComments', [
   'Seed',
+  'DOM/toDOM',
   'CommentsGroup'
 ], function(r) {
 
@@ -15,7 +16,8 @@ var ColComments = r.Seed.extend({
   options: {
     dp: null,
     commentsList: [],
-    tmpGroup: null
+    tmpGroup: null,
+    collapseEl: null
   },
 
   '+init': function() {
@@ -69,6 +71,17 @@ var ColComments = r.Seed.extend({
        && (previous_down >= parseInt(this.commentsList[i].el.style.top))
        && (this.commentsList[i].el.style.top = previous_down + 'px');
     }
+    /*Check collapse*/
+    if (i == 0) { return ;}
+    if (parseInt(this.commentsList[i - 1].el.style.top) + this.commentsList[i - 1].el.offsetHeight > this.el.offsetHeight) {
+      this.collapseCom();
+    } else if (this.collapseEl !== null) {
+      for (var i = 0, len = this.commentsList.length; i < len; i++) {
+        this.commentsList[i].show();
+      }
+      this.collapseEl.remove();
+      this.collapseEl = null;
+    }
   },
 
   resetCol: function(h, fid, ctx) {
@@ -99,7 +112,32 @@ var ColComments = r.Seed.extend({
     this.commentsList.push(this.tmpGroup);
     this.tmpGroup = null;
     this.drawAreas();
-  }
+  },
+
+  collapseCom: function() {
+    if (this.collapseEl !== null) { return ;}
+    this.el.appendChild(this.create(r.toDOM, {
+      tag: '.collapse-col.usual', innerHTML: 'Hide', events: {
+        click: function() {
+          if (this.collapseEl.innerHTML == 'Show') {
+            for (var i = 0, len = this.commentsList.length; i < len; i++) {
+              if (this.commentsList[i].el.style.display !== 'none') { continue ; }
+              this.commentsList[i].show();
+            }
+            this.collapseEl.innerHTML = 'Hide';
+          } else {
+            for (var i = 0, len = this.commentsList.length; i < len; i++) {
+              if (parseInt(this.commentsList[i].el.style.top) + this.commentsList[i].el.offsetHeight > this.el.offsetHeight) {
+                this.commentsList[i].hide();
+              }
+              this.collapseEl.innerHTML = 'Show';
+            }
+          }
+        }.bind(this)
+      }
+    }, 'collapseEl'));
+  },
+
 
 
 });
