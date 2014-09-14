@@ -86,13 +86,15 @@ var Comment = r.Seed.extend({
   },
 
   switchEdit: function() {
+      console.log(this.el.style)
     this.el.innerHTML = '';
     this.el.appendChild(this.elDiv);
     this.el.appendChild(this.timeDiv);
     if (this.elDiv.isContentEditable) {
-      this.el.style["z-index"] = 100;
+      this.el.style.zIndex = 100;
       this.el.appendChild(this.editEl);
     } else {
+      this.el.style.zIndex = 0;
       this.el.appendChild(this.removeEl);
       this.el.appendChild(document.createTextNode(' - '))
       this.el.appendChild(this.editEl);
@@ -101,6 +103,7 @@ var Comment = r.Seed.extend({
         this.el.appendChild(this.replyEl);
       }
     }
+      console.log('then', this.el.style)
   },
 
   refreshDate: function() {
