@@ -19,7 +19,7 @@ var Comment = r.Seed.extend({
         { tag:".comment-button.button", as: 'editEl', innerHTML: 'Edit', events: {
           click: function(){
             if (this.elDiv.isContentEditable) { this.valid(); this.edit();}
-            else { this.elDiv.setAttribute('contenteditable', true); this.switchEdit(); }
+            else { this.elDiv.setAttribute('contenteditable', true); this.preValid(); this.switchEdit(); }
           }.bind(this)
         }},
         { tag:".comment-button.button", as: 'replyEl', innerHTML: 'Reply', events: {
@@ -86,10 +86,8 @@ var Comment = r.Seed.extend({
     this.el.appendChild(this.elDiv);
     this.el.appendChild(this.timeDiv);
     if (this.elDiv.isContentEditable) {
-      this.el.style.zIndex = 100;
       this.el.appendChild(this.editEl);
     } else {
-      this.el.style.zIndex = 0;
       this.el.appendChild(this.removeEl);
       this.el.appendChild(document.createTextNode(' - '))
       this.el.appendChild(this.editEl);

@@ -49,10 +49,7 @@ var CommentsGroup = r.Seed.extend({
 
   insertMain: function() {
     this.el.remove();
-    this.main.preValid();
-    this.main.valid();
-    this.mainId = this.query('dp').comments.insert(this.main.getData()).id;
-    this.main.id = this.mainId;
+    this.query('dp').comments.insert(this.main.getData());
   },
 
   addArea: function(canvasArea) {/*INTERFACE*/
@@ -90,10 +87,13 @@ var CommentsGroup = r.Seed.extend({
     this.main.valid(data.date);
     this.query('dp').comments.where(function(e) { return e.idParent === this.mainId;
     }.bind(this)).each(function(c) { this.setReply([c]); }.bind(this));
+    SyntaxHighlighter.highlight();
   },
 
   removeGroup: function() {
     this.el.remove();
+    this.query('dp').comments.where(function(e){ return this.mainId == e.idParent }.bind(this))
+    .each(function(com){ com.remove(); }.bind(this));
     this.query('dp').comments.one(function(e){ return this.mainId == e.id }.bind(this)).remove();
   },
 
@@ -105,7 +105,6 @@ var CommentsGroup = r.Seed.extend({
       idParent: this.mainId,
       onCreate: function() {
         this.tmpReply.el.remove();
-        this.tmpReply.valid();
         delete this.tmpReply.id;
         this.query('dp').comments.insert(this.tmpReply.getData());
         this.tmpReply = null;

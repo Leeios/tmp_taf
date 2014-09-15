@@ -30,6 +30,7 @@ var ColComments = r.Seed.extend({
         idFile: this.idFile,
         onCreate: function() {
           this.tmpGroup.insertMain();
+          this.tmpGroup = null;
         }.bind(this)
       });
       this.tmpGroup.on('redraw', this.drawAreas.bind(this), this);
@@ -109,6 +110,7 @@ var ColComments = r.Seed.extend({
     this.tmpGroup.on('redraw', this.drawAreas.bind(this), this);
 
     this.el.appendChild(this.tmpGroup.el);
+    SyntaxHighlighter.highlight();
     this.commentsList.push(this.tmpGroup);
     this.tmpGroup = null;
     this.drawAreas();
