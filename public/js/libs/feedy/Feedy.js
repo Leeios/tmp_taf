@@ -17,7 +17,6 @@ var appComments = r.Seed.extend({
   },
 
   '+init': function() {
-
     this.projectViewer = this.create(r.ProjectViewer, {data : this.data, server: io.connect()}, 'projview');
 
     this.create(r.Header, {}, 'header');

@@ -17,11 +17,17 @@ var FileContainer = r.Seed.extend({
             this.create(r.VersionPicker, {
               addEl: this.create(r.UploadFile, {
                 complete: function(file) {
-                  this.newVersion(file, this);
+                  file.idParent = this.idParent == 0 ? this.id : this.idParent;
+                  file.idProject = this.idProject;
+                  this.query('dp').files.insert(file);
                 }.bind(this)
               }).el,
               onPick: function(id) { this.setVersion.bind(this)(this, id); }.bind(this)
-            }, 'versionPicker').el
+            }, 'versionPicker').el,
+            {tag: '.file-delete.button', as: 'deleteEl', innerHTML: 'Delete', events: {
+                click: this.removeFile.bind(this)
+              }
+            }
           ]],
           ['.file-content.usual', [
             {tag: '.wrap-content', as: 'wrapContent', children: [
@@ -36,7 +42,6 @@ var FileContainer = r.Seed.extend({
   options : function() {
     return {
       data: null,
-      newVersion: function() { console.log('Versioning not available on this element'); },
       setVersion: function() { console.log('Cannot set version for this element'); },
       txt: "",
     };
@@ -59,6 +64,21 @@ var FileContainer = r.Seed.extend({
     this.colComments.on('clearCanvas', this.canvasTrack.clearCanvas.bind(this.canvasTrack), this);
   },
 
+  removeFile: function() {
+    this.el.remove();
+
+    this.query('dp').files.where(function(files) { return files.idParent === this.idParent }.bind(this))
+    .each(function(files) {
+      this.query('dp').comments.where(function(com) { return com.idFile === files.id }.bind(this))
+      .each(function(e) {
+        e.remove();
+      }.bind(this))
+      files.remove();
+    }.bind(this))
+
+    this.query('dp').files.one(function(e) { return e.id === this.idParent }.bind(this)).remove();
+  },
+
   setCanvas: function() {
     this.canvasTrack.setSize(this.wrapContent.clientHeight, this.wrapContent.clientWidth);
     this.complete.disconnect();
@@ -66,6 +86,10 @@ var FileContainer = r.Seed.extend({
   },
 
   setContent: function(file) {
+    this.id = file.id;
+    this.idProject = file.idProject;
+    this.idParent = file.idParent;
+
     this.wrapContent.innerHTML = '';
     this.txt = file.content;
 

@@ -5,7 +5,7 @@ var File = mongoose.model('File');
 var Com = mongoose.model('Com');
 
 
-exports.insertProj = function(data) {
+exports.insertProj = function(data, socket) {
   var insert_proj = new Project({
     name: data.name,
     id: data.id,
@@ -15,6 +15,7 @@ exports.insertProj = function(data) {
     if (err) {
       console.log("Failed to add " + data.name + " to database");
     } else {
+      socket.emit('InsertProj', data.id);
       console.log("Proj " + data.name + " added to database");
     }
   });

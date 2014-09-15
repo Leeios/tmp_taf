@@ -59,7 +59,18 @@ var ProjectViewer = r.Seed.extend({
     }.bind(this));
 
     this.setDataToDP();
+    this.listenFiles();
     this.sendToServer();
+  },
+
+  listenFiles: function() {
+    this.dp.files.on('insert', this.addFile.bind(this))
+    this.dp.files.on('edit', this.editFile.bind(this));
+    this.dp.files.on('remove', this.removeFile.bind(this));
+  },
+
+  editFile: function() {
+    console.log('File edited in projview');
   },
 
   createProject : function() {
@@ -71,9 +82,11 @@ var ProjectViewer = r.Seed.extend({
       name : 'V0',
       idParent: newProject[0].id
     })];
-    setTimeout(function() {
-      window.location.replace(window.location.origin + '/' + newProject[0].id)
-    }.bind(this), 2000);
+    socket.on('InsertProj', function(id) {
+      if (id == projv0[0].id) {
+        window.location.replace(window.location.origin + '/' + newProject[0].id)
+      }
+    }.bind(this));
   },
 
   editName: function() {
@@ -95,11 +108,11 @@ var ProjectViewer = r.Seed.extend({
         else { this.dp[e].insert(this.data[e][i]); }
       }
     }.bind(this))
+    this.dp.files.on('remove', this.removeFile.bind(this));
   },
 
   _setProjectFromData: function(proj) {
     if (proj.idParent == 0) {
-      var saveIdParent = proj.id;
       this.dp.projects.insert(proj);
       this.name.innerHTML = proj.name;
       this.setCurrent(proj);
@@ -130,34 +143,56 @@ var ProjectViewer = r.Seed.extend({
     this.filesList.innerHTML = '';
     this.files.innerHTML = '';
 
-    var versionsFile = [];
+    this.fileElems = [];
     this.dp.files.where(function(e) { return this.current.id === e.idProject; }.bind(this))
           .each( function (file) {
             if (file.idParent == 0) {
-              versionsFile.push(this.appendFile(file));
-            }
-            else {
-              var parentElem = versionsFile.one(function(e) { return e.id == file.idParent }.bind(this));
-              if (parentElem == null) { return ; }
-              parentElem.versionPicker.addVersion(file);
-              parentElem.setContent(file);
+              this.fileElems.push(this.appendFile(file));
+            } else {
+              this.addVersionFile(this.fileElems.one(function(e) {
+                return (e.idParent == file.idParent || e.id == file.idParent)
+              }.bind(this)), file);
             }
           }.bind(this));
   },
 
   insertFile: function(file) {
-    var tmpcontent = file.content;
+    var v0content = file.content;
     file.content.innerHTML = 'Master file: No content available';
     file.idProject = this.id;
     file.idParent = 0;
-    this.dp.files.insert(file);
-    tmpFile = this.appendFile(file);
-    this.addVersionFile({name: 'v.0', content: tmpcontent}, tmpFile);
+    var v0Id = this.dp.files.insert(file).id;
+    var v0File = {};
+    v0File.name = 'V0';
+    v0File.content = v0content;
+    v0File.idParent = v0Id;
+    v0File.idProject = this.id;
+    this.dp.files.insert(v0File);
+  },
+
+  addFile: function(model, op) {
+    console.log(this.fileElems);
+    if (model[0].idParent == 0) {
+      this.fileElems.push(this.appendFile(model[0]));
+    } else {
+      this.addVersionFile(this.fileElems.one(function(e) {
+        return (e.idParent == model[0].idParent || e.id == model[0].idParent)
+      }.bind(this)), model[0]);
+    }
+  },
+
+  addVersionFile: function(parentFile, file) {
+    // console.log(parentFile, file);
+    if (parentFile == null) { return ; }
+    parentFile.versionPicker.addVersion(file);
+    parentFile.setContent(file);
   },
 
   appendFile : function(file) {
-    var elem = this.create(r.FileContainer, { data : file,
-      newVersion: this.addVersionFile.bind(this), setVersion: this.setVersionFile.bind(this) });
+    var elem = this.create(r.FileContainer, {
+      data : file,
+      setVersion: this.setVersionFile.bind(this)
+    });
     this.files.appendChild(elem.el);
     this.filesList.appendChild(this.create(r.toDOM, {
       tag : 'a.file-anchor',
@@ -167,13 +202,14 @@ var ProjectViewer = r.Seed.extend({
     return (elem);
   },
 
-  addVersionFile: function(file, prevFile) {
-    file.idParent = prevFile.idParent != 0 ? prevFile.idParent : prevFile.id;
-    file.idProject = prevFile.idProject;
-    this.dp.files.insert(file);
-
-    prevFile.versionPicker.addVersion(file);
-    prevFile.setContent(file);/*Equivalent à setVersionfile mais on s'evite une seach inutile*/
+  removeFile: function(model, op) {
+    var filesArray = this.filesList.childNodes;
+    for (var i = 0, len = filesArray.length; i < len ; i++) {
+      if (filesArray[i].href.substr(filesArray[i].href.lastIndexOf('#') + 1) ==  model[0].id) {
+        filesArray[i].remove();
+        return ;
+      }
+    }
   },
 
   setVersionFile: function(file, idVersion) {

@@ -16,7 +16,7 @@ exports.socket = function(socket) {
 
   socket.on('insert', function (data) {
     if (data.type == 'projects') {
-      proj_method.insertProj(data.models);
+      proj_method.insertProj(data.models, socket);
     } else if (data.type == 'files') {
       file_method.insertFile(data.models);
     } else if (data.type == 'comments') {
@@ -41,6 +41,8 @@ exports.socket = function(socket) {
   socket.on('remove', function (data) {
     if (data.type == 'comments') {
       com_method.deleteCom(data.models);
+    } else if (data.type == 'files') {
+      file_method.removeFile(data.models);
     } else {
       console.log('Data model is not recognized');
     }

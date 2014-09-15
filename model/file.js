@@ -28,6 +28,13 @@ exports.editFile = function(models, changes) {
     })
 }
 
+exports.removeFile = function(model) {
+  File.remove({id: model.id}, function(err) {
+    if (err) { console.log('Failed to remove file', model.name, model.id); }
+    else { console.log('File', model.name, model.id, 'has been removed'); }
+  });
+}
+
 exports.getFile = function(id, callback) {
   File.find({id: id}, {}, function (err, doc) {
       if (err || doc == null) {

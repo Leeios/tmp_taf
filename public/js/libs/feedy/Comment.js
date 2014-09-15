@@ -4,10 +4,6 @@ sand.define('Comment', [
   'prettyDate'
 ], function(r) {
 
-/*
-**Fire: 5
-**On:   0
-*/
 var Comment = r.Seed.extend({
 
   tpl: function() {
@@ -86,7 +82,6 @@ var Comment = r.Seed.extend({
   },
 
   switchEdit: function() {
-      console.log(this.el.style)
     this.el.innerHTML = '';
     this.el.appendChild(this.elDiv);
     this.el.appendChild(this.timeDiv);
@@ -103,7 +98,6 @@ var Comment = r.Seed.extend({
         this.el.appendChild(this.replyEl);
       }
     }
-      console.log('then', this.el.style)
   },
 
   refreshDate: function() {
