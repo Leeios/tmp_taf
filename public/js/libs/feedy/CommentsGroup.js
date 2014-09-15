@@ -23,6 +23,13 @@ var CommentsGroup = r.Seed.extend({
       ], events: {
         mouseover: this.highStyle.bind(this),
         mouseout: this.usualStyle.bind(this),
+        click: function(e) {
+          if (e.target !== this.wrap) { return ;}
+          this.color = ['#fffbbe', '#ffbfbf', '#bfffc4'][Math.floor(Math.random()*3)];
+          console.log(this.color);
+          this.wrap.style['border-color'] = this.color;
+          this.highStyle();
+        }.bind(this)
       }
     }
   },
@@ -35,7 +42,7 @@ var CommentsGroup = r.Seed.extend({
       actualTop: 0,
       replies: [],
       collapseEl: null,
-      color: '#' + Math.floor(Math.random() * 16777215).toString(16),
+      color: ['#fffbbe', '#ffbfbf', 'bfffc4'][Math.floor(Math.random()*3)],
       onCreate: function() {console.log('create is not available on this element')},
       onRemove: function() {console.log('remove not available on this element');}
     }
