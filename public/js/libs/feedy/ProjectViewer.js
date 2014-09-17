@@ -31,6 +31,16 @@ var ProjectViewer = r.Seed.extend({
     return {
       tag: '.project.usual',
       children : [
+        {tag: '.form-block', as: 'form', children: [
+          {tag: 'input.form-name.usual', as: 'formName', attr: {placeholder: 'Enter your name...'}},
+          {tag: 'input.form-email.usual', as: 'formMail', attr: {placeholder: 'Enter your mail...'}},
+          {tag: '.form-valid.usual.button', innerHTML: 'VALID', events: {
+            click: function() {
+              document.cookie = 'name=' + (this.formName.value || 'unnamed') + ';' + 'email=' + (this.formMail.value || 'unnamed') + ';';
+              this.form.remove();
+            }.bind(this)
+          }},
+        ]},
         ['.project-info', [
           {tag: 'div.project-name.name', as: 'name', events: {click: this.editName.bind(this)}},
           this.create(r.VersionPicker, {
@@ -48,6 +58,10 @@ var ProjectViewer = r.Seed.extend({
 
   '+init' : function() {
 
+    /*Ask name & mail*/
+    if (!document.cookie == '') {
+      this.form.remove();
+    }
     /*Listen scroll*/
     window.addEventListener('scroll', function(e) {
       this.actualTop = this.projectNav.offsetTop || this.actualTop;

@@ -36,6 +36,33 @@ a {
     text-align: center;
     background-color: dodgerblue; }
 
+.project .form-block {
+  position: fixed;
+  top: 0px;
+  left: 0px;
+  width: 100%;
+  height: 100%;
+  z-index: 100;
+  padding-top: 168px;
+  background-color: rgba(200, 200, 200, 0.4);
+  opacity: 0.4;
+  font-family: "Lato", sans-serif;
+  text-align: center;
+  box-sizing: border-box; }
+  .project .form-block .form-name {
+    padding: 12px 24px 12px 24px; }
+  .project .form-block .form-email {
+    padding: 12px 24px 12px 24px; }
+  .project .form-block .form-valid {
+    padding: 12px 24px 12px 24px;
+    color: #fafafa;
+    background-color: #68b2f8;
+    opacity: 1;
+    float: left;
+    border: 1px solid #cccccc;
+    transition: color 0.5s; }
+  .project .form-block .form-valid:hover {
+    background-color: dodgerblue; }
 .project .usual {
   position: relative;
   float: left;
@@ -106,7 +133,7 @@ a {
   color: white;
   font-family: "Lato", sans-serif;
   background-color: #333333;
-  z-index: 100; }
+  z-index: 50; }
   .project .file-nav .files-list {
     display: inline; }
     .project .file-nav .files-list .file-anchor {
@@ -172,28 +199,6 @@ a {
       .project .files-block .file-container .file-content .col-comments .group-comment .wrap-comments {
         margin: 6px;
         border-left: 5px solid; }
-        .project .files-block .file-container .file-content .col-comments .group-comment .wrap-comments .comment {
-          width: 100%;
-          padding: 0px 8px;
-          background-color: #fefefe;
-          transition: visibility 0.5s linear;
-          font-family: "Open Sans", sans-serif; }
-          .project .files-block .file-container .file-content .col-comments .group-comment .wrap-comments .comment .comment-txt {
-            float: left;
-            width: 99%;
-            color: #525252;
-            font-size: 14px;
-            padding: 8px;
-            white-space: pre; }
-          .project .files-block .file-container .file-content .col-comments .group-comment .wrap-comments .comment .comment-date {
-            float: right;
-            font-size: 12px;
-            font-style: italic; }
-          .project .files-block .file-container .file-content .col-comments .group-comment .wrap-comments .comment .comment-button {
-            display: inline;
-            font-size: 12px;
-            color: #68b2f8;
-            font-weight: bold; }
         .project .files-block .file-container .file-content .col-comments .group-comment .wrap-comments .collapse-com {
           float: left;
           background-color: white;
@@ -202,3 +207,25 @@ a {
           color: #68b2f8;
           font-size: 12px;
           cursor: pointer; }
+        .project .files-block .file-container .file-content .col-comments .group-comment .wrap-comments .comment {
+          padding: 0px 8px;
+          background-color: #fefefe;
+          font-family: "Open Sans", sans-serif; }
+          .project .files-block .file-container .file-content .col-comments .group-comment .wrap-comments .comment .comment-name {
+            font-weight: bold; }
+          .project .files-block .file-container .file-content .col-comments .group-comment .wrap-comments .comment .comment-date {
+            text-align: right;
+            font-size: 12px;
+            font-style: italic; }
+          .project .files-block .file-container .file-content .col-comments .group-comment .wrap-comments .comment .comment-wrap-txt {
+            padding: 0px 7px; }
+            .project .files-block .file-container .file-content .col-comments .group-comment .wrap-comments .comment .comment-wrap-txt .comment-txt {
+              color: #525252;
+              overflow: auto;
+              font-size: 14px;
+              white-space: pre; }
+            .project .files-block .file-container .file-content .col-comments .group-comment .wrap-comments .comment .comment-wrap-txt .comment-button {
+              display: inline;
+              font-size: 12px;
+              color: #68b2f8;
+              font-weight: bold; }

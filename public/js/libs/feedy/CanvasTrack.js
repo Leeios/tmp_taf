@@ -26,9 +26,8 @@ var CanvasTrack = r.Seed.extend({
   setSize: function(h, w) {
     this.el.height = h;
     this.el.width = w;
-    this.ctx.strokeStyle = "rgba(200, 200, 200, 0.3)";
     this.ctx.lineWidth = 15;
-    this.ctx.fillStyle = "rgba(200, 200, 200, 0.3)";
+    this.ctx.strokeStyle = "rgba(200, 200, 200, 0.3)";
   },
 
   getCtx: function() {

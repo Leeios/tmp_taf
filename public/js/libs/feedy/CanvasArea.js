@@ -37,7 +37,7 @@ var CanvasArea = r.Seed.extend({
     var len = this.points.length - 1;
     if (len < 2) { return ; }
     this.ctx.beginPath();
-    this.ctx.lineTo(this.points[len - 1][0], this.points[len - 1][1]);
+    this.ctx.moveTo(this.points[len - 1][0], this.points[len - 1][1]);
     this.ctx.lineTo(this.points[len][0], this.points[len][1]);
     this.ctx.stroke();
     this.ctx.closePath();

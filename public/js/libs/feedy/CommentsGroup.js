@@ -26,8 +26,8 @@ var CommentsGroup = r.Seed.extend({
         click: function(e) {
           if (e.target !== this.wrap) { return ;}
           this.color = ['#fffbbe', '#ffbfbf', '#bfffc4'][Math.floor(Math.random()*3)];
-          console.log(this.color);
           this.wrap.style['border-color'] = this.color;
+          this.main.color = this.color;
           this.highStyle();
         }.bind(this)
       }
@@ -50,12 +50,14 @@ var CommentsGroup = r.Seed.extend({
 
   '+init': function() {
     this.wrap.style['border-color'] = this.color;
+    this.main.color = this.color;
     this.query('dp').comments.on('insert', this.setReply.bind(this));
   },
 
 
   insertMain: function() {
     this.el.remove();
+    this.main.author = this.getCookie('name');
     this.query('dp').comments.insert(this.main.getData());
   },
 
@@ -72,6 +74,7 @@ var CommentsGroup = r.Seed.extend({
   },
 
   highStyle: function() {
+    this.fire('redraw');
     this.main.areas[0] && ((this.main.areas[0].ctx.strokeStyle =  this.color) && (this.main.areas[0].ctx.globalAlpha = 0.3));
     this.drawAreas();
     this.main.areas[0] && (this.main.areas[0].ctx.strokeStyle = "rgba(200, 200, 200, 0.3)");
@@ -87,6 +90,7 @@ var CommentsGroup = r.Seed.extend({
       current_area = this.create(r.CanvasArea, {form: 'points', points: data.areas[i], ctx: ctx});
       this.main.areas.push(current_area);
     }
+    this.main.setAuthor(data.author);
     this.main.txt = data.txt;
     this.main.date = data.date;
     this.main.actualTop = data.actualTop;
@@ -110,6 +114,7 @@ var CommentsGroup = r.Seed.extend({
     this.tmpReply = this.create(r.Comment, {
       idFile: this.idFile,
       idParent: this.mainId,
+      author: this.getCookie('name'),
       onCreate: function() {
         this.tmpReply.el.remove();
         delete this.tmpReply.id;
@@ -168,12 +173,24 @@ var CommentsGroup = r.Seed.extend({
     }
   },
 
+  getCookie: function (cname) {
+      var name = cname + "=";
+      var ca = document.cookie.split(';');
+      for(var i=0; i<ca.length; i++) {
+        var c = ca[i];
+        while (c.charAt(0)==' ') c = c.substring(1);
+          if (c.indexOf(name) != -1) return c.substring(name.length,c.length);
+      }
+      return "";
+    },
+
   setReply: function(model, options) {
     if (model[0].idParent !== this.mainId) { return ; }
     this.tmpReply = this.create(r.Comment, {
       id: model[0].id,
       idFile: model[0].idFile,
       idParent: model[0].idParent,
+      author: model[0].author,
       txt: model[0].txt,
       onRemove: this.removeReply.bind(this),
       onReply: this.addReply.bind(this)

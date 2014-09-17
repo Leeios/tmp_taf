@@ -33,6 +33,7 @@ var ColComments = r.Seed.extend({
           this.tmpGroup = null;
         }.bind(this)
       });
+      this.tmpGroup.main.setAuthor('');
       this.tmpGroup.on('redraw', this.drawAreas.bind(this), this);
       this.el.appendChild(this.tmpGroup.el);
     }

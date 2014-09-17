@@ -10,6 +10,7 @@ exports.insertCom = function(data) {
     idParent: data.idParent,
     date: data.date,
     txt: data.txt,
+    author: data.author,
     actualTop: data.actualTop,
     areas: data.areas
   });

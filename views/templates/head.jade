@@ -14,11 +14,16 @@ head
 	script(src="js/libs/shAutoloader.js", type="text/javascript")
 	script(src="js/libs/shLegacy.js", type="text/javascript")
 
+	//- Police & img
 	link(rel='icon', href='/img/icon.png')
 	link(href='http://fonts.googleapis.com/css?family=Lato' rel='stylesheet' type='text/css')
 	link(href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css')
 
-	script(type = 'text/javascript', src = "http://localhost:3000/socket.io/socket.io.js")
+	script(type = 'text/javascript').
+		var current_proj = !{JSON.stringify(locals)};
+
+	//- Libs app
+	script(type = 'text/javascript', src = "http://" + locals.host + ":" + locals.port + "/socket.io/socket.io.js")
 	script(type = 'text/javascript', src = "js/libs/sand.min.js")
 	script(type = 'text/javascript', src = "js/libs/Seed.js")
 	script(type = 'text/javascript', src = "js/libs/prettyDate.js")
@@ -27,13 +32,7 @@ head
 	script(type = 'text/javascript', src = "js/libs/dp.light.min.js")
 
 
-
-
-
-	script(type = 'text/javascript').
-		var current_proj = !{JSON.stringify(locals)};
-
-
+	//- Feedy app
 	script(type = 'text/javascript', src = "js/libs/feedy/CanvasArea.js")
 	script(type = 'text/javascript', src = "js/libs/feedy/CanvasTrack.js")
 	script(type = 'text/javascript', src = "js/libs/feedy/ColComments.js")

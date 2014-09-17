@@ -11,6 +11,7 @@
 	{
 		"express": "latest",
 		"socket.io": "latest",
+		"forever": "latest",
 		"mongoose": "latest",
 		"config": "latest",
 		"jade": "latest"

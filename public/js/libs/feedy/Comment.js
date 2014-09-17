@@ -10,22 +10,25 @@ var Comment = r.Seed.extend({
     return {
       tag: ".comment",
       children: [
-        { tag:".comment-button.button", as: 'createEl', innerHTML: 'Create', events: {
-          click: function(){ this.valid(); this.onCreate(); }.bind(this)
-        }},
-        { tag:".comment-button.button", as: 'removeEl', innerHTML: 'Delete', events: {
-          click: function(){ this.el.remove(); this.onRemove(this.id); }.bind(this)
-        }},
-        { tag:".comment-button.button", as: 'editEl', innerHTML: 'Edit', events: {
-          click: function(){
-            if (this.elDiv.isContentEditable) { this.valid(); this.edit();}
-            else { this.elDiv.setAttribute('contenteditable', true); this.preValid(); this.switchEdit(); }
-          }.bind(this)
-        }},
-        { tag:".comment-button.button", as: 'replyEl', innerHTML: 'Reply', events: {
-          click: this.onReply.bind(this)
-        }},
-        { tag:".comment-txt", as: 'elDiv' },
+        { tag: '.comment-name', as: 'elName', innerHTML: this.author},
+        { tag: '.comment-wrap-txt.usual', as: 'wrapTxt', children: [
+          { tag:".comment-button.button", as: 'createEl', innerHTML: 'Create', events: {
+            click: function(){ this.valid(); this.onCreate(); }.bind(this)
+          }},
+          { tag:".comment-button.button", as: 'removeEl', innerHTML: 'Delete', events: {
+            click: function(){ this.el.remove(); this.onRemove(this.id); }.bind(this)
+          }},
+          { tag:".comment-button.button", as: 'editEl', innerHTML: 'Edit', events: {
+            click: function(){
+              if (this.elDiv.isContentEditable) { this.valid(); this.edit();}
+              else { this.elDiv.setAttribute('contenteditable', true); this.preValid(); this.switchEdit(); }
+            }.bind(this)
+          }},
+          { tag:".comment-button.button", as: 'replyEl', innerHTML: 'Reply', events: {
+            click: this.onReply.bind(this)
+          }},
+          { tag:".comment-txt", as: 'elDiv' }
+        ]},
         { tag: '.comment-date', as: 'timeDiv'}
       ]
     }
@@ -42,17 +45,17 @@ var Comment = r.Seed.extend({
       onReply: function() { console.log('reply is not available on this element'); },
       actualTop: 0,
       areas: [],
-      color: '#B3B3F9',
+      author: 'unnamed',
+      color: '#ffbfbf',
       date: new Date().getTime()
     }
   },
 
   '+init': function () {
 
-    this.el.innerHTML = '';
-    this.el.appendChild(this.elDiv);
-    this.el.appendChild(this.timeDiv);
-    this.el.appendChild(this.createEl);
+    this.wrapTxt.innerHTML = '';
+    this.wrapTxt.appendChild(this.elDiv);
+    this.wrapTxt.appendChild(this.createEl);
     this.elDiv.setAttribute('contenteditable', true);
   },
 
@@ -82,20 +85,24 @@ var Comment = r.Seed.extend({
   },
 
   switchEdit: function() {
-    this.el.innerHTML = '';
-    this.el.appendChild(this.elDiv);
-    this.el.appendChild(this.timeDiv);
+    this.wrapTxt.innerHTML = '';
+    this.wrapTxt.appendChild(this.elDiv);
     if (this.elDiv.isContentEditable) {
-      this.el.appendChild(this.editEl);
+      this.wrapTxt.appendChild(this.editEl);
     } else {
-      this.el.appendChild(this.removeEl);
-      this.el.appendChild(document.createTextNode(' - '))
-      this.el.appendChild(this.editEl);
+      this.wrapTxt.appendChild(this.removeEl);
+      this.wrapTxt.appendChild(document.createTextNode(' - '))
+      this.wrapTxt.appendChild(this.editEl);
       if (this.replyEl) {
-        this.el.appendChild(document.createTextNode(' - '))
-        this.el.appendChild(this.replyEl);
+        this.wrapTxt.appendChild(document.createTextNode(' - '))
+        this.wrapTxt.appendChild(this.replyEl);
       }
     }
+  },
+
+  setAuthor: function(author) {
+    this.author = author;
+    this.elName.innerHTML = this.author;
   },
 
   refreshDate: function() {
