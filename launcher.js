@@ -1,7 +1,9 @@
 var forever = require('forever');
+var restartTime = 3;
 
   var child = new (forever.Forever)('server.js', {
-    options: []
+    'spinSleepTime': restartTime * 1000,
+    'options': []
   });
 
 /*Useless ?*/
@@ -13,8 +15,18 @@ child.on('stop', function(process) {
     console.error('Stop script ');
 });
 
+
 child.on('restart', function(info) {
-    console.error('Restarting script because ' + info.file + ' changed');
+  console.log('Server is down, will restart in ' + restartTime + ' seconds: ' + info.file);
+  var logRestart = function(sec) {
+    if (sec < 1) {
+      console.log('Server restart now !');
+    } else {
+      console.log(sec);
+      setTimeout(function() { logRestart(sec - 1) }.bind(this), 1);
+    }
+  }
+  logRestart(restartTime);
 });
 
 child.on('err', function(err) {

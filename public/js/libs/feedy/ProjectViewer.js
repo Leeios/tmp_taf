@@ -1,6 +1,7 @@
 sand.define('ProjectViewer', [
   'Seed',
   'DataPackage/Controller->DP',
+  'Library',
   'FileContainer',
   'UploadFile',
   'VersionPicker',
@@ -84,7 +85,7 @@ var ProjectViewer = r.Seed.extend({
   },
 
   editFile: function() {
-    console.log('File edited in projview');
+    // console.log('File edited in projview');
   },
 
   createProject : function() {
@@ -104,8 +105,13 @@ var ProjectViewer = r.Seed.extend({
   },
 
   editName: function() {
+    if (this.name.isContentEditable === true) { return ;}
     this.name.setAttribute('contenteditable', true);
     this.name.focus();
+    r.Library.clickOut(this.name, function() {
+      this.name.setAttribute('contenteditable', false)
+      this.dp.projects.one(function(e) { return e.id === this.current.idParent }.bind(this)).edit({'name': this.name.innerHTML})
+    }.bind(this))
     this.name.onkeypress = function(e) {
       if (e.charCode === 13) {
         this.name.setAttribute('contenteditable', false);

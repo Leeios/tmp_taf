@@ -195,7 +195,8 @@ a {
       box-sizing: border-box;
       border: 1px solid #eeeeee;
       background-color: white;
-      transition: top 0.5s; }
+      transition: top 0.3s;
+      transition: margin-left 0.5s; }
       .project .files-block .file-container .file-content .col-comments .group-comment .wrap-comments {
         margin: 6px;
         border-left: 5px solid; }
@@ -208,24 +209,27 @@ a {
           font-size: 12px;
           cursor: pointer; }
         .project .files-block .file-container .file-content .col-comments .group-comment .wrap-comments .comment {
+          margin: 8px 0px;
           padding: 0px 8px;
           background-color: #fefefe;
-          font-family: "Open Sans", sans-serif; }
+          font-family: "Open Sans", sans-serif;
+          transition: top 0.3s; }
           .project .files-block .file-container .file-content .col-comments .group-comment .wrap-comments .comment .comment-name {
-            font-weight: bold; }
+            margin-right: 6px;
+            font-weight: bold;
+            max-width: 20%;
+            float: left;
+            height: 100%; }
           .project .files-block .file-container .file-content .col-comments .group-comment .wrap-comments .comment .comment-date {
-            text-align: right;
+            float: right;
             font-size: 12px;
             font-style: italic; }
-          .project .files-block .file-container .file-content .col-comments .group-comment .wrap-comments .comment .comment-wrap-txt {
-            padding: 0px 7px; }
-            .project .files-block .file-container .file-content .col-comments .group-comment .wrap-comments .comment .comment-wrap-txt .comment-txt {
-              color: #525252;
-              overflow: auto;
-              font-size: 14px;
-              white-space: pre; }
-            .project .files-block .file-container .file-content .col-comments .group-comment .wrap-comments .comment .comment-wrap-txt .comment-button {
-              display: inline;
-              font-size: 12px;
-              color: #68b2f8;
-              font-weight: bold; }
+          .project .files-block .file-container .file-content .col-comments .group-comment .wrap-comments .comment .comment-txt {
+            color: #525252;
+            font-size: 14px;
+            white-space: pre; }
+          .project .files-block .file-container .file-content .col-comments .group-comment .wrap-comments .comment .comment-button {
+            display: inline;
+            font-size: 12px;
+            color: #68b2f8;
+            font-weight: bold; }

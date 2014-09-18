@@ -1,8 +1,9 @@
 sand.define('CommentsGroup', [
   'Seed',
+  'DOM/toDOM',
+  'Library',
   'Comment',
-  'CanvasArea',
-  'DOM/toDOM'
+  'CanvasArea'
 ], function(r) {
 
 var CommentsGroup = r.Seed.extend({
@@ -10,7 +11,7 @@ var CommentsGroup = r.Seed.extend({
   tpl: function() {
     return {
       tag: '.group-comment', children: [
-        {tag: '.wrap-comments', as: 'wrap', children: [
+        {tag: '.wrap-comments.usual', as: 'wrap', children: [
           this.create(r.Comment, {
             id: this.mainId,
             idFile: this.idFile,
@@ -24,11 +25,12 @@ var CommentsGroup = r.Seed.extend({
         mouseover: this.highStyle.bind(this),
         mouseout: this.usualStyle.bind(this),
         click: function(e) {
-          if (e.target !== this.wrap) { return ;}
-          this.color = ['#fffbbe', '#ffbfbf', '#bfffc4'][Math.floor(Math.random()*3)];
-          this.wrap.style['border-color'] = this.color;
-          this.main.color = this.color;
-          this.highStyle();
+          if (e.target === this.wrap) {
+            this.color = (this.color == this.colorTab.length - 1) ? 0 : this.color + 1;
+            this.wrap.style['border-color'] = this.colorTab[this.color];
+            this.main.color = this.colorTab[this.color];
+          }
+          this.focusCom();
         }.bind(this)
       }
     }
@@ -42,18 +44,18 @@ var CommentsGroup = r.Seed.extend({
       actualTop: 0,
       replies: [],
       collapseEl: null,
-      color: ['#fffbbe', '#ffbfbf', 'bfffc4'][Math.floor(Math.random()*3)],
+      colorTab: ['#fffbbe', '#ffbfbf', '#bfffc4'],
+      color: Math.floor(Math.random()*3),
       onCreate: function() {console.log('create is not available on this element')},
       onRemove: function() {console.log('remove not available on this element');}
     }
   },
 
   '+init': function() {
-    this.wrap.style['border-color'] = this.color;
-    this.main.color = this.color;
+    this.wrap.style['border-color'] = this.colorTab[this.color];
+    this.main.color = this.colorTab[this.color];
     this.query('dp').comments.on('insert', this.setReply.bind(this));
   },
-
 
   insertMain: function() {
     this.el.remove();
@@ -75,13 +77,23 @@ var CommentsGroup = r.Seed.extend({
 
   highStyle: function() {
     this.fire('redraw');
-    this.main.areas[0] && ((this.main.areas[0].ctx.strokeStyle =  this.color) && (this.main.areas[0].ctx.globalAlpha = 0.3));
+    this.main.areas[0] && ((this.main.areas[0].ctx.strokeStyle =  this.colorTab[this.color]) && (this.main.areas[0].ctx.globalAlpha = 0.3));
     this.drawAreas();
     this.main.areas[0] && (this.main.areas[0].ctx.strokeStyle = "rgba(200, 200, 200, 0.3)");
   },
 
   usualStyle: function() {
     this.fire('redraw');
+  },
+
+  focusCom: function() {
+    if (this.el.style.marginLeft === '-12px') { return ; }
+    this.el.style.marginLeft = '-12px';
+    this.highStyle();
+    r.Library.clickOut(this.el, function() {
+      this.el.style.marginLeft = '0px';
+      this.usualStyle();
+    }.bind(this))
   },
 
   setMain: function(data, ctx) {
@@ -91,6 +103,7 @@ var CommentsGroup = r.Seed.extend({
       this.main.areas.push(current_area);
     }
     this.main.setAuthor(data.author);
+    this.main.color = this.colorTab[this.color];
     this.main.txt = data.txt;
     this.main.date = data.date;
     this.main.actualTop = data.actualTop;
@@ -110,7 +123,6 @@ var CommentsGroup = r.Seed.extend({
 
   addReply: function(data) {/*INTERFACE*/
     if (this.tmpReply !== null) {return ;}
-
     this.tmpReply = this.create(r.Comment, {
       idFile: this.idFile,
       idParent: this.mainId,
@@ -145,7 +157,7 @@ var CommentsGroup = r.Seed.extend({
   collapseCom: function() {
     if (this.collapseEl !== null) { return ;}
     this.wrap.appendChild(this.create(r.toDOM, {
-      tag: '.collapse-com', innerHTML: 'Show', events: {
+      tag: '.collapse-com', innerHTML: 'Hide', events: {
         click: function() {
           if (this.replies[this.replies.length - 1].el.style.display === 'none') {
             for (var i = 0, len = this.replies.length; i < len; i++) {
@@ -161,9 +173,6 @@ var CommentsGroup = r.Seed.extend({
         }.bind(this)
       }
     }, 'collapseEl'));
-    for (var i = 0, len = this.replies.length; i < len; i++) {
-      this.replies[i].hide();
-    }
   },
 
   refreshDate: function(now) {
@@ -204,6 +213,12 @@ var CommentsGroup = r.Seed.extend({
       this.collapseCom();
     }
     this.tmpReply = null;
+    /*Resize collapse*/
+    if (this.collapseEl != null) {
+      this.collapseEl.remove();
+      this.collapseEl = null;
+      this.collapseCom();
+    }
   }
 
 });

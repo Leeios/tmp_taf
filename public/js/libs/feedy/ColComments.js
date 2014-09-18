@@ -1,6 +1,7 @@
 sand.define('ColComments', [
   'Seed',
   'DOM/toDOM',
+  'Library',
   'CommentsGroup'
 ], function(r) {
 
@@ -60,22 +61,47 @@ var ColComments = r.Seed.extend({
     }
   },
 
+  canTarget: function(e) {
+    /*TODO*/return;
+    for (var i = 0, len = this.commentsList.length; i < len; i++) {
+      var areas = this.commentsList[i].main.areas;
+      for (var j = 0, lenj = areas.length; j < lenj; j++) {
+        for (var k = 0, lenk = areas[j].points.length; k < lenk; k++) {
+
+          console.log(areas[j].points[k][0] - 20 , e[0] , (areas[j].points[k][0] + 20)
+        ,areas[j].points[k][1] - 20 , e[1] , areas[j].points[k][1] + 20);
+
+          if (areas[j].points[k][0] - 20 > e[0] > areas[j].points[k][0] + 20
+          && areas[j].points[k][1] - 20 > e[1] > areas[j].points[k][1] + 20) {
+            this.commentsList[i].focusCom();
+            return true;
+          }
+        }
+      }
+    }
+  },
+
+  setHeight: function(h) {
+    this.el.style.height = h;
+  },
+
   displayComments: function() {
+    this.el.style.zIndex = 50;
     this.commentsList.sort(function (a, b) {
       return a.main.actualTop - b.main.actualTop;
     });
-   var previous_down;
+   var prevDown;
    if (this.tmpGroup !== null) { this.tmpGroup.el.style.top = this.tmpGroup.main.actualTop + 'px'; }
     for (var i = 0, len = this.commentsList.length; i < len; i++) {
       this.commentsList[i].refreshDate();
-       this.commentsList[i].el.style.top = this.commentsList[i].main.actualTop + 'px';
-       i > 0 && (previous_down = parseInt(this.commentsList[i - 1].el.style.top) + this.commentsList[i - 1].el.offsetHeight)
-       && (previous_down >= parseInt(this.commentsList[i].el.style.top))
-       && (this.commentsList[i].el.style.top = previous_down + 'px');
+      this.commentsList[i].el.style.top = this.commentsList[i].main.actualTop + 'px';
+      if (i > 0 && (prevDown = r.Library.exceedSize(this.commentsList[i - 1].el, this.commentsList[i].el.style.top))) {
+        this.commentsList[i].el.style.top = prevDown + 'px';
+      }
     }
     /*Check collapse*/
-    if (i == 0) { return ;}
-    if (parseInt(this.commentsList[i - 1].el.style.top) + this.commentsList[i - 1].el.offsetHeight > this.el.offsetHeight) {
+    if (i == 0 || this.commentsList[i - 1].el.style.display === 'none') { return ;}
+    if(r.Library.exceedSize(this.commentsList[i - 1].el, this.el.offsetHeight)) {
       this.collapseCom();
     } else if (this.collapseEl !== null) {
       for (var i = 0, len = this.commentsList.length; i < len; i++) {
@@ -130,7 +156,7 @@ var ColComments = r.Seed.extend({
             this.collapseEl.innerHTML = 'Hide';
           } else {
             for (var i = 0, len = this.commentsList.length; i < len; i++) {
-              if (parseInt(this.commentsList[i].el.style.top) + this.commentsList[i].el.offsetHeight > this.el.offsetHeight) {
+              if (r.Library.exceedSize(this.commentsList[i].el, this.el.offsetHeight)) {
                 this.commentsList[i].hide();
               }
               this.collapseEl.innerHTML = 'Show';
@@ -139,9 +165,7 @@ var ColComments = r.Seed.extend({
         }.bind(this)
       }
     }, 'collapseEl'));
-  },
-
-
+  }
 
 });
 return ColComments;

@@ -12,8 +12,9 @@ var CanvasTrack = r.Seed.extend({
     tag: "canvas.file-canvas",
   },
 
-  '+options': {
-    form: "empty"
+  options: {
+    form: "empty",
+    onTarget: function(e) {console.log('Targeting is not available yet'); }
   },
 
   '+init': function () {
@@ -40,6 +41,7 @@ var CanvasTrack = r.Seed.extend({
 
   /*Start/Save & Valid selection*/
   start: function (e) {
+    if (this.onTarget(this.getPosition(e))) { console.log('found');return ;}
     this.canvasArea = this.create(r.CanvasArea, {form: this.form, ctx: this.ctx});
     this.el.onmousemove = this.draw.bind(this);
     this.el.onmouseup = this.valid.bind(this);

@@ -38,7 +38,6 @@ a
     background-color: dodgerblue
 
 .project
-
   .form-block
     position: fixed
     top: 0px
@@ -205,7 +204,8 @@ a
             box-sizing: border-box
             border: 1px solid #eee
             background-color: white
-            transition: top 0.5s
+            transition: top 0.3s
+            transition: margin-left 0.5s
             .wrap-comments
               margin: 6px
               border-left: 5px solid
@@ -218,24 +218,27 @@ a
                 font-size: 12px
                 cursor: pointer
               .comment
+                margin: 8px 0px
                 padding: 0px 8px
                 background-color: #fefefe
                 font-family: "Open Sans", sans-serif
+                transition: top 0.3s
                 .comment-name
+                  margin-right: 6px
                   font-weight: bold
+                  max-width: 20%
+                  float: left
+                  height: 100%
                 .comment-date
-                  text-align: right
+                  float: right
                   font-size: 12px
                   font-style: italic
-                .comment-wrap-txt
-                  padding: 0px 7px
-                  .comment-txt
-                    color: #525252
-                    overflow: auto
-                    font-size: 14px
-                    white-space: pre
-                  .comment-button
-                    display: inline
-                    font-size: 12px
-                    color: #68b2f8
-                    font-weight: bold
+                .comment-txt
+                  color: #525252
+                  font-size: 14px
+                  white-space: pre
+                .comment-button
+                  display: inline
+                  font-size: 12px
+                  color: #68b2f8
+                  font-weight: bold
