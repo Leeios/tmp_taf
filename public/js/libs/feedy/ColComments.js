@@ -82,7 +82,7 @@ var ColComments = r.Seed.extend({
   },
 
   setHeight: function(h) {
-    this.el.style.height = h;
+    this.el.style.height = h + 'px';
   },
 
   displayComments: function() {
@@ -112,11 +112,10 @@ var ColComments = r.Seed.extend({
     }
   },
 
-  resetCol: function(h, fid, ctx) {
+  resetCol: function(fid, ctx) {
     this.el.innerHTML = '';
     this.tmpGroup = null;
     this.commentsList = [];
-    this.el.style.height = h + 'px';
     this.idFile = fid;
     this.ctx = ctx;
     this.dp.comments.where(function(e) {

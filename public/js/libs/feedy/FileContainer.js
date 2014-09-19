@@ -115,7 +115,7 @@ var FileContainer = r.Seed.extend({
 
     this.complete = new MutationObserver(this.setCanvas.bind(this));
     this.complete.observe(this.wrapContent, { childList: true });
-    this.colComments.resetCol(this.wrapContent.clientHeight, file.id, this.canvasTrack.getCtx());
+    this.colComments.resetCol(file.id, this.canvasTrack.getCtx());
   }
 
 });

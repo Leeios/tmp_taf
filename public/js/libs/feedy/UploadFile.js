@@ -10,15 +10,16 @@ var UploadFile = r.Seed.extend({
 
   tpl: function() {
     return [
-      '.upload-wrapper', [
+      '.upload-wrapper.version-name.button', [
         {tag: "input.upload-file.button", as: 'uploadButton',
         attr: { type: "file", multiple: "multiple" }},
-        {tag: '.upload-fakebutton', innerHTML: this.txt }
+        {tag: '.upload-fakebutton.button', innerHTML: this.txt }
       ]]
   },
 
   options: function() {
     return {
+      diffColor: null,
       txt: '+',
       complete: function() {
         console.log('FileView not defined');
@@ -27,6 +28,10 @@ var UploadFile = r.Seed.extend({
   },
 
   '+init': function () {
+    if (this.diffColor !== null) {
+      this.el.style.color = this.diffColor;
+      this.el.style.border.color = this.diffColor;
+    }
     this.uploadButton.addEventListener("change", this.uploadFile.bind(this));
   },
 

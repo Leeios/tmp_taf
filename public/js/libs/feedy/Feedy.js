@@ -26,6 +26,7 @@ var appComments = r.Seed.extend({
 
     this.el.appendChild(this.header.el);
     this.el.appendChild(this.projectViewer.el);
+    SyntaxHighlighter.highlight();
   }
 
 });

@@ -204,7 +204,7 @@ var CommentsGroup = r.Seed.extend({
       onRemove: this.removeReply.bind(this),
       onReply: this.addReply.bind(this)
     });
-    this.tmpReply.el.style.marginLeft = '14px';
+    this.tmpReply.el.style.marginLeft = '24px';
     this.wrap.appendChild(this.tmpReply.el);
     this.tmpReply.preValid();
     this.tmpReply.valid(model[0].date);

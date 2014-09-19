@@ -49,7 +49,7 @@ var ProjectViewer = r.Seed.extend({
             onAdd: this.addVersion.bind(this) }, 'versionPicker').el,
         ]],
         {tag: '.file-nav.usual', as: 'projectNav', children: [
-          this.create(r.UploadFile, { complete : this.insertFile.bind(this), txt: 'Add' }, 'upload').el,
+          this.create(r.UploadFile, { complete : this.insertFile.bind(this), diffColor: '#ffffff'}, 'upload').el,
           { tag : '.files-list', as : 'filesList' }
         ]},
         {tag: '.files-block', as: 'files'}
@@ -128,7 +128,7 @@ var ProjectViewer = r.Seed.extend({
         else { this.dp[e].insert(this.data[e][i]); }
       }
     }.bind(this))
-    this.dp.files.on('remove', this.removeFile.bind(this));
+    this.setCurrent(this.dp.projects.one(function(e) {return e.idParent != 0}.bind(this)));
   },
 
   _setProjectFromData: function(proj) {
@@ -164,16 +164,17 @@ var ProjectViewer = r.Seed.extend({
     this.files.innerHTML = '';
 
     this.fileElems = [];
-    this.dp.files.where(function(e) { return this.current.id === e.idProject; }.bind(this))
-          .each( function (file) {
-            if (file.idParent == 0) {
-              this.fileElems.push(this.appendFile(file));
-            } else {
-              this.addVersionFile(this.fileElems.one(function(e) {
-                return (e.idParent == file.idParent || e.id == file.idParent)
-              }.bind(this)), file);
-            }
-          }.bind(this));
+    var tmp = this.dp.files.where(function(e) { return this.current.id === e.idProject; }.bind(this))
+    if (tmp === null) { this.files.innerHTML = 'No files yet' }
+    tmp.each( function (file) {
+      if (file.idParent == 0) {
+        this.fileElems.push(this.appendFile(file));
+      } else {
+        this.addVersionFile(this.fileElems.one(function(e) {
+          return (e.idParent == file.idParent || e.id == file.idParent)
+        }.bind(this)), file);
+      }
+    }.bind(this));
   },
 
   insertFile: function(file) {
@@ -191,7 +192,6 @@ var ProjectViewer = r.Seed.extend({
   },
 
   addFile: function(model, op) {
-    console.log(this.fileElems);
     if (model[0].idParent == 0) {
       this.fileElems.push(this.appendFile(model[0]));
     } else {
@@ -202,7 +202,6 @@ var ProjectViewer = r.Seed.extend({
   },
 
   addVersionFile: function(parentFile, file) {
-    // console.log(parentFile, file);
     if (parentFile == null) { return ; }
     parentFile.versionPicker.addVersion(file);
     parentFile.setContent(file);
