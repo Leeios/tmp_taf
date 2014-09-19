@@ -3,6 +3,7 @@ var restartTime = 3;
 
   var child = new (forever.Forever)('server.js', {
     'spinSleepTime': restartTime * 1000,
+    'logFile': 'logs_feedy/',
     'options': []
   });
 
