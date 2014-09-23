@@ -27,9 +27,10 @@ var CommentsGroup = r.Seed.extend({
         click: function(e) {
           if (e.target === this.wrap) {
             this.color = (this.color == this.colorTab.length - 1) ? 0 : this.color + 1;
+            this.main.color = this.color;
             this.wrap.style['border-color'] = this.colorTab[this.color];
-            this.main.color = this.colorTab[this.color];
-            // this.query('dp').comments.one(function(e) {return e.id === this.main.id}.bind(this)).edit({color: this.color});
+            var tmp = this.query('dp').comments.one(function(e) {return e.id === this.main.id}.bind(this));
+            if (tmp !== null) {tmp.edit({color: this.color});}
           }
           this.focusCom();
         }.bind(this)
@@ -53,8 +54,8 @@ var CommentsGroup = r.Seed.extend({
   },
 
   '+init': function() {
-    this.wrap.style['border-color'] = this.colorTab[this.color];
-    this.main.color = this.colorTab[this.color];
+    this.main.color = this.color;
+    this.wrap.style['border-color'] = this.colorTab[this.main.color];
     this.query('dp').comments.on('insert', this.setReply.bind(this));
   },
 
@@ -78,7 +79,7 @@ var CommentsGroup = r.Seed.extend({
 
   highStyle: function() {
     this.fire('redraw');
-    this.main.areas[0] && ((this.main.areas[0].ctx.strokeStyle =  this.colorTab[this.color]) && (this.main.areas[0].ctx.globalAlpha = 0.3));
+    this.main.areas[0] && ((this.main.areas[0].ctx.strokeStyle =  this.colorTab[this.main.color]) && (this.main.areas[0].ctx.globalAlpha = 0.3));
     this.drawAreas();
     this.main.areas[0] && (this.main.areas[0].ctx.strokeStyle = "rgba(200, 200, 200, 0.3)");
   },
@@ -107,7 +108,8 @@ var CommentsGroup = r.Seed.extend({
       this.main.areas.push(current_area);
     }
     this.main.setAuthor(data.author);
-    this.main.color = this.colorTab[this.color];
+    this.main.color = data.color;
+    this.wrap.style['border-color'] = this.colorTab[this.main.color];
     this.main.txt = data.txt;
     this.main.date = data.date;
     this.main.actualTop = data.actualTop;
@@ -127,6 +129,7 @@ var CommentsGroup = r.Seed.extend({
 
   addReply: function(data) {/*INTERFACE*/
     if (this.tmpReply !== null) {return ;}
+    this.el.style.zIndex = 30;
     this.tmpReply = this.create(r.Comment, {
       idFile: this.idFile,
       idParent: this.mainId,
@@ -136,6 +139,7 @@ var CommentsGroup = r.Seed.extend({
         delete this.tmpReply.id;
         this.query('dp').comments.insert(this.tmpReply.getData());
         this.tmpReply = null;
+        this.el.style.zIndex = 10;
       }.bind(this)
     });
     this.wrap.appendChild(this.tmpReply.el);

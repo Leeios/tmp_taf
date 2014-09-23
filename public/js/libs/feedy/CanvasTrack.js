@@ -14,7 +14,8 @@ var CanvasTrack = r.Seed.extend({
 
   options: {
     form: "empty",
-    onTarget: function(e) {console.log('Targeting is not available yet'); }
+    onTarget: function(e) {console.log('Targeting is not available yet'); },
+    drawAll: function(e) {console.log('draw all is not available yet'); }
   },
 
   '+init': function () {
@@ -48,7 +49,9 @@ var CanvasTrack = r.Seed.extend({
   },
 
   draw: function(e) {
+    this.drawAll();
     this.canvasArea.refresh(this.getPosition(e));
+    this.canvasArea.draw();
   },
 
   getPosition: function(e) {
