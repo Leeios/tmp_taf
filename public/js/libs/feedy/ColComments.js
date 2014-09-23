@@ -101,7 +101,7 @@ var ColComments = r.Seed.extend({
       this.commentsList[i].refreshDate();
       this.commentsList[i].el.style.top = this.commentsList[i].main.actualTop + 'px';
       if (i > 0 && (prevDown = r.Library.exceedSize(this.commentsList[i - 1].el, this.commentsList[i].el.style.top))) {
-        this.commentsList[i].el.style.top = prevDown + 'px';
+        this.commentsList[i].el.style.top = prevDown + 3 + 'px';
       }
     }
     /*Check collapse*/

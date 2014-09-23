@@ -214,29 +214,31 @@ a {
           font-size: 12px;
           cursor: pointer; }
         .project .files-block .file-container .file-content .col-comments .group-comment .wrap-comments .comment {
-          margin: 8px 0px;
-          padding: 0px 8px;
+          padding: 3px 6px;
           background-color: #fefefe;
           font-family: "Open Sans", sans-serif;
-          transition: top 0.3s; }
+          transition: top 0.3s;
+          border-spacing: 12px 0px; }
           .project .files-block .file-container .file-content .col-comments .group-comment .wrap-comments .comment .comment-name {
-            margin-right: 6px;
+            width: 1px;
             font-weight: bold;
-            max-width: 20%;
-            float: left;
-            height: 100%; }
+            vertical-align: top; }
+          .project .files-block .file-container .file-content .col-comments .group-comment .wrap-comments .comment .comment-right {
+            min-width: 79%; }
           .project .files-block .file-container .file-content .col-comments .group-comment .wrap-comments .comment .comment-txt {
             color: #525252;
             font-size: 14px;
             white-space: pre; }
             .project .files-block .file-container .file-content .col-comments .group-comment .wrap-comments .comment .comment-txt[contenteditable=true] {
               outline: 0px solid transparent; }
-          .project .files-block .file-container .file-content .col-comments .group-comment .wrap-comments .comment .comment-info .comment-date {
-            float: right;
-            font-size: 12px;
-            font-style: italic; }
-          .project .files-block .file-container .file-content .col-comments .group-comment .wrap-comments .comment .comment-info .comment-button {
-            display: inline;
-            font-size: 12px;
-            color: #68b2f8;
-            font-weight: bold; }
+          .project .files-block .file-container .file-content .col-comments .group-comment .wrap-comments .comment .comment-info {
+            width: 100%; }
+            .project .files-block .file-container .file-content .col-comments .group-comment .wrap-comments .comment .comment-info .comment-date {
+              float: right;
+              font-size: 12px;
+              font-style: italic; }
+            .project .files-block .file-container .file-content .col-comments .group-comment .wrap-comments .comment .comment-info .comment-button {
+              display: inline;
+              font-size: 12px;
+              color: #68b2f8;
+              font-weight: bold; }

@@ -8,11 +8,17 @@ var Comment = r.Seed.extend({
 
   tpl: function() {
     return {
-      tag: ".comment.usual",
+      tag: "table.comment.usual",
+      attr: { cellpadding: 0, cellspacing: 0},
       children: [
-        { tag: '.comment-name', as: 'elName', innerHTML: this.author},
-        { tag:".comment-txt", as: 'elDiv' },
-        { tag: ".comment-info", as: 'infoCom', children: [
+      ['tr', [
+        { tag: 'td.comment-name', attr: {rowspan: 2, width: '100%'}, as: 'elName', innerHTML: this.author},
+        ['td.comment-right', [
+          { tag:".comment-txt", as: 'elDiv' },
+        ]]
+      ]],
+      ['tr', [
+        { tag: "td.comment-info.comment-right", as: 'infoCom', children: [
           { tag:".comment-button.button", as: 'createEl', innerHTML: 'Create', events: {
             click: function(){ this.valid(); this.onCreate(); }.bind(this)
           }},
@@ -30,6 +36,7 @@ var Comment = r.Seed.extend({
           }},
           { tag: '.comment-date', as: 'timeDiv'}
         ]}
+      ]]
     ]}
   },
 
