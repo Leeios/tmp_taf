@@ -12,11 +12,12 @@ exports.insertCom = function(data) {
     txt: data.txt,
     author: data.author,
     actualTop: data.actualTop,
-    areas: data.areas
+    areas: data.areas,
+    color: data.color
   });
   insert_com.save(function(err) {
     if (err) {
-      console.log("Comment " + data.txt + " not added to database");
+      console.log("Comment " + data.txt + " not added to database: " + err);
     } else {
       console.log("Comment added " + data.txt);
     }

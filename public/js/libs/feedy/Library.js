@@ -12,9 +12,12 @@ sand.define('Library', [
       return false;
     },
 
-    clickOut: function(el, callback) {
+    clickOut: function(el, callback, n) {
+      var i = n || 1;
       var rc = function(e) {
         if (!Library.recursiveChild(el, e.target)) {
+          i--;
+          if (i !== 0) { return ; }
           document.body.removeEventListener('click', rc);
           callback(e);
         }

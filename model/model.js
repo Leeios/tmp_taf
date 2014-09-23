@@ -26,7 +26,7 @@ var comSchema = new mongoose.Schema({
   resolved: Boolean,
   author: String,
   actualTop: Number,
-  color: Number,
+  color: String,
   areas: Array
 });
 

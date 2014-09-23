@@ -127,7 +127,7 @@ var ProjectViewer = r.Seed.extend({
         if (e == 'projects') { this._setProjectFromData(this.data[e][i]); }
         else { this.dp[e].insert(this.data[e][i]); }
       }
-    }.bind(this))
+    }.bind(this));
     this.setCurrent(this.dp.projects.one(function(e) {return e.idParent != 0}.bind(this)));
   },
 

@@ -27,7 +27,7 @@ var CanvasTrack = r.Seed.extend({
   setSize: function(h, w) {
     this.el.height = h;
     this.el.width = w;
-    this.ctx.lineWidth = 15;
+    this.ctx.lineWidth = 16;
     this.ctx.strokeStyle = "rgba(200, 200, 200, 0.3)";
   },
 
@@ -41,7 +41,7 @@ var CanvasTrack = r.Seed.extend({
 
   /*Start/Save & Valid selection*/
   start: function (e) {
-    if (this.onTarget(this.getPosition(e))) { console.log('found');return ;}
+    if (this.onTarget(this.getPosition(e))) { return ;}
     this.canvasArea = this.create(r.CanvasArea, {form: this.form, ctx: this.ctx});
     this.el.onmousemove = this.draw.bind(this);
     this.el.onmouseup = this.valid.bind(this);

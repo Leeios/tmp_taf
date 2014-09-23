@@ -62,20 +62,25 @@ var ColComments = r.Seed.extend({
   },
 
   canTarget: function(e) {
-    /*TODO*/return;
+    if (this.ctx.getImageData(e[0], e[1], 1, 1).data[3] === 0) { return 0;}
     for (var i = 0, len = this.commentsList.length; i < len; i++) {
       var areas = this.commentsList[i].main.areas;
       for (var j = 0, lenj = areas.length; j < lenj; j++) {
-        for (var k = 0, lenk = areas[j].points.length; k < lenk; k++) {
+        for (var k = 1, lenk = areas[j].points.length; k < lenk; k++) {
 
-          console.log(areas[j].points[k][0] - 20 , e[0] , (areas[j].points[k][0] + 20)
-        ,areas[j].points[k][1] - 20 , e[1] , areas[j].points[k][1] + 20);
+          var u = [(e[0] - areas[j].points[k][0]), (e[1] - areas[j].points[k][1])];
+          var v = [(areas[j].points[k - 1][0] - areas[j].points[k][0]), (areas[j].points[k - 1][1] - areas[j].points[k][1])];
+          var uNorm = Math.sqrt(u[0] * u[0] + u[1] * u[1]);
+          var vNorm = Math.sqrt(v[0] * v[0] + v[1] * v[1]);
+          var angle = (u[0] * v[0] + u[1] * v[1]) / (uNorm * vNorm);
+          var dotProdu = angle * uNorm;
+          var distPoint = Math.abs(u[0] * (e[0] - areas[j].points[k][0]) + u[1] * (e[1] - areas[j].points[k][1])) / vNorm;
 
-          if (areas[j].points[k][0] - 20 > e[0] > areas[j].points[k][0] + 20
-          && areas[j].points[k][1] - 20 > e[1] > areas[j].points[k][1] + 20) {
-            this.commentsList[i].focusCom();
-            return true;
+          if (dotProdu >= 0 && distPoint <= 10 && dotProdu <= vNorm) {
+            this.commentsList[i].focusCom(2);
+            return 1;
           }
+
         }
       }
     }

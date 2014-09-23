@@ -29,6 +29,7 @@ var CommentsGroup = r.Seed.extend({
             this.color = (this.color == this.colorTab.length - 1) ? 0 : this.color + 1;
             this.wrap.style['border-color'] = this.colorTab[this.color];
             this.main.color = this.colorTab[this.color];
+            // this.query('dp').comments.one(function(e) {return e.id === this.main.id}.bind(this)).edit({color: this.color});
           }
           this.focusCom();
         }.bind(this)
@@ -86,14 +87,17 @@ var CommentsGroup = r.Seed.extend({
     this.fire('redraw');
   },
 
-  focusCom: function() {
+  focusCom: function(n) {
     if (this.el.style.marginLeft === '-12px') { return ; }
     this.el.style.marginLeft = '-12px';
     this.highStyle();
-    r.Library.clickOut(this.el, function() {
+
+    var callback = function() {
       this.el.style.marginLeft = '0px';
       this.usualStyle();
-    }.bind(this))
+    }.bind(this);
+
+    r.Library.clickOut(this.el, callback, n);
   },
 
   setMain: function(data, ctx) {
