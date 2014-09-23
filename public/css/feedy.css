@@ -218,7 +218,7 @@ a {
           background-color: #fefefe;
           font-family: "Open Sans", sans-serif;
           transition: top 0.3s;
-          border-spacing: 12px 0px; }
+          border-spacing: 6px 0px; }
           .project .files-block .file-container .file-content .col-comments .group-comment .wrap-comments .comment .comment-name {
             width: 1px;
             font-weight: bold;
