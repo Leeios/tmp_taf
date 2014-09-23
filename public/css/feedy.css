@@ -84,6 +84,8 @@ a {
   box-sizing: border-box;
   transition: 0.3s color, 0.3s border-bottom;
   border-color: #333333; }
+  .project .version-name[contenteditable=true] {
+    outline: 0px solid transparent; }
 .project .version-name:hover {
   color: #333333;
   border-bottom: 5px solid; }
