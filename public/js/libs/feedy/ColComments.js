@@ -34,6 +34,7 @@ var ColComments = r.Seed.extend({
           this.tmpGroup = null;
         }.bind(this)
       });
+      this.tmpGroup.el.style.zIndex = 50;
       this.tmpGroup.main.setAuthor('');
       this.tmpGroup.on('redraw', this.drawAreas.bind(this), this);
       this.el.appendChild(this.tmpGroup.el);
@@ -107,9 +108,11 @@ var ColComments = r.Seed.extend({
     /*Check collapse*/
     if (i == 0 || this.commentsList[i - 1].el.style.display === 'none') { return ;}
     if(r.Library.exceedSize(this.commentsList[i - 1].el, this.el.offsetHeight)) {
+      this.el.style.zIndex = 0;
       this.collapseCom();
     } else if (this.collapseEl !== null) {
       for (var i = 0, len = this.commentsList.length; i < len; i++) {
+        this.el.style.zIndex = 50;
         this.commentsList[i].show();
       }
       this.collapseEl.remove();
