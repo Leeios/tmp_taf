@@ -76,6 +76,24 @@ var ProjectViewer = r.Seed.extend({
     this.setDataToDP();
     this.listenFiles();
     this.sendToServer();
+    this.listenServer();
+  },
+
+  listenServer: function() {
+    ['insert', 'edit', 'remove'].each(function(s) {
+      socket.on(s, function(data) {
+        console.log('Receive from server:', s, data);
+        this.subServ[s][data.type].un();/*On coupe le renvoi serveur*/
+        if (s === 'insert') {
+          this.dp[data.type][s](data.models, data.changes);
+        } else {
+          this.dp[data.type].one(function(m) {return m.id === data.models.id}.bind(this))[s](data.changes);
+        }
+        this.subServ[s][data.type] = this.dp[data.type].on(s, function(models, changes) {/*On remet le renvoi serveur*/
+          this._emitServer(s, data.type, models, changes);
+        }.bind(this))
+      }.bind(this))
+    }.bind(this))
   },
 
   listenFiles: function() {
@@ -226,6 +244,7 @@ var ProjectViewer = r.Seed.extend({
     for (var i = 0, len = filesArray.length; i < len ; i++) {
       if (filesArray[i].href.substr(filesArray[i].href.lastIndexOf('#') + 1) ==  model[0].id) {
         filesArray[i].remove();
+        this.files.childNodes[i].remove();
         return ;
       }
     }
@@ -237,17 +256,15 @@ var ProjectViewer = r.Seed.extend({
   },
 
   sendToServer: function() {
+    this.subServ = {};
     ['insert', 'edit', 'remove'].each(function(e) {
-      var data = {};
-      this.dp.projects.on(e, function(models, changes) {
-        this._emitServer(e, 'projects', models, changes);
-      }.bind(this));
-      this.dp.files.on(e, function(models, changes) {
-        this._emitServer(e, 'files', models, changes);
-      }.bind(this));
-      this.dp.comments.on(e, function(models, changes) {
-        this._emitServer(e, 'comments', models, changes);
-      }.bind(this));
+      this.subServ[e] = {};
+      ['projects', 'files', 'comments'].each(function(type) {
+        var data = {};
+        this.subServ[e][type] = this.dp[type].on(e, function(models, changes) {
+          this._emitServer(e, type, models, changes);
+        }.bind(this));
+      }.bind(this))
     }.bind(this));
   },
 

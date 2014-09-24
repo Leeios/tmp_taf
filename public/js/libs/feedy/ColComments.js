@@ -23,6 +23,11 @@ var ColComments = r.Seed.extend({
 
   '+init': function() {
     this.dp.comments.on('insert', this.appendCom.bind(this));
+    this.dp.comments.on('remove', function(models, changes) {
+      if (models[0].idFile === this.idFile && models[0].idParent == 0) {
+        this.deleteComGroup(models[0].id)
+      }
+    }.bind(this));
   },
 
   addArea: function(canArea) {/*INTERFACE*/
@@ -55,6 +60,7 @@ var ColComments = r.Seed.extend({
   deleteComGroup: function(id) {
     for (var i = 0, len = this.commentsList.length; i < len; i++) {
       if (id == this.commentsList[i].mainId) {
+        this.commentsList[i].el.remove();
         this.commentsList.splice(i, 1);
         this.drawAreas();
         return ;

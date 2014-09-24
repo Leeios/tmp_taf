@@ -23,7 +23,7 @@ var Comment = r.Seed.extend({
             click: function(){ this.valid(); this.onCreate(); }.bind(this)
           }},
           { tag:".comment-button.button", as: 'removeEl', innerHTML: 'Delete', events: {
-            click: function(){ this.el.remove(); this.onRemove(this.id); }.bind(this)
+            click: function(){ this.onRemove(this.id); }.bind(this)
           }},
           { tag:".comment-button.button", as: 'editEl', innerHTML: 'Edit', events: {
             click: function(){
@@ -66,7 +66,6 @@ var Comment = r.Seed.extend({
     this.elDiv.setAttribute('contenteditable', true);
   },
 
-  /*Add/remove*/
   valid: function(newDate) {
 
     this.txt = this.elDiv.innerHTML;

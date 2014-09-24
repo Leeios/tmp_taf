@@ -47,4 +47,10 @@ exports.socket = function(socket) {
       console.log('Data model is not recognized');
     }
   });
+
+  ['insert', 'edit', 'remove'].forEach(function(s) {
+    socket.on(s, function(data) {
+      socket.broadcast.emit(s, data);
+    });
+  });
 }

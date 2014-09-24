@@ -57,6 +57,24 @@ var CommentsGroup = r.Seed.extend({
     this.main.color = this.color;
     this.wrap.style['border-color'] = this.colorTab[this.main.color];
     this.query('dp').comments.on('insert', this.setReply.bind(this));
+    this.query('dp').comments.on('edit', function(mod, changes) {
+      console.log('editCOM: ', mod[0], changes);
+      if (mod[0].idParent == this.main.id) {
+        for (var i = 0, len = this.replies.length; i < len; i++) {
+          if (mod[0].id === this.replies[i].id) {
+            changes.each(function(ch) {
+              this.replies[i][ch] =;
+          }
+        }
+      } else if (mod[0].id == this.main.id) {
+        ;
+      }
+    }.bind(this));
+    this.query('dp').comments.on('remove', function(mod, op) {
+      if (mod[0].idParent === this.main.id) {
+        this.removeReply(mod[0].id);
+      }
+    }.bind(this));
   },
 
   insertMain: function() {
@@ -121,7 +139,6 @@ var CommentsGroup = r.Seed.extend({
   },
 
   removeGroup: function() {
-    this.el.remove();
     this.query('dp').comments.where(function(e){ return this.mainId == e.idParent }.bind(this))
     .each(function(com){ com.remove(); }.bind(this));
     this.query('dp').comments.one(function(e){ return this.mainId == e.id }.bind(this)).remove();
@@ -146,9 +163,9 @@ var CommentsGroup = r.Seed.extend({
   },
 
   removeReply: function(id) {
-    this.query('dp').comments.one(function(e) {return e.id === id;}.bind(this)).remove();
     for (var i = 0, len = this.replies.length; i < len; i++) {
       if (id == this.replies[i].id) {
+        this.replies[i].el.remove();
         this.replies.splice(i, 1);
         if (this.replies.length < 3 && this.collapseEl !== null) {
           for (var i = 0, len = this.replies.length; i < len; i++) {
@@ -209,7 +226,7 @@ var CommentsGroup = r.Seed.extend({
       idParent: model[0].idParent,
       author: model[0].author,
       txt: model[0].txt,
-      onRemove: this.removeReply.bind(this),
+      onRemove: function() {this.query('dp').comments.one(function(e) {return e.id === model[0].id}.bind(this)).remove()}.bind(this),
       onReply: this.addReply.bind(this)
     });
     this.tmpReply.el.style.marginLeft = '24px';

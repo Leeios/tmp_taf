@@ -67,8 +67,6 @@ var FileContainer = r.Seed.extend({
   },
 
   removeFile: function() {
-    this.el.remove();
-
     this.query('dp').files.where(function(files) { return files.idParent === this.idParent }.bind(this))
     .each(function(files) {
       this.query('dp').comments.where(function(com) { return com.idFile === files.id }.bind(this))
