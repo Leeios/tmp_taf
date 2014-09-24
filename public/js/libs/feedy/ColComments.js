@@ -64,6 +64,8 @@ var ColComments = r.Seed.extend({
 
   canTarget: function(e) {
     if (this.ctx.getImageData(e[0], e[1], 1, 1).data[3] === 0) { return 0;}
+
+    /*CORE*/
     for (var i = 0, len = this.commentsList.length; i < len; i++) {
       var areas = this.commentsList[i].main.areas;
       for (var j = 0, lenj = areas.length; j < lenj; j++) {
@@ -73,18 +75,18 @@ var ColComments = r.Seed.extend({
           var v = [(areas[j].points[k - 1][0] - areas[j].points[k][0]), (areas[j].points[k - 1][1] - areas[j].points[k][1])];
           var uNorm = Math.sqrt(u[0] * u[0] + u[1] * u[1]);
           var vNorm = Math.sqrt(v[0] * v[0] + v[1] * v[1]);
-          var angle = (u[0] * v[0] + u[1] * v[1]) / (uNorm * vNorm);
-          var dotProdu = angle * uNorm;
-          var distPoint = Math.abs(u[0] * (e[0] - areas[j].points[k][0]) + u[1] * (e[1] - areas[j].points[k][1])) / vNorm;
+          var angle = Math.acos((u[0] * v[0] + u[1] * v[1]) / (uNorm * vNorm));
+          var dotProdu = Math.cos(angle) * uNorm;
+          var distPoint = Math.abs(Math.sin(angle) * uNorm);
 
-          if (dotProdu >= 0 && distPoint <= 10 && dotProdu <= vNorm) {
+          if (dotProdu >= 0 && dotProdu <= vNorm + 8 && distPoint <= 8) {
             this.commentsList[i].focusCom(2);
             return 1;
           }
-
         }
       }
     }
+    /*!CORE*/
   },
 
   setHeight: function(h) {
@@ -108,7 +110,7 @@ var ColComments = r.Seed.extend({
     /*Check collapse*/
     if (i == 0 || this.commentsList[i - 1].el.style.display === 'none') { return ;}
     if(r.Library.exceedSize(this.commentsList[i - 1].el, this.el.offsetHeight)) {
-      this.el.style.zIndex = 0;
+      this.el.style.zIndex = 4;
       this.collapseCom();
     } else if (this.collapseEl !== null) {
       for (var i = 0, len = this.commentsList.length; i < len; i++) {

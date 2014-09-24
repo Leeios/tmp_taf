@@ -130,6 +130,8 @@ a {
     font-weight: bold;
     margin-left: 24px;
     color: #525252; }
+    .project .project-info .project-name[contenteditable=true] {
+      outline: 0px solid transparent; }
 .project .file-nav {
   height: 36px;
   line-height: 36px;
@@ -153,6 +155,7 @@ a {
 .project .files-block .file-container {
   position: relative; }
   .project .files-block .file-container .file-info {
+    z-index: 3;
     font-family: "Lato", sans-serif;
     box-sizing: border-box;
     padding: 24px 0px 12px 24px;
@@ -172,7 +175,8 @@ a {
   .project .files-block .file-container .file-content .wrap-content {
     position: relative;
     float: left;
-    width: 50%; }
+    width: 50%;
+    overflow-x: auto; }
     .project .files-block .file-container .file-content .wrap-content .file-canvas {
       position: absolute;
       top: 0px;

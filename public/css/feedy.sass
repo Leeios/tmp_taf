@@ -135,6 +135,8 @@ a
       font-weight: bold
       margin-left: 24px
       color: #525252
+      &[contenteditable = true]
+        outline: 0px solid transparent
 
   .file-nav
     height: 36px
@@ -161,6 +163,7 @@ a
     .file-container
       position: relative
       .file-info
+        z-index: 3
         font-family: "Lato", sans-serif
         box-sizing: border-box
         padding: 24px 0px 12px 24px
@@ -185,6 +188,7 @@ a
           position: relative
           float: left
           width: 50%
+          overflow-x: auto
           .file-canvas
             position: absolute
             top: 0px
