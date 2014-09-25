@@ -35,6 +35,11 @@ var ProjectViewer = r.Seed.extend({
         {tag: '.form-block', as: 'form', children: [
           {tag: 'input.form-name.usual', as: 'formName', attr: {placeholder: 'Enter your name...'}},
           {tag: 'input.form-email.usual', as: 'formMail', attr: {placeholder: 'Enter your mail...'}},
+          ['.form-container-box', [
+            {tag: 'input.form-box.usual', attr: {type: 'checkbox', value: 'TEST'}, as: 'formBoxProj',innerHTML: 'Project'},
+            {tag: 'input.form-box.usual', attr: {type: 'checkbox'}, as: 'formBoxFiles',innerHTML: 'Files'},
+            {tag: 'input.form-box.usual', attr: {type: 'checkbox'}, as: 'formBoxCom',innerHTML: 'Comments'},
+          ]],
           {tag: '.form-valid.usual.button', innerHTML: 'VALID', events: {
             click: function() {
               document.cookie = 'name=' + (this.formName.value || 'unnamed') + ';' + 'email=' + (this.formMail.value || 'unnamed') + ';';

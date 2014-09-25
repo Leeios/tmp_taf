@@ -105,8 +105,8 @@ var FileContainer = r.Seed.extend({
         attr: {
           class: 'brush: js',
           unselectable: 'on',
-          onselectstart: 'return false;',
-          onmousedown: 'return false;'
+          onselectstart: function() {return false;}
+          onmousedown: function() {return false;}
         }
       }));
       SyntaxHighlighter.highlight();

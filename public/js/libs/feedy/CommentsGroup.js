@@ -58,16 +58,22 @@ var CommentsGroup = r.Seed.extend({
     this.wrap.style['border-color'] = this.colorTab[this.main.color];
     this.query('dp').comments.on('insert', this.setReply.bind(this));
     this.query('dp').comments.on('edit', function(mod, changes) {
-      console.log('editCOM: ', mod[0], changes);
       if (mod[0].idParent == this.main.id) {
         for (var i = 0, len = this.replies.length; i < len; i++) {
           if (mod[0].id === this.replies[i].id) {
-            changes.each(function(ch) {
-              this.replies[i][ch] =;
+            for (var att in changes) {
+              this.replies[i][att] = changes[att];
+            }
+            this.replies[i].preValid();
+            this.replies[i].valid();
           }
         }
       } else if (mod[0].id == this.main.id) {
-        ;
+        for (var att in changes) {
+          this.main[att] = changes[att];
+        }
+        this.main.preValid();
+        this.main.valid();
       }
     }.bind(this));
     this.query('dp').comments.on('remove', function(mod, op) {
