@@ -14,6 +14,7 @@
 		"forever": "latest",
 		"mongoose": "latest",
 		"config": "latest",
-		"jade": "latest"
+		"jade": "latest",
+		"nodemailer": "latest"
 	}
 }

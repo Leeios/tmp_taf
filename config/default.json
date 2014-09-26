@@ -6,6 +6,8 @@
 		"dbName": "Test_database",
 		"dbPort": 10043,
 		"dbUser": "lili",
-		"dbPwd": "castor"
+		"dbPwd": "castor",
+            "Mailuser": "feedy.io",
+            "Mailpass": "specialnico"
 	}
 }

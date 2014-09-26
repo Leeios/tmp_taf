@@ -80,7 +80,7 @@ var FileContainer = r.Seed.extend({
   },
 
   setCanvas: function() {
-    this.canvasTrack.setSize(this.wrapContent.clientHeight, this.wrapContent.clientWidth);
+    this.canvasTrack.setSize(this.wrapContent.clientHeight, this.wrapContent.scrollWidth);
     this.colComments.setHeight(this.wrapContent.clientHeight);
     this.complete.disconnect();
     this.wrapContent.appendChild(this.canvasTrack.el);
@@ -105,7 +105,7 @@ var FileContainer = r.Seed.extend({
         attr: {
           class: 'brush: js',
           unselectable: 'on',
-          onselectstart: function() {return false;}
+          onselectstart: function() {return false;},
           onmousedown: function() {return false;}
         }
       }));

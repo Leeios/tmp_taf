@@ -10,7 +10,7 @@ exports.insertFile = function(data) {
       name: data.name,
       content: data.content,
       size: data.size,
-      type: data.type,
+      type: data.type
     });
     insert_file.save(function (err) {
       if (err) {

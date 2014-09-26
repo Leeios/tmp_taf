@@ -31,22 +31,34 @@ var ProjectViewer = r.Seed.extend({
   tpl : function() {
     return {
       tag: '.project.usual',
-      children : [
+      children : [/*Ask info*/
         {tag: '.form-block', as: 'form', children: [
           {tag: 'input.form-name.usual', as: 'formName', attr: {placeholder: 'Enter your name...'}},
           {tag: 'input.form-email.usual', as: 'formMail', attr: {placeholder: 'Enter your mail...'}},
-          ['.form-container-box', [
-            {tag: 'input.form-box.usual', attr: {type: 'checkbox', value: 'TEST'}, as: 'formBoxProj',innerHTML: 'Project'},
-            {tag: 'input.form-box.usual', attr: {type: 'checkbox'}, as: 'formBoxFiles',innerHTML: 'Files'},
-            {tag: 'input.form-box.usual', attr: {type: 'checkbox'}, as: 'formBoxCom',innerHTML: 'Comments'},
+          ['table.form-container-box.usual', [
+            ['tr.usual', [
+              {tag: 'td.form-box-name', innerHTML: 'Subscribe to Project versions'},
+              ['td', [
+                {tag: 'input.form-box', attr: {type: 'checkbox'}, as: 'formBoxProj',innerHTML: 'Project'}
+              ]],
+            ]],
+            ['tr.usual', [
+              {tag: 'td.form-box-name', innerHTML: 'Subscribe to add/edit/remove Files'},
+              ['td', [
+              {tag: 'input.form-box', attr: {type: 'checkbox'}, as: 'formBoxFiles',innerHTML: 'Files'},
+              ]]
+            ]],
+            ['tr.usual', [
+              {tag: 'td.form-box-name', innerHTML: 'Subscribe to add/edit/remove Comments'},
+              ['td', [
+              {tag: 'input.form-box', attr: {type: 'checkbox'}, as: 'formBoxCom',innerHTML: 'Comments'},
+              ]]
+            ]]
           ]],
           {tag: '.form-valid.usual.button', innerHTML: 'VALID', events: {
-            click: function() {
-              document.cookie = 'name=' + (this.formName.value || 'unnamed') + ';' + 'email=' + (this.formMail.value || 'unnamed') + ';';
-              this.form.remove();
-            }.bind(this)
+            click: this.validInfo.bind(this)
           }},
-        ]},
+        ]},/*!Ask info*/
         ['.project-info', [
           {tag: 'div.project-name.name', as: 'name', events: {click: this.editName.bind(this)}},
           this.create(r.VersionPicker, {
@@ -82,6 +94,19 @@ var ProjectViewer = r.Seed.extend({
     this.listenFiles();
     this.sendToServer();
     this.listenServer();
+  },
+
+  validInfo:  function() {
+    document.cookie = 'name=' + (this.formName.value || 'unnamed') + ';' + 'email=' + (this.formMail.value || 'unnamed') + ';';
+    if (this.formMail.value && new RegExp("^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$").test(this.formMail.value)) {
+      var subsmod = (this.formBoxProj.checked ? 1 : 0) + (this.formBoxFiles.checked ? 2 : 0) + (this.formBoxCom.checked ? 4 : 0);
+      this.server.emit('subscribe', {
+        mail: this.formMail.value,
+        idProj: this.current.idParent || this.current.id,
+        subscribes: subsmod
+      })
+    }
+    this.form.remove();
   },
 
   listenServer: function() {
@@ -265,7 +290,6 @@ var ProjectViewer = r.Seed.extend({
     ['insert', 'edit', 'remove'].each(function(e) {
       this.subServ[e] = {};
       ['projects', 'files', 'comments'].each(function(type) {
-        var data = {};
         this.subServ[e][type] = this.dp[type].on(e, function(models, changes) {
           this._emitServer(e, type, models, changes);
         }.bind(this));
@@ -289,7 +313,7 @@ var ProjectViewer = r.Seed.extend({
 
   _emitServer: function(e, type, models, changes) {
     console.log('Send Server: ', e, this.getData(type, models[0]), changes, type);
-    this.server.emit(e, {models: this.getData(type, models[0]), changes: changes, type: type});
+    this.server.emit(e, {models: this.getData(type, models[0]), changes: changes, type: type, idProject: this.idParent});
   }
 
 });

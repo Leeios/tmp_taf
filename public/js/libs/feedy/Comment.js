@@ -73,7 +73,8 @@ var Comment = r.Seed.extend({
     this.switchEdit();
     this.date = newDate || new Date().getTime();
 
-    this.elDiv.innerHTML = this.txt.replace(/\[/g, '<pre class = "brush: js">').replace(/\]/g, '</pre>');
+    /*just some text ...'''code here"""some other text...*/
+    this.elDiv.innerHTML = this.txt.replace(/\'\'\'/g, '<pre class = "brush: js">').replace(/\"\"\"/g, '</pre>');
     for (var i = 0, len = this.elDiv.childNodes.length; i < len; i++) {
       if (this.elDiv.childNodes[i].tagName != "PRE") {
         this.elDiv.childNodes[i] = this.elDiv.childNodes[i].toString().replace(/\ /g, "&nbsp").replace(/\n/g, "<br/>");

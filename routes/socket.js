@@ -2,6 +2,7 @@ var idUser = 0;
 var proj_method = require('../model/project');
 var file_method = require('../model/file');
 var com_method = require('../model/comment');
+var mail_method = require('../model/mail');
 
 exports.socket = function(socket) {
 
@@ -50,7 +51,12 @@ exports.socket = function(socket) {
 
   ['insert', 'edit', 'remove'].forEach(function(s) {
     socket.on(s, function(data) {
+      mail_method.sendMail(s, data);
       socket.broadcast.emit(s, data);
     });
+  });
+
+  socket.on('subscribe', function(data) {
+    mail_method.insertMail(data);
   });
 }

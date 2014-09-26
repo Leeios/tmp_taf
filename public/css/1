@@ -44,9 +44,10 @@ a {
   width: 100%;
   height: 100%;
   z-index: 200;
-  padding: 10% 25% 0px 25%;
+  padding: 20% 20% 0px 20%;
   background-color: rgba(100, 100, 100, 0.8);
   font-family: "Lato", sans-serif;
+  text-align: center;
   box-sizing: border-box; }
   .project .form-block .form-name {
     width: 40%;
@@ -60,16 +61,13 @@ a {
     color: #fafafa;
     border-radius: 3px;
     background-color: #68b2f8;
-    text-align: center;
     transition: color 0.5s; }
   .project .form-block .form-valid:hover {
     background-color: dodgerblue; }
-  .project .form-block .form-container-box {
-    border-spacing: 0px;
-    color: #fafafa; }
-    .project .form-block .form-container-box .form-box-name {
-      width: 1%;
-      white-space: nowrap; }
+  .project .form-block .form-container-box .form-box-name {
+    display: inline; }
+  .project .form-block .form-container-box .form-box {
+    display: inline; }
 .project .usual {
   position: relative;
   float: left;
@@ -205,7 +203,6 @@ a {
       z-index: 2;
       background-color: #fefefe;
       text-align: center;
-      border-top: 1px solid #eeeeee;
       border-bottom: 1px solid #eeeeee; }
     .project .files-block .file-container .file-content .col-comments .group-comment {
       position: absolute;
