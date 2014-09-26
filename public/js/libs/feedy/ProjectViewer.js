@@ -69,7 +69,8 @@ var ProjectViewer = r.Seed.extend({
           this.create(r.UploadFile, { complete : this.insertFile.bind(this), diffColor: '#ffffff'}, 'upload').el,
           { tag : '.files-list', as : 'filesList' }
         ]},
-        {tag: '.files-block', as: 'files'}
+        {tag: '.files-block', as: 'files'},
+        {tag: '.foot-element', innerHTML: 'Copyright (c) Meuh'}
       ],
     }
   },
