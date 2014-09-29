@@ -159,7 +159,6 @@ var ColComments = r.Seed.extend({
   },
 
   showCom: function() {
-    this.el.style.zIndex = 40;
     for (var i = 0, len = this.commentsList.length; i < len; i++) {
       if (this.commentsList[i].el.style.display !== 'none') { continue ; }
       this.commentsList[i].show();

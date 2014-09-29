@@ -172,7 +172,7 @@ a {
 .project .files-block .file-container {
   position: relative; }
   .project .files-block .file-container .file-info {
-    z-index: 3;
+    z-index: 0;
     font-family: "Lato", sans-serif;
     box-sizing: border-box;
     padding: 24px 0px 12px 24px;
@@ -202,7 +202,6 @@ a {
     .project .files-block .file-container .file-content .wrap-content .syntaxhighlighter {
       z-index: 0; }
   .project .files-block .file-container .file-content .col-comments {
-    overflow-y: auto;
     position: relative;
     float: left;
     width: 45%;

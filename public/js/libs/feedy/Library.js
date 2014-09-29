@@ -13,21 +13,23 @@ sand.define('Library', [
     },
 
     eventOut: function(eventName, el, callback, n) {
-      var i = n || 1;
-      var rc = function(e) {
-        if (!Library.recursiveParent(e.target, el)) {
-          i--;
-          if (i !== 0) { return ; }
-          document.body.removeEventListener(eventName, rc);
-          callback(e);
+      (function () {
+        var i = n || 1;
+        var rc = function(e) {
+          if (!Library.recursiveParent(e.target, el)) {
+            i--;
+            if (i !== 0) { return ; }
+            document.body.removeEventListener(eventName, rc);
+            callback(e);
+          }
         }
-      }
-      document.body.addEventListener(eventName, rc);
+        document.body.addEventListener(eventName, rc);
+      })();
     },
-/*Switc en recusrvie parent if el == document.body */
+
     recursiveParent: function(el, cmp) {
       if (el === cmp) { return true; }
-      if (el === document.body || !el.parentNode) { return false; }
+      if (el === document.body || !el || !el.parentNode) { return false; }
       return (this.recursiveParent(el.parentNode, cmp));
     }
 

@@ -4,7 +4,7 @@
 		"Port": 3000,
 		"dbHost": "mongodb",
 		"dbName": "Review",
-		"dbPort": 10043,
+		"dbPort": 10013,
 		"dbUser": "lili",
 		"dbPwd": "castor",
             "Mailuser": "feedy.io",

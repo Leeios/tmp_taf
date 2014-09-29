@@ -66,10 +66,23 @@ var FileContainer = r.Seed.extend({
     this.canvasTrack.drawAll = this.colComments.drawAreas.bind(this.colComments);
     this.colComments.on('clearCanvas', this.canvasTrack.clearCanvas.bind(this.canvasTrack), this);
 
-    this.fileContent.addEventListener('mouseover', function() {
+    this.eventMouse();
+  },
+
+
+  eventMouse: function() {
+    this.fileContent.onmouseover = function() {
+      this.fileContent.onmouseover = '';
+      this.el.style.zIndex = 50;
       this.colComments.showCom();
-      r.Library.eventOut('mouseout', this.el, this.colComments.collapseCom.bind(this.colComments), 1);
-    }.bind(this));
+      this.fileContent.onmouseout = function(e) {
+        if (r.Library.recursiveParent(e.toElement, this.colComments.el) === true) {return ;}
+        this.el.onmouseout = '';
+        this.el.style.zIndex = 5;
+        this.colComments.collapseCom();
+        this.eventMouse();
+      }.bind(this);
+    }.bind(this);
   },
 
   removeFile: function() {
