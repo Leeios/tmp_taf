@@ -122,7 +122,7 @@ var CommentsGroup = r.Seed.extend({
       this.usualStyle();
     }.bind(this);
 
-    r.Library.clickOut(this.el, callback, n);
+    r.Library.eventOut('click', this.el, callback, n);
   },
 
   setMain: function(data, ctx) {

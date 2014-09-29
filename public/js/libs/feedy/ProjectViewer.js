@@ -157,7 +157,7 @@ var ProjectViewer = r.Seed.extend({
     if (this.name.isContentEditable === true) { return ;}
     this.name.setAttribute('contenteditable', true);
     this.name.focus();
-    r.Library.clickOut(this.name, function() {
+    r.Library.eventOut('click', this.name, function() {
       this.name.setAttribute('contenteditable', false)
       this.dp.projects.one(function(e) { return e.id === this.current.idParent }.bind(this)).edit({'name': this.name.innerHTML})
     }.bind(this))

@@ -14,6 +14,7 @@ var transporter = nodemailer.createTransport({
 });
 
 exports.insertMail = function(data) {
+    if (data.idProj == 0) { return ;}
     var insert_mail = new Mail({
       mail: data.mail,
       idProj: data.idProj,
