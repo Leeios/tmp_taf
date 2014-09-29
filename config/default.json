@@ -3,7 +3,7 @@
 		"Host": "localhost",
 		"Port": 3000,
 		"dbHost": "mongodb",
-		"dbName": "Test_database",
+		"dbName": "Review",
 		"dbPort": 10043,
 		"dbUser": "lili",
 		"dbPwd": "castor",

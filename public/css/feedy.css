@@ -202,6 +202,7 @@ a {
     .project .files-block .file-container .file-content .wrap-content .syntaxhighlighter {
       z-index: 0; }
   .project .files-block .file-container .file-content .col-comments {
+    overflow-y: auto;
     position: relative;
     float: left;
     width: 45%;
