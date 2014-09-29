@@ -103,7 +103,7 @@ var ProjectViewer = r.Seed.extend({
       var subsmod = (this.formBoxProj.checked ? 1 : 0) + (this.formBoxFiles.checked ? 2 : 0) + (this.formBoxCom.checked ? 4 : 0);
       this.server.emit('subscribe', {
         mail: this.formMail.value,
-        idProj: this.current.idParent || this.current.id,
+        idProj: this.current ? this.current.idParent || this.current.id : 0,
         subscribes: subsmod
       })
     }
