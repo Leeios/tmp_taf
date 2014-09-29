@@ -114,18 +114,18 @@ var ColComments = r.Seed.extend({
       }
     }
     /*Check collapse*/
-    if (i == 0 || this.commentsList[i - 1].el.style.display === 'none') { return ;}
-    if(r.Library.exceedSize(this.commentsList[i - 1].el, this.el.offsetHeight)) {
-      this.el.style.zIndex = 4;
-      this.collapseCom();
-    } else if (this.collapseEl !== null) {
-      for (var i = 0, len = this.commentsList.length; i < len; i++) {
-        this.el.style.zIndex = 50;
-        this.commentsList[i].show();
-      }
-      this.collapseEl.remove();
-      this.collapseEl = null;
-    }
+    // if (i == 0 || this.commentsList[i - 1].el.style.display === 'none') { return ;}
+    // if(r.Library.exceedSize(this.commentsList[i - 1].el, this.el.offsetHeight)) {
+    //   this.el.style.zIndex = 4;
+    //   this.collapseCom();
+    // } else if (this.collapseEl !== null) {
+    //   for (var i = 0, len = this.commentsList.length; i < len; i++) {
+    //     this.el.style.zIndex = 50;
+    //     this.commentsList[i].show();
+    //   }
+    //   this.collapseEl.remove();
+    //   this.collapseEl = null;
+    // }
   },
 
   resetCol: function(fid, ctx) {
@@ -158,28 +158,19 @@ var ColComments = r.Seed.extend({
     this.drawAreas();
   },
 
+  showCom: function() {
+    for (var i = 0, len = this.commentsList.length; i < len; i++) {
+      if (this.commentsList[i].el.style.display !== 'none') { continue ; }
+      this.commentsList[i].show();
+    }
+  },
+
   collapseCom: function() {
-    if (this.collapseEl !== null) { return ;}
-    this.el.appendChild(this.create(r.toDOM, {
-      tag: '.collapse-col.usual', innerHTML: 'Hide', events: {
-        click: function() {
-          if (this.collapseEl.innerHTML == 'Show') {
-            for (var i = 0, len = this.commentsList.length; i < len; i++) {
-              if (this.commentsList[i].el.style.display !== 'none') { continue ; }
-              this.commentsList[i].show();
-            }
-            this.collapseEl.innerHTML = 'Hide';
-          } else {
-            for (var i = 0, len = this.commentsList.length; i < len; i++) {
-              if (r.Library.exceedSize(this.commentsList[i].el, this.el.offsetHeight)) {
-                this.commentsList[i].hide();
-              }
-              this.collapseEl.innerHTML = 'Show';
-            }
-          }
-        }.bind(this)
+    for (var i = 0, len = this.commentsList.length; i < len; i++) {
+      if (r.Library.exceedSize(this.commentsList[i].el, this.el.offsetHeight)) {
+        this.commentsList[i].hide();
       }
-    }, 'collapseEl'));
+    }
   }
 
 });

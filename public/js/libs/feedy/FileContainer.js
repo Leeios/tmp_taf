@@ -2,6 +2,7 @@ sand.define('FileContainer', [
   'Seed',
   'CanvasTrack',
   'ColComments',
+  'Library',
   'VersionPicker',
   'UploadFile',
   'DOM/toDOM'
@@ -29,12 +30,12 @@ var FileContainer = r.Seed.extend({
               }
             }
           ]],
-          ['.file-content.usual', [
+          {tag: '.file-content.usual', as: 'fileContent' ,children: [
             {tag: '.wrap-content', as: 'wrapContent', children: [
               this.create(r.CanvasTrack, {form: "points"}, 'canvasTrack').el,
             ]},
             this.create(r.ColComments, {dp: this.query('dp')}, 'colComments').el
-          ]]
+          ]}
       ]
     }
   },
@@ -64,6 +65,11 @@ var FileContainer = r.Seed.extend({
     this.canvasTrack.onTarget = this.colComments.canTarget.bind(this.colComments);
     this.canvasTrack.drawAll = this.colComments.drawAreas.bind(this.colComments);
     this.colComments.on('clearCanvas', this.canvasTrack.clearCanvas.bind(this.canvasTrack), this);
+
+    this.fileContent.addEventListener('mouseover', function() {
+      this.colComments.showCom();
+      r.Library.eventOut('mouseout', this.el, this.colComments.collapseCom.bind(this.colComments), 1);
+    }.bind(this));
   },
 
   removeFile: function() {
