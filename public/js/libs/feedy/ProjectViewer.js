@@ -305,7 +305,7 @@ var ProjectViewer = r.Seed.extend({
       return { id: data.id, idParent: data.idParent, idProject: data.idProject, name: data.name, content: data.content };
     } else if (type == 'comments') {
       return { id: data.id, idParent: data.idParent, idFile: data.idFile, txt: data.txt, areas: data.areas,
-        author: data.author, actualTop: data.actualTop, color: data.color, date: data.date };
+        author: data.author, actualTop: data.actualTop, actualLeft: data.actualLeft, color: data.color, date: data.date };
     } else {
       console.log('Data not valid');
       return null;

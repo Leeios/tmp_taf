@@ -180,6 +180,11 @@ a {
     .project .files-block .file-container .file-info .file-name {
       font-size: 18px;
       color: #68b2f8; }
+    .project .files-block .file-container .file-info .tool-tip {
+      display: inline;
+      float: right;
+      margin-right: 12px;
+      color: #68b2f8; }
     .project .files-block .file-container .file-info .version-name {
       font-size: 14px; }
     .project .files-block .file-container .file-info .file-delete {
@@ -189,80 +194,91 @@ a {
       color: #cb6767;
       margin: 6px 0px 6px 24px;
       transition: 0.3s border-bottom; }
-  .project .files-block .file-container .file-content .wrap-content {
-    position: relative;
-    float: left;
-    width: 50%;
-    overflow-x: auto; }
-    .project .files-block .file-container .file-content .wrap-content .file-canvas {
-      position: absolute;
-      top: 0px;
-      left: 0px;
-      z-index: 2; }
-    .project .files-block .file-container .file-content .wrap-content .syntaxhighlighter {
-      z-index: 0; }
-  .project .files-block .file-container .file-content .col-comments {
-    position: relative;
-    float: left;
-    width: 45%;
-    height: 100%; }
-    .project .files-block .file-container .file-content .col-comments .collapse-col {
-      top: -24px;
-      font-family: "Lato", sans-serif;
-      font-style: italic;
-      color: #68b2f8;
-      font-size: 14px;
-      cursor: pointer;
-      z-index: 2;
-      background-color: #fefefe;
-      text-align: center;
-      border-top: 1px solid #eeeeee;
-      border-bottom: 1px solid #eeeeee; }
-    .project .files-block .file-container .file-content .col-comments .group-comment {
-      position: absolute;
+  .project .files-block .file-container .file-content {
+    overflow-x: none; }
+    .project .files-block .file-container .file-content .wrap-content {
+      position: relative;
       float: left;
-      width: 100%;
-      box-sizing: border-box;
-      border: 1px solid #eeeeee;
-      background-color: white;
-      transition: top 0.3s, margin-left 0.3s; }
-      .project .files-block .file-container .file-content .col-comments .group-comment .wrap-comments {
-        margin: 6px;
-        border-left: 5px solid; }
-        .project .files-block .file-container .file-content .col-comments .group-comment .wrap-comments .collapse-com {
-          float: left;
-          background-color: white;
-          font-family: "Lato", sans-serif;
-          font-style: italic;
-          color: #68b2f8;
-          font-size: 12px;
-          cursor: pointer; }
-        .project .files-block .file-container .file-content .col-comments .group-comment .wrap-comments .comment {
-          padding: 3px 6px;
-          background-color: #fefefe;
-          font-family: "Open Sans", sans-serif;
-          transition: top 0.3s;
-          border-spacing: 6px 0px; }
-          .project .files-block .file-container .file-content .col-comments .group-comment .wrap-comments .comment .comment-name {
-            width: 1px;
-            font-weight: bold;
-            vertical-align: top; }
-          .project .files-block .file-container .file-content .col-comments .group-comment .wrap-comments .comment .comment-right {
-            min-width: 79%; }
-          .project .files-block .file-container .file-content .col-comments .group-comment .wrap-comments .comment .comment-txt {
-            color: #525252;
-            font-size: 14px;
-            white-space: pre; }
-            .project .files-block .file-container .file-content .col-comments .group-comment .wrap-comments .comment .comment-txt[contenteditable=true] {
-              outline: 0px solid transparent; }
-          .project .files-block .file-container .file-content .col-comments .group-comment .wrap-comments .comment .comment-info {
-            width: 100%; }
-            .project .files-block .file-container .file-content .col-comments .group-comment .wrap-comments .comment .comment-info .comment-date {
-              float: right;
-              font-size: 12px;
-              font-style: italic; }
-            .project .files-block .file-container .file-content .col-comments .group-comment .wrap-comments .comment .comment-info .comment-button {
-              display: inline;
-              font-size: 12px;
-              color: #68b2f8;
-              font-weight: bold; }
+      width: 50%;
+      overflow-x: auto; }
+      .project .files-block .file-container .file-content .wrap-content.tool-content {
+        width: 100%; }
+      .project .files-block .file-container .file-content .wrap-content .file-canvas {
+        position: absolute;
+        top: 0px;
+        left: 0px;
+        z-index: 2; }
+      .project .files-block .file-container .file-content .wrap-content .syntaxhighlighter {
+        z-index: 0; }
+    .project .files-block .file-container .file-content .col-comments {
+      position: relative;
+      float: left;
+      width: 45%;
+      height: 100%; }
+      .project .files-block .file-container .file-content .col-comments.tool-colcom {
+        width: 100%;
+        position: absolute; }
+        .project .files-block .file-container .file-content .col-comments.tool-colcom .group-comment {
+          z-index: 50;
+          background-color: rgba(255, 255, 255, 0.9);
+          border: none;
+          width: 30%;
+          border-radius: 6px; }
+      .project .files-block .file-container .file-content .col-comments .collapse-col {
+        top: -24px;
+        font-family: "Lato", sans-serif;
+        font-style: italic;
+        color: #68b2f8;
+        font-size: 14px;
+        cursor: pointer;
+        z-index: 2;
+        text-align: center;
+        border-top: 1px solid #eeeeee;
+        border-bottom: 1px solid #eeeeee; }
+      .project .files-block .file-container .file-content .col-comments .group-comment {
+        position: absolute;
+        float: left;
+        width: 100%;
+        box-sizing: border-box;
+        background-color: #fefefe;
+        border: 1px solid #eeeeee;
+        transition: top 0.3s, margin-left 0.3s, left 0.3s;
+        overflow: hidden; }
+        .project .files-block .file-container .file-content .col-comments .group-comment .wrap-comments {
+          margin: 6px;
+          border-left: 5px solid; }
+          .project .files-block .file-container .file-content .col-comments .group-comment .wrap-comments .collapse-com {
+            float: left;
+            font-family: "Lato", sans-serif;
+            font-style: italic;
+            color: #68b2f8;
+            font-size: 12px;
+            cursor: pointer; }
+          .project .files-block .file-container .file-content .col-comments .group-comment .wrap-comments .comment {
+            padding: 3px 6px;
+            font-family: "Open Sans", sans-serif;
+            transition: top 0.3s;
+            border-spacing: 6px 0px; }
+            .project .files-block .file-container .file-content .col-comments .group-comment .wrap-comments .comment .comment-name {
+              width: 1px;
+              font-weight: bold;
+              vertical-align: top; }
+            .project .files-block .file-container .file-content .col-comments .group-comment .wrap-comments .comment .comment-right {
+              min-width: 79%; }
+            .project .files-block .file-container .file-content .col-comments .group-comment .wrap-comments .comment .comment-txt {
+              color: #525252;
+              font-size: 14px;
+              white-space: pre; }
+              .project .files-block .file-container .file-content .col-comments .group-comment .wrap-comments .comment .comment-txt[contenteditable=true] {
+                outline: 0px solid transparent; }
+            .project .files-block .file-container .file-content .col-comments .group-comment .wrap-comments .comment .comment-info {
+              width: 100%; }
+              .project .files-block .file-container .file-content .col-comments .group-comment .wrap-comments .comment .comment-info .comment-date {
+                float: right;
+                font-size: 12px;
+                font-style: italic; }
+              .project .files-block .file-container .file-content .col-comments .group-comment .wrap-comments .comment .comment-info .comment-button {
+                display: inline;
+                font-size: 12px;
+                color: #68b2f8;
+                font-weight: bold; }

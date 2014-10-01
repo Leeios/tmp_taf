@@ -93,6 +93,7 @@ var CommentsGroup = r.Seed.extend({
     if (canvasArea.points.length == 0) { return ; }
     this.main.areas.push(canvasArea);
     this.main.actualTop = canvasArea.points[0][1];
+    this.main.actualLeft = canvasArea.points[0][0];
   },
 
   drawAreas: function() {
@@ -137,6 +138,7 @@ var CommentsGroup = r.Seed.extend({
     this.main.txt = data.txt;
     this.main.date = data.date;
     this.main.actualTop = data.actualTop;
+    this.main.actualLeft = data.actualLeft;
     this.main.preValid();
     this.main.valid(data.date);
     this.query('dp').comments.where(function(e) { return e.idParent === this.mainId;

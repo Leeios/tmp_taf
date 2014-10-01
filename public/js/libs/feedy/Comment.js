@@ -50,6 +50,7 @@ var Comment = r.Seed.extend({
       onRemove: function() { console.log('remove is not available on this element'); },
       onReply: function() { console.log('reply is not available on this element'); },
       actualTop: 0,
+      actualLeft: 0,
       areas: [],
       author: 'unnamed',
       color: '#aa66aa',
@@ -118,7 +119,8 @@ var Comment = r.Seed.extend({
 
   getData: function() {
     return { id: this.id, idParent: this.idParent, idFile: this.idFile, txt: this.txt,
-      author: this.author, actualTop: this.actualTop, color: this.color, areas: this.getAreas(), date: this.date};
+      author: this.author, actualTop: this.actualTop, actualLeft: this.actualLeft,
+      color: this.color, areas: this.getAreas(), date: this.date};
   },
 
   getAreas: function() {

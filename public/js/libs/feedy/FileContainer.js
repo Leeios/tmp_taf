@@ -15,6 +15,9 @@ var FileContainer = r.Seed.extend({
         tag: '.file-container', children: [
           ['.file-info.usual', [
             {tag: '.file-name.name', as: 'name'},
+            {tag: '.tool-tip.button', innerHTML: '&lt;&gt;', as: 'switchEl', events: {
+              click: this.switchFormat.bind(this)
+            }},
             this.create(r.VersionPicker, {
               addEl: this.create(r.UploadFile, {
                 complete: function(file) {
@@ -75,6 +78,7 @@ var FileContainer = r.Seed.extend({
       this.fileContent.onmouseover = '';
       this.el.style.zIndex = 50;
       this.colComments.showCom();
+      this.setCanvas();
       this.fileContent.onmouseout = function(e) {
         if (r.Library.recursiveParent(e.toElement, this.colComments.el) === true) {return ;}
         this.el.onmouseout = '';
@@ -83,6 +87,24 @@ var FileContainer = r.Seed.extend({
         this.eventMouse();
       }.bind(this);
     }.bind(this);
+  },
+
+  switchFormat: function() {
+    if (this.switchEl.innerHTML === '&lt;&gt;') {
+      this.switchEl.innerHTML = '&gt;&lt;';
+      this.wrapContent.setAttribute('class', 'wrap-content tool-content');
+      this.colComments.el.setAttribute('class', 'col-comments tool-colcom');
+      this.colComments.setLeft();
+      this.fileContent.style.overflowY ='auto';
+      this.setCanvas();
+    } else if (this.switchEl.innerHTML === '&gt;&lt;'){
+      this.switchEl.innerHTML = '&lt;&gt;';
+      this.wrapContent.setAttribute('class', 'wrap-content');
+      this.colComments.el.setAttribute('class', 'col-comments');
+      this.colComments.resetLeft();
+      this.fileContent.style.overflowY ='none';
+      this.setCanvas();
+    }
   },
 
   removeFile: function() {
@@ -99,7 +121,11 @@ var FileContainer = r.Seed.extend({
   },
 
   setCanvas: function() {
-    this.canvasTrack.setSize(this.wrapContent.clientHeight, this.wrapContent.scrollWidth);
+    if (this.switchEl.innerHTML === '&gt;&lt;') {
+      this.canvasTrack.setSize(this.wrapContent.clientHeight, this.wrapContent.clientWidth);
+    } else {
+      this.canvasTrack.setSize(this.wrapContent.clientHeight, this.wrapContent.scrollWidth);
+    }
     this.colComments.setHeight(this.wrapContent.clientHeight);
     this.complete.disconnect();
     this.wrapContent.appendChild(this.canvasTrack.el);

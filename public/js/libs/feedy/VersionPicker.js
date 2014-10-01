@@ -8,7 +8,7 @@ var VersionPicker = r.Seed.extend({
 
   tpl: function() {
     return {
-      tag: 'div.nav-version',
+      tag: '.nav-version',
       children: [this.addEl]
     }
   },
@@ -38,6 +38,7 @@ var VersionPicker = r.Seed.extend({
           if (e.target.isContentEditable === true) { return ;}
           if (data.id === this.currentVersion) {
             e.target.setAttribute('contenteditable', true);
+            e.target.style.backgroundColor = '#787878';
             e.target.onkeypress = function(k) {
               if (k.charCode === 13) {
                 e.target.setAttribute('contenteditable', false);
