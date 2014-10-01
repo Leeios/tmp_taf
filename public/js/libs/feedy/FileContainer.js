@@ -84,6 +84,7 @@ var FileContainer = r.Seed.extend({
         this.el.onmouseout = '';
         this.el.style.zIndex = 5;
         this.colComments.collapseCom();
+        this.setCanvas();
         this.eventMouse();
       }.bind(this);
     }.bind(this);
@@ -94,7 +95,7 @@ var FileContainer = r.Seed.extend({
       this.switchEl.innerHTML = '&gt;&lt;';
       this.wrapContent.setAttribute('class', 'wrap-content tool-content');
       this.colComments.el.setAttribute('class', 'col-comments tool-colcom');
-      this.colComments.setLeft();
+      this.colComments.toolFormat();
       this.fileContent.style.overflowY ='auto';
       this.setCanvas();
     } else if (this.switchEl.innerHTML === '&gt;&lt;'){
@@ -129,6 +130,7 @@ var FileContainer = r.Seed.extend({
     this.colComments.setHeight(this.wrapContent.clientHeight);
     this.complete.disconnect();
     this.wrapContent.appendChild(this.canvasTrack.el);
+    this.canvasTrack.drawAll();
   },
 
   setContent: function(file) {

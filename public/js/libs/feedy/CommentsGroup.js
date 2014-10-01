@@ -24,16 +24,7 @@ var CommentsGroup = r.Seed.extend({
       ], events: {
         mouseover: this.highStyle.bind(this),
         mouseout: this.usualStyle.bind(this),
-        click: function(e) {
-          if (e.target === this.wrap) {
-            this.color = (this.color == this.colorTab.length - 1) ? 0 : this.color + 1;
-            this.main.color = this.color;
-            this.wrap.style['border-color'] = this.colorTab[this.color];
-            var tmp = this.query('dp').comments.one(function(e) {return e.id === this.main.id}.bind(this));
-            if (tmp !== null) {tmp.edit({color: this.color});}
-          }
-          this.focusCom();
-        }.bind(this)
+        click: this.targetClassic.bind(this)
       }
     }
   },
@@ -111,6 +102,22 @@ var CommentsGroup = r.Seed.extend({
 
   usualStyle: function() {
     this.fire('redraw');
+  },
+
+  targetClassic: function(e) {
+    if (e.target === this.wrap) {
+      this.color = (this.color == this.colorTab.length - 1) ? 0 : this.color + 1;
+      this.main.color = this.color;
+      this.wrap.style['border-color'] = this.colorTab[this.color];
+      var tmp = this.query('dp').comments.one(function(e) {return e.id === this.main.id}.bind(this));
+      if (tmp !== null) {tmp.edit({color: this.color});}
+    }
+    this.focusCom();
+  },
+
+  targetTool: function(e) {
+    this.show();
+    r.Library.eventOut('click', this.el, function(){ this.hide(); }.bind(this), 2);
   },
 
   focusCom: function(n) {
