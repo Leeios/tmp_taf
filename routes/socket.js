@@ -7,7 +7,7 @@ var mail_method = require('../model/mail');
 exports.socket = function(socket) {
 
   /*Basic enter and msg*/
-  socket.username = idUser.toString();
+  // socket.username = idUser.toString();
   console.log('User ' + idUser + ' connected');
   var address = socket.handshake.address;
   console.log("New connection from " + address);
@@ -49,14 +49,30 @@ exports.socket = function(socket) {
     }
   });
 
+  var isAlive = function(idProject, username) {
+    if (username === undefined) { return ;}
+    var timeLeft = 10 * 1000;
+    if (idTime) { clearTimeout(idTime); }
+    console.log('Launch timeout');
+    var idTime = setTimeout(function() {
+      console.log('User ' + username + ' left project ' + idProject + ': send mail');
+      mail_method.sendMail(idProject, username);
+    }, timeLeft);
+  };
+
   ['insert', 'edit', 'remove'].forEach(function(s) {
     socket.on(s, function(data) {
-      mail_method.sendMail(s, data);
-      socket.broadcast.emit(s, data);
+      mail_method.addMailContent(s, data, socket.username || 'default');
+      isAlive(data.idProject, socket.username);
+      socket.broadcast.to(data.idProject).emit(s, data);
     });
   });
 
   socket.on('subscribe', function(data) {
+    console.log(data.name, 'arrived on project', data.idProject);
+    if (data.idProject == 0) { return ;}
     mail_method.insertMail(data);
+    socket.username = data.name;
+    socket.join(data.idProject);
   });
 }

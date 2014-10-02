@@ -76,7 +76,7 @@ var CommentsGroup = r.Seed.extend({
 
   insertMain: function() {
     this.el.remove();
-    this.main.author = this.getCookie('name');
+    this.main.author = r.Library.getCookie('name');
     this.query('dp').comments.insert(this.main.getData());
   },
 
@@ -165,7 +165,7 @@ var CommentsGroup = r.Seed.extend({
     this.tmpReply = this.create(r.Comment, {
       idFile: this.idFile,
       idParent: this.mainId,
-      author: this.getCookie('name'),
+      author: r.Library.getCookie('name'),
       onCreate: function() {
         this.tmpReply.el.remove();
         delete this.tmpReply.id;
@@ -221,17 +221,6 @@ var CommentsGroup = r.Seed.extend({
       this.replies[i].refreshDate(now);
     }
   },
-
-  getCookie: function (cname) {
-      var name = cname + "=";
-      var ca = document.cookie.split(';');
-      for(var i=0; i<ca.length; i++) {
-        var c = ca[i];
-        while (c.charAt(0)==' ') c = c.substring(1);
-          if (c.indexOf(name) != -1) return c.substring(name.length,c.length);
-      }
-      return "";
-    },
 
   setReply: function(model, options) {
     if (model[0].idParent !== this.mainId) { return ; }
