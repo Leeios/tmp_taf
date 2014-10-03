@@ -3,6 +3,7 @@ var proj_method = require('../model/project');
 var file_method = require('../model/file');
 var com_method = require('../model/comment');
 var mail_method = require('../model/mail');
+var timeSave = {};
 
 exports.socket = function(socket) {
 
@@ -49,12 +50,12 @@ exports.socket = function(socket) {
     }
   });
 
-  var isAlive = function(idProject, username) {
+  var isAlive = function(username, idProject) {
     if (username === undefined) { return ;}
-    var timeLeft = 10 * 1000;
-    if (idTime) { clearTimeout(idTime); }
+    if (timeSave[username][idProject]) { clearTimeout(timeSave[username][idProject]); }
+    var timeLeft = 3 * 1000;
     console.log('Launch timeout');
-    var idTime = setTimeout(function() {
+    timeSave[username][idProject] = setTimeout(function() {
       console.log('User ' + username + ' left project ' + idProject + ': send mail');
       mail_method.sendMail(idProject, username);
     }, timeLeft);
@@ -63,7 +64,7 @@ exports.socket = function(socket) {
   ['insert', 'edit', 'remove'].forEach(function(s) {
     socket.on(s, function(data) {
       mail_method.addMailContent(s, data, socket.username || 'default');
-      isAlive(data.idProject, socket.username);
+      isAlive(socket.username, data.idProject);
       socket.broadcast.to(data.idProject).emit(s, data);
     });
   });
@@ -74,5 +75,8 @@ exports.socket = function(socket) {
     mail_method.insertMail(data);
     socket.username = data.name;
     socket.join(data.idProject);
+    if (!timeSave[socket.username]) {
+      timeSave[socket.username] = {};
+    }
   });
 }
