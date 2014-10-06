@@ -149,13 +149,11 @@ sand.define('Seed', [
 
     show : function() {
       this.el.style.display = 'block';
-
       this.fire('show');
     },
 
     hide : function() {
       this.el.style.display = 'none';
-
       this.fire('hide');
     }
 

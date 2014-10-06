@@ -2,6 +2,7 @@ sand.define('FileContainer', [
   'Seed',
   'CanvasTrack',
   'ColComments',
+  'Library',
   'VersionPicker',
   'UploadFile',
   'DOM/toDOM'
@@ -14,6 +15,9 @@ var FileContainer = r.Seed.extend({
         tag: '.file-container', children: [
           ['.file-info.usual', [
             {tag: '.file-name.name', as: 'name'},
+            {tag: '.tool-tip.button', innerHTML: '&lt;&gt;', as: 'switchEl', events: {
+              click: this.switchFormat.bind(this)
+            }},
             this.create(r.VersionPicker, {
               addEl: this.create(r.UploadFile, {
                 complete: function(file) {
@@ -29,12 +33,12 @@ var FileContainer = r.Seed.extend({
               }
             }
           ]],
-          ['.file-content.usual', [
+          {tag: '.file-content.usual', as: 'fileContent' ,children: [
             {tag: '.wrap-content', as: 'wrapContent', children: [
               this.create(r.CanvasTrack, {form: "points"}, 'canvasTrack').el,
             ]},
             this.create(r.ColComments, {dp: this.query('dp')}, 'colComments').el
-          ]]
+          ]}
       ]
     }
   },
@@ -64,6 +68,44 @@ var FileContainer = r.Seed.extend({
     this.canvasTrack.onTarget = this.colComments.canTarget.bind(this.colComments);
     this.canvasTrack.drawAll = this.colComments.drawAreas.bind(this.colComments);
     this.colComments.on('clearCanvas', this.canvasTrack.clearCanvas.bind(this.canvasTrack), this);
+
+    this.eventMouse();
+  },
+
+
+  eventMouse: function() {
+    this.fileContent.onmouseover = function() {
+      this.fileContent.onmouseover = '';
+      this.el.style.zIndex = 50;
+      this.colComments.showCom();
+      this.setCanvas();
+      this.fileContent.onmouseout = function(e) {
+        if (r.Library.recursiveParent(e.toElement, this.colComments.el) === true) {return ;}
+        this.el.onmouseout = '';
+        this.el.style.zIndex = 5;
+        this.colComments.collapseCom();
+        this.setCanvas();
+        this.eventMouse();
+      }.bind(this);
+    }.bind(this);
+  },
+
+  switchFormat: function() {
+    if (this.switchEl.innerHTML === '&lt;&gt;') {
+      this.switchEl.innerHTML = '&gt;&lt;';
+      this.wrapContent.setAttribute('class', 'wrap-content tool-content');
+      this.colComments.el.setAttribute('class', 'col-comments tool-colcom');
+      this.colComments.toolFormat();
+      this.fileContent.style.overflowY ='auto';
+      this.setCanvas();
+    } else if (this.switchEl.innerHTML === '&gt;&lt;'){
+      this.switchEl.innerHTML = '&lt;&gt;';
+      this.wrapContent.setAttribute('class', 'wrap-content');
+      this.colComments.el.setAttribute('class', 'col-comments');
+      this.colComments.resetLeft();
+      this.fileContent.style.overflowY ='none';
+      this.setCanvas();
+    }
   },
 
   removeFile: function() {
@@ -80,10 +122,15 @@ var FileContainer = r.Seed.extend({
   },
 
   setCanvas: function() {
-    this.canvasTrack.setSize(this.wrapContent.clientHeight, this.wrapContent.scrollWidth);
+    if (this.switchEl.innerHTML === '&gt;&lt;') {
+      this.canvasTrack.setSize(this.wrapContent.clientHeight, this.wrapContent.clientWidth);
+    } else {
+      this.canvasTrack.setSize(this.wrapContent.clientHeight, this.wrapContent.scrollWidth);
+    }
     this.colComments.setHeight(this.wrapContent.clientHeight);
     this.complete.disconnect();
     this.wrapContent.appendChild(this.canvasTrack.el);
+    this.canvasTrack.drawAll();
   },
 
   setContent: function(file) {

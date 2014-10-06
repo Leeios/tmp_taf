@@ -24,16 +24,7 @@ var CommentsGroup = r.Seed.extend({
       ], events: {
         mouseover: this.highStyle.bind(this),
         mouseout: this.usualStyle.bind(this),
-        click: function(e) {
-          if (e.target === this.wrap) {
-            this.color = (this.color == this.colorTab.length - 1) ? 0 : this.color + 1;
-            this.main.color = this.color;
-            this.wrap.style['border-color'] = this.colorTab[this.color];
-            var tmp = this.query('dp').comments.one(function(e) {return e.id === this.main.id}.bind(this));
-            if (tmp !== null) {tmp.edit({color: this.color});}
-          }
-          this.focusCom();
-        }.bind(this)
+        click: this.targetClassic.bind(this)
       }
     }
   },
@@ -85,7 +76,7 @@ var CommentsGroup = r.Seed.extend({
 
   insertMain: function() {
     this.el.remove();
-    this.main.author = this.getCookie('name');
+    this.main.author = r.Library.getCookie('name');
     this.query('dp').comments.insert(this.main.getData());
   },
 
@@ -93,6 +84,7 @@ var CommentsGroup = r.Seed.extend({
     if (canvasArea.points.length == 0) { return ; }
     this.main.areas.push(canvasArea);
     this.main.actualTop = canvasArea.points[0][1];
+    this.main.actualLeft = canvasArea.points[0][0];
   },
 
   drawAreas: function() {
@@ -112,6 +104,22 @@ var CommentsGroup = r.Seed.extend({
     this.fire('redraw');
   },
 
+  targetClassic: function(e) {
+    if (e.target === this.wrap) {
+      this.color = (this.color == this.colorTab.length - 1) ? 0 : this.color + 1;
+      this.main.color = this.color;
+      this.wrap.style['border-color'] = this.colorTab[this.color];
+      var tmp = this.query('dp').comments.one(function(e) {return e.id === this.main.id}.bind(this));
+      if (tmp !== null) {tmp.edit({color: this.color});}
+    }
+    this.focusCom();
+  },
+
+  targetTool: function(e) {
+    this.show();
+    r.Library.eventOut('click', this.el, function(){ this.hide(); }.bind(this), 2);
+  },
+
   focusCom: function(n) {
     if (this.el.style.marginLeft === '-12px') { return ; }
     this.el.style.marginLeft = '-12px';
@@ -122,7 +130,7 @@ var CommentsGroup = r.Seed.extend({
       this.usualStyle();
     }.bind(this);
 
-    r.Library.clickOut(this.el, callback, n);
+    r.Library.eventOut('click', this.el, callback, n);
   },
 
   setMain: function(data, ctx) {
@@ -137,6 +145,7 @@ var CommentsGroup = r.Seed.extend({
     this.main.txt = data.txt;
     this.main.date = data.date;
     this.main.actualTop = data.actualTop;
+    this.main.actualLeft = data.actualLeft;
     this.main.preValid();
     this.main.valid(data.date);
     this.query('dp').comments.where(function(e) { return e.idParent === this.mainId;
@@ -156,7 +165,7 @@ var CommentsGroup = r.Seed.extend({
     this.tmpReply = this.create(r.Comment, {
       idFile: this.idFile,
       idParent: this.mainId,
-      author: this.getCookie('name'),
+      author: r.Library.getCookie('name'),
       onCreate: function() {
         this.tmpReply.el.remove();
         delete this.tmpReply.id;
@@ -212,17 +221,6 @@ var CommentsGroup = r.Seed.extend({
       this.replies[i].refreshDate(now);
     }
   },
-
-  getCookie: function (cname) {
-      var name = cname + "=";
-      var ca = document.cookie.split(';');
-      for(var i=0; i<ca.length; i++) {
-        var c = ca[i];
-        while (c.charAt(0)==' ') c = c.substring(1);
-          if (c.indexOf(name) != -1) return c.substring(name.length,c.length);
-      }
-      return "";
-    },
 
   setReply: function(model, options) {
     if (model[0].idParent !== this.mainId) { return ; }

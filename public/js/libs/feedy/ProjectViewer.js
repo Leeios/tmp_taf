@@ -32,6 +32,7 @@ var ProjectViewer = r.Seed.extend({
     return {
       tag: '.project.usual',
       children : [/*Ask info*/
+        {tag: '.loading.usual', as: 'loadEl'},
         {tag: '.form-block', as: 'form', children: [
           {tag: 'input.form-name.usual', as: 'formName', attr: {placeholder: 'Enter your name...'}},
           {tag: 'input.form-email.usual', as: 'formMail', attr: {placeholder: 'Enter your mail...'}},
@@ -45,18 +46,21 @@ var ProjectViewer = r.Seed.extend({
             ['tr.usual', [
               {tag: 'td.form-box-name', innerHTML: 'Subscribe to add/edit/remove Files'},
               ['td', [
-              {tag: 'input.form-box', attr: {type: 'checkbox'}, as: 'formBoxFiles',innerHTML: 'Files'},
+              {tag: 'input.form-box', attr: {type: 'checkbox', maxlength: 16}, as: 'formBoxFiles',innerHTML: 'Files'},
               ]]
             ]],
             ['tr.usual', [
               {tag: 'td.form-box-name', innerHTML: 'Subscribe to add/edit/remove Comments'},
               ['td', [
-              {tag: 'input.form-box', attr: {type: 'checkbox'}, as: 'formBoxCom',innerHTML: 'Comments'},
+              {tag: 'input.form-box', attr: {type: 'checkbox', maxlength: 64}, as: 'formBoxCom',innerHTML: 'Comments'},
               ]]
             ]]
           ]],
           {tag: '.form-valid.usual.button', innerHTML: 'VALID', events: {
-            click: this.validInfo.bind(this)
+            click: function() {
+              document.cookie = 'name=' + (this.formName.value || 'unnamed') + ';';
+              this.validInfo();
+            }.bind(this)
           }},
         ]},/*!Ask info*/
         ['.project-info', [
@@ -77,10 +81,6 @@ var ProjectViewer = r.Seed.extend({
 
   '+init' : function() {
 
-    /*Ask name & mail*/
-    if (!document.cookie == '') {
-      this.form.remove();
-    }
     /*Listen scroll*/
     window.addEventListener('scroll', function(e) {
       this.actualTop = this.projectNav.offsetTop || this.actualTop;
@@ -93,20 +93,25 @@ var ProjectViewer = r.Seed.extend({
 
     this.setDataToDP();
     this.listenFiles();
-    this.sendToServer();
     this.listenServer();
+    this.sendToServer();
+
+    /*Ask name & mail*/
+    if (r.Library.getCookie('name') != '') {
+      this.validInfo();
+    }
   },
 
   validInfo:  function() {
-    document.cookie = 'name=' + (this.formName.value || 'unnamed') + ';' + 'email=' + (this.formMail.value || 'unnamed') + ';';
-    if (this.formMail.value && new RegExp("^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$").test(this.formMail.value)) {
-      var subsmod = (this.formBoxProj.checked ? 1 : 0) + (this.formBoxFiles.checked ? 2 : 0) + (this.formBoxCom.checked ? 4 : 0);
-      this.server.emit('subscribe', {
-        mail: this.formMail.value,
-        idProj: this.current ? this.current.idParent || this.current.id : 0,
-        subscribes: subsmod
-      })
-    }
+    console.log('Valid info :', r.Library.getCookie('name'));
+    var subsmod = (this.formBoxProj.checked ? 1 : 0) + (this.formBoxFiles.checked ? 2 : 0) + (this.formBoxCom.checked ? 4 : 0);
+    this.server.emit('subscribe', {
+      name: r.Library.getCookie('name'),
+      mail: this.formMail.value,
+      nameProj: this.name.innerHTML,
+      idProject: this.current ? this.current.idParent || this.current.id : 0,
+      subscribes: subsmod
+    })
     this.form.remove();
   },
 
@@ -157,7 +162,7 @@ var ProjectViewer = r.Seed.extend({
     if (this.name.isContentEditable === true) { return ;}
     this.name.setAttribute('contenteditable', true);
     this.name.focus();
-    r.Library.clickOut(this.name, function() {
+    r.Library.eventOut('click', this.name, function() {
       this.name.setAttribute('contenteditable', false)
       this.dp.projects.one(function(e) { return e.id === this.current.idParent }.bind(this)).edit({'name': this.name.innerHTML})
     }.bind(this))
@@ -224,6 +229,7 @@ var ProjectViewer = r.Seed.extend({
         }.bind(this)), file);
       }
     }.bind(this));
+    this.loadEl.remove();
   },
 
   insertFile: function(file) {
@@ -241,6 +247,7 @@ var ProjectViewer = r.Seed.extend({
   },
 
   addFile: function(model, op) {
+    if (model[0].idProject != this.current.id) {return ;}
     if (model[0].idParent == 0) {
       this.fileElems.push(this.appendFile(model[0]));
     } else {
@@ -305,7 +312,7 @@ var ProjectViewer = r.Seed.extend({
       return { id: data.id, idParent: data.idParent, idProject: data.idProject, name: data.name, content: data.content };
     } else if (type == 'comments') {
       return { id: data.id, idParent: data.idParent, idFile: data.idFile, txt: data.txt, areas: data.areas,
-        author: data.author, actualTop: data.actualTop, color: data.color, date: data.date };
+        author: data.author, actualTop: data.actualTop, actualLeft: data.actualLeft, color: data.color, date: data.date };
     } else {
       console.log('Data not valid');
       return null;

@@ -50,6 +50,10 @@ a
     background-color: dodgerblue
 
 .project
+  .loading
+    z-index: 500
+    background-color: rgba(200, 200, 200, 0.8)
+    background-image: url(../img/loading.gif)
   .form-block
     position: fixed
     top: 0px
@@ -180,13 +184,18 @@ a
     .file-container
       position: relative
       .file-info
-        z-index: 3
+        z-index: 0
         font-family: "Lato", sans-serif
         box-sizing: border-box
         padding: 24px 0px 12px 24px
         font-weight: bold
         .file-name
           font-size: 18px
+          color: #68b2f8
+        .tool-tip
+          display: inline
+          float: right
+          margin-right: 12px
           color: #68b2f8
         .version-name
           font-size: 14px
@@ -201,7 +210,10 @@ a
         // .file-delete:hover
         //   border-bottom: 2px solid #cb6767
       .file-content
+        overflow-x: none
         .wrap-content
+          &.tool-content
+            width: 100%
           position: relative
           float: left
           width: 50%
@@ -214,6 +226,14 @@ a
           .syntaxhighlighter
             z-index: 0
         .col-comments
+          &.tool-colcom
+            width: 100%
+            position: absolute
+            .group-comment
+              z-index: 50
+              border: none
+              width: 30%
+              border-radius: 6px
           .collapse-col
             top: -24px
             font-family: "Lato", sans-serif
@@ -222,7 +242,6 @@ a
             font-size: 14px
             cursor: pointer
             z-index: 2
-            background-color: #fefefe
             text-align: center
             border-top: 1px solid #eee
             border-bottom: 1px solid #eee
@@ -235,15 +254,15 @@ a
             float: left
             width: 100%
             box-sizing: border-box
+            background-color: #fefefe
             border: 1px solid #eee
-            background-color: white
-            transition: top 0.3s, margin-left 0.3s
+            transition: top 0.3s, margin-left 0.3s, left 0.3s
+            overflow: hidden
             .wrap-comments
               margin: 6px
               border-left: 5px solid
               .collapse-com
                 float: left
-                background-color: white
                 font-family: "Lato", sans-serif
                 font-style: italic
                 color: #68b2f8
@@ -251,7 +270,6 @@ a
                 cursor: pointer
               .comment
                 padding: 3px 6px
-                background-color: #fefefe
                 font-family: "Open Sans", sans-serif
                 transition: top 0.3s
                 border-spacing: 6px 0px

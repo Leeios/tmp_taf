@@ -25,8 +25,10 @@ var appComments = r.Seed.extend({
     this.el = document.body;
 
     this.el.appendChild(this.header.el);
-    this.el.appendChild(this.projectViewer.el);
-    SyntaxHighlighter.highlight();
+    if (this.data !== null) {
+      this.el.appendChild(this.projectViewer.el);
+      SyntaxHighlighter.highlight();
+    }
   }
 
 });

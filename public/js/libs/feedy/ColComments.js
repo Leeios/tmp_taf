@@ -86,7 +86,11 @@ var ColComments = r.Seed.extend({
           var distPoint = Math.abs(Math.sin(angle) * uNorm);
 
           if (dotProdu >= 0 && dotProdu <= vNorm + 8 && distPoint <= 8) {
-            this.commentsList[i].focusCom(2);
+            if (this.el.className === 'col-comments tool-colcom') {
+              this.commentsList[i].targetTool();
+            } else {
+              this.commentsList[i].focusCom(2);
+            }
             return 1;
           }
         }
@@ -99,32 +103,45 @@ var ColComments = r.Seed.extend({
     this.el.style.height = h + 'px';
   },
 
+  toolFormat : function() {
+    if (this.tmpGroup !== null) {
+      this.tmpGroup.el.style.left = this.tmpGroup.main.actualLeft + 'px';
+    }
+    for (var i = 0, len = this.commentsList.length; i < len; i++) {
+      this.commentsList[i].refreshDate();
+      this.commentsList[i].el.style.left = this.commentsList[i].main.actualLeft + 'px';
+      this.commentsList[i].el.style.top = this.commentsList[i].main.actualTop + 'px';
+      this.commentsList[i].hide();
+      // this.commentsList[i].el.onclick = this.commentsList[i].targetTool.bind(this.commentsList[i]);
+    }
+  },
+  resetLeft: function() {
+    if (this.tmpGroup !== null) {
+      this.tmpGroup.el.style.left = 0;
+    }
+    for (var i = 0, len = this.commentsList.length; i < len; i++) {
+      this.commentsList[i].el.style.left = 0;
+      this.commentsList[i].show();
+      // this.commentsList[i].el.onclick = this.commentsList[i].targetClassic.bind(this.commentsList[i]);
+    }
+  },
+
   displayComments: function() {
-    this.el.style.zIndex = 50;
+    // this.el.style.zIndex = 50;
+    if (this.tmpGroup !== null) { this.tmpGroup.el.style.top = this.tmpGroup.main.actualTop + 'px'; }
+    if (this.el.className === 'col-comments tool-colcom') {
+      return ;
+    }
     this.commentsList.sort(function (a, b) {
       return a.main.actualTop - b.main.actualTop;
     });
    var prevDown;
-   if (this.tmpGroup !== null) { this.tmpGroup.el.style.top = this.tmpGroup.main.actualTop + 'px'; }
     for (var i = 0, len = this.commentsList.length; i < len; i++) {
       this.commentsList[i].refreshDate();
       this.commentsList[i].el.style.top = this.commentsList[i].main.actualTop + 'px';
       if (i > 0 && (prevDown = r.Library.exceedSize(this.commentsList[i - 1].el, this.commentsList[i].el.style.top))) {
         this.commentsList[i].el.style.top = prevDown + 3 + 'px';
       }
-    }
-    /*Check collapse*/
-    if (i == 0 || this.commentsList[i - 1].el.style.display === 'none') { return ;}
-    if(r.Library.exceedSize(this.commentsList[i - 1].el, this.el.offsetHeight)) {
-      this.el.style.zIndex = 4;
-      this.collapseCom();
-    } else if (this.collapseEl !== null) {
-      for (var i = 0, len = this.commentsList.length; i < len; i++) {
-        this.el.style.zIndex = 50;
-        this.commentsList[i].show();
-      }
-      this.collapseEl.remove();
-      this.collapseEl = null;
     }
   },
 
@@ -158,28 +175,22 @@ var ColComments = r.Seed.extend({
     this.drawAreas();
   },
 
+  showCom: function() {
+    if (this.el.className === 'col-comments tool-colcom') {
+      return ;
+    }
+    for (var i = 0, len = this.commentsList.length; i < len; i++) {
+      if (this.commentsList[i].el.style.display !== 'none') { continue ; }
+      this.commentsList[i].show();
+    }
+  },
+
   collapseCom: function() {
-    if (this.collapseEl !== null) { return ;}
-    this.el.appendChild(this.create(r.toDOM, {
-      tag: '.collapse-col.usual', innerHTML: 'Hide', events: {
-        click: function() {
-          if (this.collapseEl.innerHTML == 'Show') {
-            for (var i = 0, len = this.commentsList.length; i < len; i++) {
-              if (this.commentsList[i].el.style.display !== 'none') { continue ; }
-              this.commentsList[i].show();
-            }
-            this.collapseEl.innerHTML = 'Hide';
-          } else {
-            for (var i = 0, len = this.commentsList.length; i < len; i++) {
-              if (r.Library.exceedSize(this.commentsList[i].el, this.el.offsetHeight)) {
-                this.commentsList[i].hide();
-              }
-              this.collapseEl.innerHTML = 'Show';
-            }
-          }
-        }.bind(this)
+    for (var i = 0, len = this.commentsList.length; i < len; i++) {
+      if (r.Library.exceedSize(this.commentsList[i].el, this.el.offsetHeight)) {
+        this.commentsList[i].hide();
       }
-    }, 'collapseEl'));
+    }
   }
 
 });

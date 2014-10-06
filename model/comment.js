@@ -12,6 +12,7 @@ exports.insertCom = function(data) {
     txt: data.txt,
     author: data.author,
     actualTop: data.actualTop,
+    actualLeft: data.actualLeft,
     areas: data.areas,
     color: data.color
   });

@@ -8,7 +8,7 @@ var VersionPicker = r.Seed.extend({
 
   tpl: function() {
     return {
-      tag: 'div.nav-version',
+      tag: '.nav-version',
       children: [this.addEl]
     }
   },
@@ -46,7 +46,7 @@ var VersionPicker = r.Seed.extend({
                 editTmp.edit({'name': e.target.innerHTML})
               }
             }.bind(this);
-            r.Library.clickOut(e.target, function() {
+            r.Library.eventOut('click', e.target, function() {
               e.target.setAttribute('contenteditable', false);
               var editTmp = this.query('dp').projects.one(function(p) { return p.id === this.currentVersion }.bind(this))
               || this.query('dp').files.one(function(p) { return p.id === this.currentVersion }.bind(this));
