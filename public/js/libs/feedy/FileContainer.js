@@ -14,7 +14,7 @@ var FileContainer = r.Seed.extend({
     return {
         tag: '.file-container', children: [
           ['.file-info.usual', [
-            {tag: '.file-name.name', as: 'name'},
+            {tag: '.file-name.name', as: 'name', events: {click: this.editName.bind(this)}},
             {tag: '.tool-tip.button', innerHTML: '&lt;&gt;', as: 'switchEl', events: {
               click: this.switchFormat.bind(this)
             }},
@@ -97,16 +97,32 @@ var FileContainer = r.Seed.extend({
       this.colComments.el.setAttribute('class', 'col-comments tool-colcom');
       this.colComments.toolFormat();
       this.fileContent.style.overflowY ='auto';
-      this.setCanvas();
     } else if (this.switchEl.innerHTML === '&gt;&lt;'){
       this.switchEl.innerHTML = '&lt;&gt;';
       this.wrapContent.setAttribute('class', 'wrap-content');
       this.colComments.el.setAttribute('class', 'col-comments');
       this.colComments.resetLeft();
       this.fileContent.style.overflowY ='none';
-      this.setCanvas();
     }
+    this.setCanvas();
   },
+
+  editName: function() {
+    if (this.name.isContentEditable === true) { return ;}
+    this.name.setAttribute('contenteditable', true);
+    this.name.focus();
+    r.Library.eventOut('click', this.name, function() {
+      this.name.setAttribute('contenteditable', false)
+      this.query('dp').files.one(function(e) { return e.id === this.idParent || this.id }.bind(this)).edit({'name': this.name.innerHTML})
+    }.bind(this))
+    this.name.onkeypress = function(e) {
+      if (e.charCode === 13) {
+        this.name.setAttribute('contenteditable', false);
+        this.query('dp').files.one(function(e) { return e.id === this.idParent || this.id }.bind(this)).edit({'name': this.name.innerHTML})
+      }
+    }.bind(this)
+  },
+
 
   removeFile: function() {
     this.query('dp').files.where(function(files) { return files.idParent === this.idParent }.bind(this))

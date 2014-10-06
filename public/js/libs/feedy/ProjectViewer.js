@@ -59,6 +59,7 @@ var ProjectViewer = r.Seed.extend({
           {tag: '.form-valid.usual.button', innerHTML: 'VALID', events: {
             click: function() {
               document.cookie = 'name=' + (this.formName.value || 'unnamed') + ';';
+              document.cookie = 'mail=' + (this.formMail.value || 'none') + ';';
               this.validInfo();
             }.bind(this)
           }},
@@ -103,7 +104,6 @@ var ProjectViewer = r.Seed.extend({
   },
 
   validInfo:  function() {
-    console.log('Valid info :', r.Library.getCookie('name'));
     var subsmod = (this.formBoxProj.checked ? 1 : 0) + (this.formBoxFiles.checked ? 2 : 0) + (this.formBoxCom.checked ? 4 : 0);
     this.server.emit('subscribe', {
       name: r.Library.getCookie('name'),

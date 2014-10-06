@@ -27,14 +27,14 @@ exports.insertMail = function(data) {
   }
   var insert_mail = new Mail({
     mail: data.mail,
-    idProj: data.idProj,
+    idProj: data.idProject,
     subscribes: data.subscribes,
   });
   insert_mail.save(function (err) {
     if (err) {
       console.log("Cannot add mail " + data.mail + " to database");
     } else {
-      console.log("Mail " + data.mail + " for project " + data.idProj + ' with subscribes ' + data.subscribes + " added to database");
+      console.log("Mail " + data.mail + " for project " + data.idProject + ' with subscribes ' + data.subscribes + " added to database");
     }
   });
 }
@@ -55,18 +55,21 @@ exports.addMailContent = function(s, data, username) {
   textMail[username][data.idProject][data.type].push(data.models);
 };
 
-var _emitEmail = function(mailList, idProj, type, changes) {
+var _emitEmail = function(mailList, txt) {
   var mailOptions = {
       from: 'Feedy.io <feedy.io@gmail.com>',
       to: mailList,
-      subject: 'Feedy project ' + idProj + 'has been modified ✔',
-      text: 'A ' + type + ' has been ' + changes + ' on project ' + idProj,
-      html: 'A ' + type + ' has been ' + changes + ' on project ' + idProj
+      subject: 'Feedy project has been modified ✔',
+      headers: {
+        'X-Laziness-level': 1000
+      },
+      text: 'Feedy contacts you',
+      html: txt
   };
 
   transporter.sendMail(mailOptions, function(error, info){
       if(error){
-          console.log(error);
+          console.log(error.message);
       }else{
           console.log('Message sent to ' + mailList + ': ' + info.response);
       }
@@ -81,10 +84,11 @@ var _emitEmail = function(mailList, idProj, type, changes) {
 **CommentId/CommentTxt
 */
 var keepChanges = function(tree) {
+  if (!tree.files) { return ;}
   for (var i = 0, len = tree.files.length; i < len; i++) {
     for (var j = 0, lenj = tree.comments.length; j < lenj; j++) {
       if (tree.comments[j].changes && tree.comments[j].idFile === tree.files[i].id) {
-        tree.files[i].changes = 'IFC';/*Intermed File Children*/
+        tree.files[i].changes = ' ';/*Intermed File Children*/
         break ;
       }
     }
@@ -92,7 +96,7 @@ var keepChanges = function(tree) {
   for (var i = 0, len = tree.files.length; i < len; i++) {
     for (var j = 0, lenj = tree.files.length; j < lenj; j++) {
       if (tree.files[j].changes && tree.files[j].idParent === tree.files[i].id) {
-        tree.files[i].changes = 'IFP';/*Intermed File Parent*/
+        tree.files[i].changes = ' ';/*Intermed File Parent*/
         break ;
       }
     }
@@ -100,7 +104,7 @@ var keepChanges = function(tree) {
   for (var i = 0, len = tree.projects.length; i < len; i++) {
     for (var j = 0, lenj = tree.files.length; j < lenj; j++) {
       if (tree.files[j].changes && tree.files[j].idProject === tree.projects[i].id) {
-        tree.projects[i].changes = 'IPC';/*Intermed File Parent*/
+        tree.projects[i].changes = ' ';/*Intermed Project Parent*/
         break ;
       }
     }
@@ -111,25 +115,27 @@ var formateMail = function(idProject, username) {
   /*INIT MAIL*/
   var tree = textMail[username][idProject];
   keepChanges(tree);
-  var finalTxt = 'Hi ! User ' + username + ' reviewed a project\n';
+  var finalTxt = '<div style = "text-align: center;letter-spacing: 3px;background-color = #68b2f8;color = #fefefe;border: 2px solid #000;"><h1><b>User ' + username + ' reviewed a Feedy project</b></h1></div>';
   for (var i = 0, len = tree.projects.length; i < len; i++) {
     if (tree.projects[i].idParent == 0) {
-      finalTxt += tree.projects[i].name + '/' + tree.projects[i].id;
+      finalTxt += '<div style ="padding = 24px 0px;text-align: center;"><h1><i>' + tree.projects[i].name + '&nbsp&nbsp/&nbsp&nbspid:' + tree.projects[i].id + '</i></h1><div>';
       break ;
     }
   }
+
+  finalTxt += '<div style="text-align: left;float:left;border-left: 2px solid #000;">'
   for (var i = 0, len = tree.projects.length; i < len; i++) {
     if (tree.projects[i].changes && tree.projects[i].id !== idProject) {
-      finalTxt += '\n  |' + tree.projects[i].changes + '|Project version: ' + tree.projects[i].name;
+      finalTxt += '<div style = "padding-left: 6px; border-top: 2px solid #010101;">' + tree.projects[i].changes + '<h2>' + tree.projects[i].name + '</h2></div>';
       for (var j = 0, lenj = tree.files.length; j < lenj; j++) {
         if (tree.files[j].changes && tree.files[j].idProject === tree.projects[i].id && tree.files[j].idParent == 0) {
-          finalTxt += '\n    |' + tree.files[j].changes + '|File name: ' + tree.files[j].name;
+          finalTxt += '<div style = "padding-left: 54px; border-top: 2px solid #010101;">' + tree.files[j].changes + '<h3>' + tree.files[j].name + '</h2></div>';
           for (var k = 0, lenk = tree.files.length; k < lenk; k++) {
             if (tree.files[k].changes && tree.files[k].idParent === tree.files[j].id) {
-              finalTxt += '\n      |' + tree.files[k].changes + '|File version: ' + tree.files[k].name;
+              finalTxt += '<div style = "padding-left: 96px; border-top: 1px solid #010101;">' + tree.files[k].changes + '<h4>' + tree.files[k].name + '</h2></div>';
               for (var l = 0, lenl = tree.comments.length; l < lenl; l++) {
                 if (tree.comments[l].changes && tree.comments[l].idFile === tree.files[k].id) {
-                  finalTxt += '\n       |' + tree.comments[l].changes + ' comment: ' + tree.comments[l].txt;
+                  finalTxt += '<div style = "padding-left: 117px; border-top: 1px solid #010101;">' + tree.comments[l].changes + ' comment:</br><pre>' + tree.comments[l].txt + '</pre></div>';
                 }
               }
             }
@@ -138,24 +144,24 @@ var formateMail = function(idProject, username) {
       }
     }
   }
-  console.log(finalTxt);
+  finalTxt += '</div>'
+  return (finalTxt)
 };
 
 exports.sendMail = function(idProject, username) {
   formateMail(idProject, username);
-  return ;
 
-  var searchbite = (data.type == 'projects' ? 0 : (data.type == 'files' ? 1 : (data.type == 'comments') ? 2 : 4));
-  Mail.find({idProj: data.idProject}, {}, function (err, doc) {
+  // var searchbite = (data.type == 'projects' ? 0 : (data.type == 'files' ? 1 : (data.type == 'comments') ? 2 : 4));
+  Mail.find({idProj: idProject}, {}, function (err, doc) {
     if (err) {console.log('Error sending email: ' + err)}
     else {
       var mailList = '';
       for (var i = 0, len = doc.length; i < len; i++) {
-        if (doc[i].subscribes, doc[i].subscribes >> searchbite) {
-          mailList += doc[i].mail + ', ';
-        }
+        // if (doc[i].subscribes, doc[i].subscribes >> searchbite) {
+          mailList += '<' + doc[i].mail + '>, ';
+        // }
       }
-      _emitEmail(mailList, data.idProject, data.type, s);
+      _emitEmail(mailList, formateMail(idProject, username));
     }
   })
 };
