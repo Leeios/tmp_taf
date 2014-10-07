@@ -190,6 +190,9 @@ a {
     box-sizing: border-box;
     padding: 24px 0px 12px 24px;
     font-weight: bold; }
+    .project .files-block .file-container .file-info .tool-tip {
+      font-size: 18px;
+      font-weight: bold; }
     .project .files-block .file-container .file-info .file-name {
       font-size: 18px;
       color: #68b2f8; }

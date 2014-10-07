@@ -53,7 +53,7 @@ exports.socket = function(socket) {
   var isAlive = function(username, idProject) {
     if (username === undefined) { return ;}
     if (timeSave[username][idProject]) { clearTimeout(timeSave[username][idProject]); }
-    var timeLeft = 10 * 60 * 1000;
+    var timeLeft = 10 * 1 * 1000;
     console.log('Launch timeout');
     timeSave[username][idProject] = setTimeout(function() {
       console.log('User ' + username + ' left project ' + idProject + ': send mail');
