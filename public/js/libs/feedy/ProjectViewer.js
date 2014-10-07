@@ -309,7 +309,13 @@ var ProjectViewer = r.Seed.extend({
       if (filesArray[i].href.substr(filesArray[i].href.lastIndexOf('#') + 1) ==  model[0].id) {
         filesArray[i].remove();
         this.files.childNodes[i].remove();
-        return ;
+        break ;
+      }
+    }
+    for (var i = 0, len = this.fileElems.length; i < len ; i++) {
+      if (this.fileElems[i].idParent ==  model[0].id) {
+        this.fileElems.splice(i, 1);
+        break ;
       }
     }
   },
