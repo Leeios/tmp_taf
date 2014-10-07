@@ -308,12 +308,13 @@ var ProjectViewer = r.Seed.extend({
     for (var i = 0, len = filesArray.length; i < len ; i++) {
       if (filesArray[i].href.substr(filesArray[i].href.lastIndexOf('#') + 1) ==  model[0].id) {
         filesArray[i].remove();
-        this.files.childNodes[i].remove();
+        (this.files.childNodes[i] || this.files.childNodes[0]).remove();
         break ;
       }
     }
     for (var i = 0, len = this.fileElems.length; i < len ; i++) {
-      if (this.fileElems[i].idParent ==  model[0].id) {
+      console.log(this.fileElems[i].idParent,  this.fileElems[i].id, model[0].id)
+      if ((this.fileElems[i].idParent || this.fileElems[i].id) ==  model[0].id) {
         this.fileElems.splice(i, 1);
         break ;
       }
