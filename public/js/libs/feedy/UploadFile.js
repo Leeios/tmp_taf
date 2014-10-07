@@ -13,14 +13,13 @@ var UploadFile = r.Seed.extend({
       '.upload-wrapper.version-name.button', [
         {tag: "input.upload-file.button", as: 'uploadButton',
         attr: { type: "file", multiple: "multiple" }},
-        {tag: '.upload-fakebutton.button', innerHTML: this.txt }
+        {tag: 'i.fa.fa-folder-open.upload-fakebutton.button'}
       ]]
   },
 
   options: function() {
     return {
       diffColor: null,
-      txt: '+',
       complete: function() {
         console.log('FileView not defined');
       }

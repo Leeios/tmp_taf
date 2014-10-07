@@ -23,7 +23,7 @@ var VersionPicker = r.Seed.extend({
         console.log('Versioning is not available for this element');
       },
       addEl: r.toDOM({
-        tag: '.version-name.button', innerHTML: '+',
+        tag: 'i.fa.fa-plus.version-name.button',
         events: { click: function() { this.onAdd(); }.bind(this) }
       })
     }

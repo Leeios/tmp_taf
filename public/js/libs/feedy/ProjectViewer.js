@@ -65,11 +65,11 @@ var ProjectViewer = r.Seed.extend({
           }},
         ]},/*!Ask info*/
         ['.project-info', [
-          {tag: 'div.switch-display.tool-tip.button', as: 'switchEl', innerHTML: '&lt;&gt;', events: {click: function() {
-            if (this.switchEl.innerHTML == '&lt;&gt;') {
-              this.switchEl.innerHTML = '&gt;&lt;'
+          {tag: '.switch-display.tool-tip.fa.fa-arrows-h.button', as: 'switchEl', events: {click: function() {
+            if (this.switchEl.className == 'switch-display tool-tip fa fa-arrows-h button') {
+              this.switchEl.className = 'switch-display tool-tip fa fa-arrows-v button';
             } else {
-              this.switchEl.innerHTML = '&lt;&gt;'
+              this.switchEl.className = 'switch-display tool-tip fa fa-arrows-h button';
             }
             window.onhashchange = this.switchDisplay.bind(this);
             this.switchDisplay();
@@ -185,8 +185,7 @@ var ProjectViewer = r.Seed.extend({
 
   switchDisplay: function() {
     this.files.innerHTML = '';
-    console.log(this.switchEl.innerHTML)
-    if (this.switchEl.innerHTML == '&lt;&gt;') {
+    if (this.switchEl.className == 'switch-display tool-tip fa fa-arrows-v button') {
       if (!window.location.hash) { return ;}
       for (var i = 0; i < this.fileElems.length; i++) {
         if ('#' + (this.fileElems[i].idParent || this.fileElems[i].id) == window.location.hash) {

@@ -105,7 +105,7 @@ a {
   display: inline;
   font-weight: bold;
   color: #cccccc;
-  margin: 0px 12px;
+  margin-left: 24px;
   box-sizing: border-box;
   transition: 0.3s color, 0.3s border-bottom;
   border-color: #333333; }
@@ -119,7 +119,6 @@ a {
   float: left;
   width: 36px;
   height: 36px;
-  margin-left: 12px;
   position: relative; }
   .project .upload-wrapper .upload-file {
     position: relative;
@@ -131,13 +130,15 @@ a {
     z-index: 2; }
   .project .upload-wrapper .upload-fakebutton {
     position: absolute;
-    text-align: center;
     top: 0px;
     left: 0px;
+    float: left;
     height: 100%;
     width: 100%;
     z-index: 1;
-    border-color: #cccccc; }
+    box-sizing: border-box;
+    padding: 6px 0px;
+    font-size: 18px; }
   .project .upload-wrapper .upload-wrapper:hover {
     color: #cccccc;
     border-bottom: 5px solid; }
@@ -154,6 +155,11 @@ a {
   background-color: #fafafa;
   font-family: "Lato", sans-serif;
   margin: 12px 0px; }
+  .project .project-info .switch-display {
+    box-sizing: border-box;
+    padding: 6px 48px;
+    font-size: 18px;
+    font-weight: bold; }
   .project .project-info .project-name {
     height: 72px;
     font-size: 24px;
@@ -190,9 +196,6 @@ a {
     box-sizing: border-box;
     padding: 24px 0px 12px 24px;
     font-weight: bold; }
-    .project .files-block .file-container .file-info .tool-tip {
-      font-size: 18px;
-      font-weight: bold; }
     .project .files-block .file-container .file-info .file-name {
       font-size: 18px;
       color: #68b2f8; }
