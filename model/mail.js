@@ -84,7 +84,7 @@ var _emitEmail = function(mailList, txt) {
 **CommentId/CommentTxt
 */
 var keepChanges = function(tree) {
-  if (!tree.files) { return ;}
+  if (!tree || !tree.files) { return ;}
   for (var i = 0, len = tree.files.length; i < len; i++) {
     for (var j = 0, lenj = tree.comments.length; j < lenj; j++) {
       if (tree.comments[j].changes && tree.comments[j].idFile === tree.files[i].id) {

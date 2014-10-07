@@ -97,7 +97,7 @@ var FileContainer = r.Seed.extend({
       this.colComments.el.setAttribute('class', 'col-comments tool-colcom');
       this.colComments.toolFormat();
       this.fileContent.style.overflowY ='auto';
-    } else if (this.switchEl.innerHTML === '&gt;&lt;'){
+    } else if (this.switchEl.innerHTML === '&gt;&lt;') {
       this.switchEl.innerHTML = '&lt;&gt;';
       this.wrapContent.setAttribute('class', 'wrap-content');
       this.colComments.el.setAttribute('class', 'col-comments');
@@ -122,7 +122,6 @@ var FileContainer = r.Seed.extend({
       }
     }.bind(this)
   },
-
 
   removeFile: function() {
     this.query('dp').files.where(function(files) { return files.idParent === this.idParent }.bind(this))

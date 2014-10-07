@@ -19,12 +19,12 @@ a {
   width: 100%;
   padding: 12px 6px;
   box-sizing: border-box;
-  color: #777;
+  color: #777777;
   font-style: italic;
   font-size: 12px;
   font-family: "Lato", sans-serif;
   text-align: center;
-  border-top: 1px solid #eee; }
+  border-top: 1px solid #eeeeee; }
 
 .name {
   float: left; }
@@ -45,7 +45,7 @@ a {
     box-sizing: border-box;
     height: 36px;
     padding: 10px 10px 0px 10px;
-    color: #FAFAFA;
+    color: #fafafa;
     font-weight: bold;
     font-size: 14px;
     cursor: pointer;
@@ -141,8 +141,14 @@ a {
   .project .upload-wrapper .upload-wrapper:hover {
     color: #cccccc;
     border-bottom: 5px solid; }
+.project .tool-tip {
+  display: inline;
+  float: right;
+  margin-right: 12px;
+  color: #68b2f8; }
 .project .project-info {
   width: 100%;
+  float: left;
   height: 72px;
   line-height: 72px;
   background-color: #fafafa;
@@ -186,11 +192,6 @@ a {
     font-weight: bold; }
     .project .files-block .file-container .file-info .file-name {
       font-size: 18px;
-      color: #68b2f8; }
-    .project .files-block .file-container .file-info .tool-tip {
-      display: inline;
-      float: right;
-      margin-right: 12px;
       color: #68b2f8; }
     .project .files-block .file-container .file-info .version-name {
       font-size: 14px; }
@@ -239,15 +240,15 @@ a {
         cursor: pointer;
         z-index: 2;
         text-align: center;
-        border-top: 1px solid #eee;
-        border-bottom: 1px solid #eee; }
+        border-top: 1px solid #eeeeee;
+        border-bottom: 1px solid #eeeeee; }
       .project .files-block .file-container .file-content .col-comments .group-comment {
         position: absolute;
         float: left;
         width: 100%;
         box-sizing: border-box;
         background-color: #fefefe;
-        border: 1px solid #eee;
+        border: 1px solid #eeeeee;
         transition: top 0.3s, margin-left 0.3s, left 0.3s;
         overflow: hidden; }
         .project .files-block .file-container .file-content .col-comments .group-comment .wrap-comments {

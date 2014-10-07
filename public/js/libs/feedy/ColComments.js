@@ -44,7 +44,9 @@ var ColComments = r.Seed.extend({
       this.tmpGroup.on('redraw', this.drawAreas.bind(this), this);
       this.el.appendChild(this.tmpGroup.el);
     }
-    this.tmpGroup.addArea(canArea);
+    if (canArea) {
+      this.tmpGroup.addArea(canArea);
+    }
     this.drawAreas();
   },
 
@@ -128,18 +130,24 @@ var ColComments = r.Seed.extend({
 
   displayComments: function() {
     // this.el.style.zIndex = 50;
-    if (this.tmpGroup !== null) { this.tmpGroup.el.style.top = this.tmpGroup.main.actualTop + 'px'; }
-    if (this.el.className === 'col-comments tool-colcom') {
-      return ;
+    if (this.tmpGroup !== null) {
+      this.tmpGroup.el.style.top = this.tmpGroup.main.actualTop + 'px';
+      if (this.el.className === 'col-comments tool-colcom') {
+        this.tmpGroup.el.style.left = this.tmpGroup.main.actualLeft + 'px';
+      }
     }
+
     this.commentsList.sort(function (a, b) {
       return a.main.actualTop - b.main.actualTop;
     });
+
    var prevDown;
     for (var i = 0, len = this.commentsList.length; i < len; i++) {
       this.commentsList[i].refreshDate();
       this.commentsList[i].el.style.top = this.commentsList[i].main.actualTop + 'px';
-      if (i > 0 && (prevDown = r.Library.exceedSize(this.commentsList[i - 1].el, this.commentsList[i].el.style.top))) {
+      if (this.el.className === 'col-comments tool-colcom') {
+        this.commentsList[i].el.style.left = this.commentsList[i].main.actualLeft + 'px';
+      } else if (i > 0 && (prevDown = r.Library.exceedSize(this.commentsList[i - 1].el, this.commentsList[i].el.style.top))) {
         this.commentsList[i].el.style.top = prevDown + 3 + 'px';
       }
     }

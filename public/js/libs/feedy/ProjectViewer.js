@@ -65,6 +65,10 @@ var ProjectViewer = r.Seed.extend({
           }},
         ]},/*!Ask info*/
         ['.project-info', [
+          {tag: 'div.switch-display.tool-tip.button', as: 'switchEl', innerHTML: '&lt;&gt;', events: {click: function() {
+            window.onhashchange = this.switchDisplay.bind(this);
+            this.switchDisplay();
+          }.bind(this)}},
           {tag: 'div.project-name.name', as: 'name', events: {click: this.editName.bind(this)}},
           this.create(r.VersionPicker, {
             onPick: this.setCurrent.bind(this),
@@ -172,6 +176,18 @@ var ProjectViewer = r.Seed.extend({
         this.dp.projects.one(function(e) { return e.id === this.current.idParent }.bind(this)).edit({'name': this.name.innerHTML})
       }
     }.bind(this)
+  },
+
+  switchDisplay: function() {
+    this.files.innerHTML = '';
+    if (!window.location.hash) { return ;}
+    for (var i = 0; i < this.fileElems.length; i++) {
+      console.log(this.fileElems[i].idParent, this.fileElems[i].id,  window.location.hash);
+      if ('#' + (this.fileElems[i].idParent || this.fileElems[i].id) == window.location.hash) {
+        this.files.appendChild(this.fileElems[i].el);
+        return ;
+      }
+    }
   },
 
   setDataToDP: function() {
