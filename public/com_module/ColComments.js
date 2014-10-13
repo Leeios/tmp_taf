@@ -1,6 +1,5 @@
 sand.define('ColComments', [
   'Seed',
-  'DataPackage/Controller->DP',
   'DOM/toDOM',
   'Library',
   'CommentsGroup'
@@ -12,15 +11,12 @@ sand.define('ColComments', [
 */
 var ColComments = r.Seed.extend({
 
-  isMediator: true,
-  respondsTo: { dp: function() {return this.dp;} },
-
   tpl: {
     tag: ".col-comments"
   },
 
   options: {
-    dp: null,
+    dp: this.query('dp'),
     commentsList: [],
     tmpGroup: null
   },
@@ -121,6 +117,7 @@ var ColComments = r.Seed.extend({
       this.tmpGroup.el.style.left = 0;
     }
     for (var i = 0, len = this.commentsList.length; i < len; i++) {
+      this.commentsList[i].refreshDate();
       this.commentsList[i].el.style.left = 0;
       this.commentsList[i].show();
       // this.commentsList[i].el.onclick = this.commentsList[i].targetClassic.bind(this.commentsList[i]);

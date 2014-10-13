@@ -64,7 +64,7 @@ var FileContainer = r.Seed.extend({
     this.setContent(this.data);
 
     /*Echanges entre canvas et colcom*/
-    this.canvasTrack.on('valid', this.colComments.addArea.bind(this.colComments), this);
+    this.canvasTrack.on('valid', this.colComments.suggestComment.bind(this.colComments), this);
     this.canvasTrack.onTarget = this.colComments.canTarget.bind(this.colComments);
     this.canvasTrack.drawAll = this.colComments.drawAreas.bind(this.colComments);
     this.colComments.on('clearCanvas', this.canvasTrack.clearCanvas.bind(this.canvasTrack), this);

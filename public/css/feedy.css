@@ -211,6 +211,7 @@ a {
   .project .files-block .file-container .file-content {
     overflow-x: none; }
     .project .files-block .file-container .file-content .wrap-content {
+      transition: left 0.3s, width 0.2s;
       position: relative;
       float: left;
       width: 50%;
@@ -255,7 +256,7 @@ a {
         box-sizing: border-box;
         background-color: #fefefe;
         border: 1px solid #eeeeee;
-        transition: top 0.3s, margin-left 0.3s, left 0.3s;
+        transition: top 0.3s, margin-left 0.3s, left 0.3s, width 0.2s;
         overflow: hidden; }
         .project .files-block .file-container .file-content .col-comments .group-comment .wrap-comments {
           margin: 6px;

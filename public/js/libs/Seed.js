@@ -148,12 +148,18 @@ sand.define('Seed', [
     },
 
     show : function() {
+      var tmp = this.el.style.left;
+      this.el.style.left = -1000;
       this.el.style.display = 'block';
+      this.el.style.left = tmp;
       this.fire('show');
     },
 
     hide : function() {
+      var tmp = this.el.style.left;
+      this.el.style.left = -1000;
       this.el.style.display = 'none';
+      this.el.style.left = tmp;
       this.fire('hide');
     }
 

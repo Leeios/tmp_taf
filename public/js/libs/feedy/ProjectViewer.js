@@ -147,8 +147,10 @@ var ProjectViewer = r.Seed.extend({
     this.dp.files.on('remove', this.removeFile.bind(this));
   },
 
-  editFile: function() {
-    // console.log('File edited in projview');
+  editFile: function(model, change) {
+    for (var i = 0, len = this.filesList.childNodes.lenghth; i < len; i++) {
+      if (this.filesList.childNodes[i].innerHTML == '')
+    }
   },
 
   createProject : function() {
@@ -299,7 +301,7 @@ var ProjectViewer = r.Seed.extend({
       tag : 'a.file-anchor',
       innerHTML: elem.name.innerHTML,
       attr : { href: '#' + elem.id }
-    }));
+    }).el);
     return (elem);
   },
 
