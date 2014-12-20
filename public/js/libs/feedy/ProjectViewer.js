@@ -148,8 +148,10 @@ var ProjectViewer = r.Seed.extend({
   },
 
   editFile: function(model, change) {
+    return ;
     for (var i = 0, len = this.filesList.childNodes.lenghth; i < len; i++) {
-      if (this.filesList.childNodes[i].innerHTML == '')
+      if (this.filesList.childNodes[i].innerHTML == '') {
+      }
     }
   },
 
@@ -301,7 +303,7 @@ var ProjectViewer = r.Seed.extend({
       tag : 'a.file-anchor',
       innerHTML: elem.name.innerHTML,
       attr : { href: '#' + elem.id }
-    }).el);
+    }));
     return (elem);
   },
 
